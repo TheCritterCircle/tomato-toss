@@ -42,10 +42,10 @@ class Player extends GameObject{
 	}
 
 	move(){
-		if(rightPressed){
+		if(rightPressed || isSliding && direction == "Right"){
 			this.velX = this.speed;
 		}
-		else if(leftPressed){
+		else if(leftPressed || isSliding && direction == "Left"){
 			this.velX = -this.speed;
 		}
 		else{
@@ -89,18 +89,21 @@ class Tomato extends GameObject{
 
 //Functions & Code
 
-var rightPressed = false;
-var leftPressed = false;
+let rightPressed = false;
+let leftPressed = false;
 
-var playerImg = new Image();
+let direction = "Right";
+let isSliding = false;
+
+let playerImg = new Image();
 playerImg.src = "Sprites/hamster.png";
-var player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5);
+let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5);
 
-var tomatoImg = new Image();
+let tomatoImg = new Image();
 tomatoImg.src = "Sprites/tomato.png";
 tomatoes = [new Tomato(250, 10, 40, 40, tomatoImg, 0, 0, 200, 200)];
 
-var score = 0;
+let score = 0;
 
 objects = [player];
 
@@ -163,12 +166,14 @@ function slide(){
 	player.width = 196;
 	player.height = 140;
 	player.y = canvas.height - 140;
+	isSliding = true;
 }
 function getUp(){
 	player.speed = 5;
 	player.height = 196;
 	player.width = 140;
 	player.y = canvas.height - 196;
+	isSliding = false;
 }
 
 main();
@@ -185,9 +190,11 @@ document.addEventListener("mousemove", mouseMoveHandler, false);
 function keyDownHandler(e){
 if(e.key == "Right" || e.key == "ArrowRight"){
 		rightPressed = true;
+		direction = "Right";
     }
     else if(e.key == "Left" || e.key == "ArrowLeft"){
 		leftPressed = true;
+		direction = "Left";
 	}
 	else if(e.key == "Down" || e.key == "ArrowDown"){
 		slide();
