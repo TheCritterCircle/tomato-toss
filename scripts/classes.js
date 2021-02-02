@@ -1,5 +1,7 @@
 "use strict";
 
+// TODO: change all the speeds of stuff
+
 class Sprite {
 	constructor(img, x, y, xVel = 0, yVel = 0, width = img.width, height = img.height) {
 		this.img = img;
@@ -32,7 +34,7 @@ class Player extends Sprite {
 		super(Player.img, x, y, 0, 0, width, height);
 	}
 
-	update() { // TODO: improve this
+	update() {
 		let xDir = inputMap.right - inputMap.left;
 		this.xVel = xDir * (inputMap.slide ? 2 : 1);
 
@@ -48,7 +50,7 @@ class Player extends Sprite {
 			this.width,
 			this.height
 		);
-		ctx.drawImage(
+		ctx.drawImage( // TODO: fix draw
 			this.img,
 			27, 30, 80, 90,
 			this.x + 63,
