@@ -61,7 +61,7 @@ class Player extends Sprite {
 Player.img = makeImg("sprites/hamster.png");
 Player.speed = 5;
 Player.width = 140;
-Player.height = 196
+Player.height = 196;
 
 class Ball extends Sprite {
 	constructor(
@@ -76,7 +76,7 @@ class Ball extends Sprite {
 			Math.random() * 2, Math.random() - 2,
 			40, 40
 		);
-		this.fell = false; // goes to true when ball falls below player, since at that point it's no longer possible to catch
+		this.fell = this.y + this.height > player.y; // goes to true when ball falls below player, since at that point it's no longer possible to catch
 	}
 
 	update() {
@@ -88,27 +88,30 @@ class Ball extends Sprite {
 		if (this.y <= 0)
 			this.yVel *= -1;
 
-		let playerXCollide = // if inside or above player
-			this.x <= player.x + player.width &&
-			this.x >= player.x - this.width;
-		if (this.fell || this.yVel < 0) {
-			if (playerXCollide) {
-				if (this.xVel - player.xVel > 0) // if on left of player
-					this.x = player.x - this.width // move to left of player
-				else
-					this.x = player.x + player.width // move to right of player
-				this.xVel *= -1; // entered player from side, bounce to the side
-				this.xVel += player.xVel; // carry momentum from player
+		if (this.y + this.height > player.y) { // below players head
+			let playerXCollide = // if inside or above player
+				this.x <= player.x + player.width &&
+				this.x >= player.x - this.width;
+			if (this.fell || this.yVel < 0) {
+				if (playerXCollide) {
+					if (this.xVel - player.xVel > 0) // if on left of player
+						this.x = player.x - this.width; // move to left of player
+					else
+						this.x = player.x + player.width; // move to right of player
+					this.xVel *= -1; // entered player from side, bounce to the side
+					this.xVel += player.xVel; // carry momentum from player
+				}
+			} else {
+				if (playerXCollide) {
+					this.yVel = -Math.random() * 3 - 1; // entered player from above, bounce up
+					this.xVel += Math.random * .1;
+					this.xVel += player.xVel; // carry momentum from player
+					score++;
+				} else
+					this.fell = true; // player didn't catch ball
 			}
-		} else {
-			if (playerXCollide) {
-				this.yVel = -Math.random() * 3 - 1; // entered player from above, bounce up
-				this.xVel += Math.random * .1;
-				this.xVel += player.xVel; // carry momentum from player
-				score++;
-			} else
-				this.fell = true; // player didn't catch ball
-		}
+		} else
+			this.fell = false;
 	}
 }
 Ball.gravity = .01;
