@@ -20,6 +20,9 @@ class GameObject {
 	main(){
 		this.x += this.velX;
 		this.y += this.velY
+	}
+
+	draw(){
 		ctx.drawImage(this.img, this.sx, this.sy, this.sWidth, this.sHeight, this.x, this.y, this.width, this.height);
 	}
 
@@ -103,13 +106,9 @@ objects = [player];
 
 function main(){
 
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 	for(let i = 0; i < objects.length; i++){
 		objects[i].main();
 	}
-
-	player.drawMore(playerImg, 27, 30, 80, 90, 63, 203, 40, 45);
 
 	for(let i = 0; i < tomatoes.length; i++){
 		tomatoes[i].main();
@@ -117,12 +116,31 @@ function main(){
 		tomatoes[i].collision();
 	}
 
-	ctx.font = "30px Arial";
-	ctx.fillText(score, 10, 30);
-
 	player.move();
 
 	addTomatoes();
+
+	setTimeout(main, 10);
+}
+
+function draw(){
+	
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	
+	for(let i = 0; i < objects.length; i++){
+		objects[i].draw();
+	}
+
+	for(let i = 0; i < tomatoes.length; i++){
+		tomatoes[i].draw();
+	}
+
+	player.drawMore(playerImg, 27, 30, 80, 90, 63, 203, 40, 45);
+
+	ctx.font = "30px Arial";
+	ctx.fillText(score, 10, 30);
+
+	setTimeout(draw, 10);
 }
 
 function addTomatoes(){
@@ -153,8 +171,8 @@ function getUp(){
 	player.y = canvas.height - 196;
 }
 
-setInterval(main, 10);
-
+main();
+draw();
 
 
 //Inputs
