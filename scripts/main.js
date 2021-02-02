@@ -57,7 +57,7 @@ function mainLoop() {
 }
 
 function addTomatoes() {
-	/*switch (balls.length) {
+	switch (balls.length) {
 		case 1:
 			if (score > 40)
 				balls.push(new Ball);
@@ -66,7 +66,7 @@ function addTomatoes() {
 			if (score > 200)
 				balls.push(new Ball);
 			break;
-	}*/
+	}
 }
 
 requestAnimationFrame(mainLoop);
