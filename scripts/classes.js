@@ -1,11 +1,5 @@
 "use strict";
 
-function makeImg(src) {
-	let i = new Image();
-	i.src = src;
-	return i;
-}
-
 class Sprite {
 	constructor(img, x, y, xVel = 0, yVel = 0, width = img.width, height = img.height) {
 		this.img = img;
@@ -28,10 +22,6 @@ class Sprite {
 			this.x,
 			this.y,
 			this.width,
-			this.height,
-			this.x,
-			this.y,
-			this.width,
 			this.height
 		);
 	}
@@ -51,6 +41,13 @@ class Player extends Sprite {
 
 	draw() {
 		ctx.drawImage(
+			this.img,
+			this.x,
+			this.y,
+			this.width,
+			this.height
+		);
+		ctx.drawImage(
 			Player.img,
 			27, 30, 80, 90,
 			63, 203, 40, 45,
@@ -64,7 +61,7 @@ class Ball extends Sprite {
 	constructor(x, y, img = Math.random() * Ball.imgs.length) {
 		if (typeof img == 'number')
 			img = Ball.imgs[img]
-		super(img, x, y, 40, 40);
+		super(img, x, y, 250, 10, 40, 40);
 		this.fell = false; // goes to true when ball falls below player, since at that point it's no longer possible to catch
 	}
 

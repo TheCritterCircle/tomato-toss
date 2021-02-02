@@ -12,7 +12,7 @@ let inputMap = {
 	'left': false,
 	'slide': false,
 };
-const keyMap = {
+const KEYMAP = {
 	"ArrowRight": 'right',
 	"ArrowLeft": 'left',
 	"ArrowDown": 'slide',
@@ -20,10 +20,10 @@ const keyMap = {
 
 document.addEventListener("keydown", keyHandler(true), false);
 document.addEventListener("keyup", keyHandler(false), false);
-function keyHandler(state) {
+function keyHandler(state) { // note that this function returns the function that is acutally used in the event listener
 	return function InternalKeyHandler(e) {
-		if (keyMap[e.key])
-			inputMap[keyMap[e.key]] = state;
+		if (KEYMAP[e.code])
+			inputMap[KEYMAP[e.code]] = state;
 	};
 }
 
@@ -38,21 +38,22 @@ function mouseMoveHandler(e) {
 
 let score = 0,
 	player = new Player(canvas.width / 2, canvas.height - 200),
-	sprites = [player, new Ball(0, 0, 0)]; // first ball is always tomato
+	balls = [new Ball(0, 0, 0)], // first ball is always tomato
+	sprites = [player, balls];
 
-function updateLoop() {
-	requestAnimationFrame(updateLoop);
+function mainLoop() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-	for (let sprite of sprites) {
+	nestedForEach(sprites, function updateSprite(sprite) {
 		sprite.update();
 		sprite.draw();
-	}
+	});
+	addTomatoes();
 
 	ctx.font = "30px Arial";
 	ctx.fillText(score, 10, 30);
 
-	addTomatoes();
+	requestAnimationFrame(mainLoop);
 }
 
 function addTomatoes() {
@@ -68,4 +69,4 @@ function addTomatoes() {
 	}*/
 }
 
-requestAnimationFrame(updateLoop);
+requestAnimationFrame(mainLoop);
