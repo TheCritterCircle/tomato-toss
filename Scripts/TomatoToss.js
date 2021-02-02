@@ -56,7 +56,7 @@ class Tomato extends GameObject{
 	constructor(x, y, width, height, img, sx, sy, sWidth, sHeight){
 		super(x, y, width, height, img, sx, sy, sWidth, sHeight);
 
-		this.velX = 0;
+		this.velX = Math.random() * 3 - 1;
 		this.velY = 0;
 
 	}
@@ -70,6 +70,7 @@ class Tomato extends GameObject{
 			this.velX = -this.velX;
 		}
 		if(this.y <= 0){
+			this.y = 0;
 			this.velY = -this.velY;
 		}
 		if(this.x <= player.x + player.width && this.x >= player.x - this.width){
@@ -95,8 +96,6 @@ var player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg
 var tomatoImg = new Image();
 tomatoImg.src = "Sprites/tomato.png";
 tomatoes = [new Tomato(250, 10, 40, 40, tomatoImg, 0, 0, 200, 200)];
-
-tomatoes[0].velX = 2;
 
 var score = 0;
 
@@ -143,10 +142,15 @@ function addTomatoes(){
 
 function slide(){
 	player.speed = 10;
-	
+	player.width = 196;
+	player.height = 140;
+	player.y = canvas.height - 140;
 }
 function getUp(){
 	player.speed = 5;
+	player.height = 196;
+	player.width = 140;
+	player.y = canvas.height - 196;
 }
 
 setInterval(main, 10);
