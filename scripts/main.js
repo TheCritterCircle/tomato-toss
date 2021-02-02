@@ -38,7 +38,7 @@ function mouseMoveHandler(e) {
 
 let score = 0,
 	player = new Player(canvas.width / 2, canvas.height - 200),
-	balls = [new Ball(0, 0, 0)], // first ball is always tomato
+	balls = [new Ball(undefined, undefined, 0)], // first ball is always tomato
 	sprites = [player, balls];
 
 function mainLoop() {
@@ -60,11 +60,11 @@ function addTomatoes() {
 	/*switch (balls.length) {
 		case 1:
 			if (score > 40)
-				balls.push(new Ball(250, 10, 40, 40, tomatoImg, 0, 0, 200, 200));
+				balls.push(new Ball);
 			break;
 		case 2:
 			if (score > 200)
-				balls.push(new Ball(250, 10, 40, 40, tomatoImg, 0, 0, 200, 200));
+				balls.push(new Ball);
 			break;
 	}*/
 }
