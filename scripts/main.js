@@ -37,7 +37,7 @@ function mouseMoveHandler(e) {
  */
 
 let score = 0,
-	player = new Player(canvas.width / 2, canvas.height - 200),
+	player = new Player((canvas.width - Player.width) / 2, canvas.height - 200),
 	balls = [new Ball(undefined, undefined, 0)], // first ball is always tomato
 	sprites = [player, balls];
 

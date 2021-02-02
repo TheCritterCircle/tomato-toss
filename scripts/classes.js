@@ -28,7 +28,7 @@ class Sprite {
 }
 
 class Player extends Sprite {
-	constructor(x, y, width = 140, height = 196) {
+	constructor(x, y, width = Player.width, height = Player.height) {
 		super(Player.img, x, y, 0, 0, width, height);
 	}
 
@@ -60,10 +60,12 @@ class Player extends Sprite {
 }
 Player.img = makeImg("sprites/hamster.png");
 Player.speed = 5;
+Player.width = 140;
+Player.height = 196
 
 class Ball extends Sprite {
 	constructor(
-		x = Math.random() * canvas.width,
+		x = Math.random() * canvas.width - 40,
 		y = canvas.height,
 		img = Math.floor(Math.random() * Ball.imgs.length)
 	) {
@@ -90,12 +92,19 @@ class Ball extends Sprite {
 			this.x <= player.x + player.width &&
 			this.x >= player.x - this.width;
 		if (this.fell || this.yVel < 0) {
-			if (playerXCollide)
+			if (playerXCollide) {
+				if (this.xVel - player.xVel > 0) // if on left of player
+					this.x = player.x - this.width // move to left of player
+				else
+					this.x = player.x + player.width // move to right of player
 				this.xVel *= -1; // entered player from side, bounce to the side
+				this.xVel += player.xVel; // carry momentum from player
+			}
 		} else {
 			if (playerXCollide) {
 				this.yVel = -Math.random() * 3 - 1; // entered player from above, bounce up
 				this.xVel += Math.random * .1;
+				this.xVel += player.xVel; // carry momentum from player
 				score++;
 			} else
 				this.fell = true; // player didn't catch ball
