@@ -47,13 +47,25 @@ class GameObject {
 }
 
 class Player extends GameObject{
-	constructor(x, y, width, height, img, sx, sy, sWidth, sHeight, speed){
+	constructor(x, y, width, height, img, sx, sy, sWidth, sHeight, speed, hitboxX, hitboxY, hitboxWidth, hitboxHeight){
 		super(x, y, width, height, img, sx, sy, sWidth, sHeight);
 
 		this.velX = 0;
 		this.velY = 0;
 
 		this.speed = speed;
+
+		this.hitboxX = hitboxX;
+		this.hitboxY = hitboxY;
+		this.hitboxWidth = hitboxWidth;
+		this.hitboxHeight = hitboxHeight;
+	}
+
+	main(){
+		this.x += this.velX;
+		this.y += this.velY
+		this.hitboxX += this.velX;
+		this.hitboxY += this.velY
 	}
 
 	move(){
@@ -79,6 +91,8 @@ class Tomato extends GameObject{
 
 		this.offsetX = -this.width / 2;
 		this.offsetY = -this.height / 2;
+
+		this.hasScored = false;
 	}
 
 	gravity(){
@@ -95,6 +109,7 @@ class Tomato extends GameObject{
 	}
 
 	collision(){
+		//Wall & Ceiling
 		if(this.x + this.offsetX <= 0 || this.x + this.offsetX >= canvas.width - this.width){
 			this.velX = -this.velX;
 		}
@@ -102,11 +117,18 @@ class Tomato extends GameObject{
 			this.y = 0 + this.height / 2;
 			this.velY = -this.velY;
 		}
-		if(this.x + this.offsetX <= player.x + player.width && this.x + this.offsetX >= player.x - this.width){
-			if(this.y + this.offsetY >= player.y - this.height){
+		//Player
+		if(this.x + this.offsetX <= player.hitboxX + player.hitboxWidth && this.x + this.offsetX >= player.hitboxX - this.width){
+			if(this.y + this.offsetY >= player.hitboxY - this.height){
 				this.velY = -Math.random() * 3 - 1;
-				score += 10;
+				if(this.hasScored == false){
+					score += 10;
+				}
+				this.hasScored = true;
 			}
+		}
+		if(this.velY > 0){
+			this.hasScored = false;
 		}
 	}
 }
@@ -123,11 +145,11 @@ let isSliding = false;
 
 let playerImg = new Image();
 playerImg.src = "Sprites/hamster.png";
-let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5);
+let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5, canvas.width/2, canvas.height - 200, 140, 196);
 
 let tomatoImg = new Image();
 tomatoImg.src = "Sprites/tomato.png";
-tomatoes = [new Tomato(250, 60, 40, 40, tomatoImg, 0, 0, 200, 200)];
+tomatoes = [new Tomato(250, 60, 50, 50, tomatoImg, 0, 0, 200, 200)];
 
 let score = 0;
 
@@ -170,6 +192,10 @@ function draw(){
 	ctx.font = "30px Arial";
 	ctx.fillText(score, 10, 30);
 
+	ctx.beginPath();
+	ctx.rect(player.hitboxX, player.hitboxY, player.hitboxWidth, player.hitboxHeight);
+	ctx.stroke();
+
 	setTimeout(draw, 10);
 }
 
@@ -177,12 +203,12 @@ function addTomatoes(){
 	switch(tomatoes.length){
 		case 1:
 			if(score > 40){
-				tomatoes.push(new Tomato(250, 60, 40, 40, tomatoImg, 0, 0, 200, 200))
+				tomatoes.push(new Tomato(250, 60, 50, 50, tomatoImg, 0, 0, 200, 200))
 			}
 			break;
 		case 2:
 			if(score > 200){
-				tomatoes.push(new Tomato(250, 60, 40, 40, tomatoImg, 0, 0, 200, 200))
+				tomatoes.push(new Tomato(250, 60, 50, 50, tomatoImg, 0, 0, 200, 200))
 			}
 			break;
 	}
@@ -190,16 +216,40 @@ function addTomatoes(){
 
 function slide(){
 	player.speed = 10;
-	player.width = 196;
-	player.height = 140;
-	player.y = canvas.height - 140;
+	if(direction == "Left"){
+		player.angle = 90;
+		player.y = canvas.height - 140;
+		player.x += player.width;
+
+		player.hitboxX = player.x - player.height;
+		player.hitboxY = canvas.height - 140;
+		player.hitboxWidth = player.height;
+		player.hitboxHeight = player.width;
+	}
+	else{
+		player.angle = 270
+		player.y = canvas.height;
+		player.x += player.width;
+
+		player.hitboxX = player.x;
+		player.hitboxY = canvas.height - 140;
+		player.hitboxWidth = player.height;
+		player.hitboxHeight = player.width;
+	}	
+	
 	isSliding = true;
 }
 function getUp(){
 	player.speed = 5;
-	player.height = 196;
-	player.width = 140;
+	player.angle = 0;
 	player.y = canvas.height - 196;
+	player.x -= player.width;
+
+	player.hitboxX = player.x;
+	player.hitboxY = player.y;
+	player.hitboxWidth = 140;
+	player.hitboxHeight = 196;
+
 	isSliding = false;
 }
 
@@ -224,7 +274,9 @@ if(e.key == "Right" || e.key == "ArrowRight"){
 		direction = "Left";
 	}
 	else if(e.key == "Down" || e.key == "ArrowDown"){
-		slide();
+		if(isSliding == false){
+			slide();
+		}
 	}
 }
 
