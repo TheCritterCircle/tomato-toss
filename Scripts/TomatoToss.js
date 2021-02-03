@@ -15,6 +15,11 @@ class GameObject {
 
 		this.velX = 0;
 		this.velY = 0;
+
+		this.offsetX = 0;
+		this.offsetY = 0;
+
+		this.angle = 0;
 	}
 
 	main(){
@@ -23,11 +28,21 @@ class GameObject {
 	}
 
 	draw(){
-		ctx.drawImage(this.img, this.sx, this.sy, this.sWidth, this.sHeight, this.x, this.y, this.width, this.height);
+		ctx.save();
+		ctx.translate(this.x, this.y);
+		ctx.rotate(this.angle * Math.PI / 180);
+		ctx.translate(-this.x, -this.y);
+		ctx.drawImage(this.img, this.sx, this.sy, this.sWidth, this.sHeight, this.x + this.offsetX, this.y + this.offsetY, this.width, this.height);
+		ctx.restore();
 	}
 
 	drawMore(img, x, y, width, height, sx, sy, sWidth, sHeight){
+		ctx.save();
+		ctx.translate(this.x, this.y);
+		ctx.rotate(this.angle * Math.PI / 180);
+		ctx.translate(-this.x, -this.y);
 		ctx.drawImage(img, sx, sy, sWidth, sHeight, x + this.x, y + this.y, width, height);
+		ctx.restore();
 	}
 }
 
@@ -59,25 +74,36 @@ class Tomato extends GameObject{
 	constructor(x, y, width, height, img, sx, sy, sWidth, sHeight){
 		super(x, y, width, height, img, sx, sy, sWidth, sHeight);
 
-		this.velX = Math.random() * 3 - 1;
+		this.velX = Math.random() * 3;
 		this.velY = 0;
 
+		this.offsetX = -this.width / 2;
+		this.offsetY = -this.height / 2;
 	}
 
 	gravity(){
 		this.velY += 0.01;
 	}
+	
+	spin(){
+		if(this.velY > 0){
+			this.angle += this.velX + this.velY;
+		}
+		else{
+			this.angle += this.velX - this.velY;
+		}
+	}
 
 	collision(){
-		if(this.x <= 0 || this.x >= canvas.width - this.width){
+		if(this.x + this.offsetX <= 0 || this.x + this.offsetX >= canvas.width - this.width){
 			this.velX = -this.velX;
 		}
-		if(this.y <= 0){
-			this.y = 0;
+		if(this.y + this.offsetY <= 0){
+			this.y = 0 + this.height / 2;
 			this.velY = -this.velY;
 		}
-		if(this.x <= player.x + player.width && this.x >= player.x - this.width){
-			if(this.y >= player.y - this.height){
+		if(this.x + this.offsetX <= player.x + player.width && this.x + this.offsetX >= player.x - this.width){
+			if(this.y + this.offsetY >= player.y - this.height){
 				this.velY = -Math.random() * 3 - 1;
 				score += 10;
 			}
@@ -101,7 +127,7 @@ let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg
 
 let tomatoImg = new Image();
 tomatoImg.src = "Sprites/tomato.png";
-tomatoes = [new Tomato(250, 10, 40, 40, tomatoImg, 0, 0, 200, 200)];
+tomatoes = [new Tomato(250, 60, 40, 40, tomatoImg, 0, 0, 200, 200)];
 
 let score = 0;
 
@@ -136,6 +162,7 @@ function draw(){
 
 	for(let i = 0; i < tomatoes.length; i++){
 		tomatoes[i].draw();
+		tomatoes[i].spin();
 	}
 
 	player.drawMore(playerImg, 27, 30, 80, 90, 63, 203, 40, 45);
@@ -150,12 +177,12 @@ function addTomatoes(){
 	switch(tomatoes.length){
 		case 1:
 			if(score > 40){
-				tomatoes.push(new Tomato(250, 10, 40, 40, tomatoImg, 0, 0, 200, 200))
+				tomatoes.push(new Tomato(250, 60, 40, 40, tomatoImg, 0, 0, 200, 200))
 			}
 			break;
 		case 2:
 			if(score > 200){
-				tomatoes.push(new Tomato(250, 10, 40, 40, tomatoImg, 0, 0, 200, 200))
+				tomatoes.push(new Tomato(250, 60, 40, 40, tomatoImg, 0, 0, 200, 200))
 			}
 			break;
 	}
