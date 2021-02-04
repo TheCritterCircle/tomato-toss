@@ -79,7 +79,51 @@ class Player extends GameObject{
 			this.velX = 0;
 		}
 	}
+	slide(){
+		player.speed = 10;
+		if(direction == "Left"){
+			this.angle = 90;
+			this.y = canvas.height - 140;
+			this.x += player.width;
+	
+			this.hitboxX = player.x - player.height;
+			this.hitboxY = canvas.height - 140;
+			this.hitboxWidth = player.height;
+			this.hitboxHeight = player.width;
+		}
+		else{
+			this.angle = 270
+			this.y = canvas.height;
+			this.x -= player.width / 2;
+	
+			this.hitboxX = player.x;
+			this.hitboxY = canvas.height - 140;
+			this.hitboxWidth = player.height;
+			this.hitboxHeight = player.width;
+		}	
+		
+		isSliding = true;
+	}
+	getUp(){
+		this.speed = 5;
+		this.angle = 0;
 
+		if(direction == "Left"){
+			this.y = canvas.height - 196;
+			this.x -= player.width;
+		}
+		else{
+			this.y = canvas.height - 196;
+			this.x += player.width / 2;
+		}
+
+		this.hitboxX = player.x;
+		this.hitboxY = player.y;
+		this.hitboxWidth = 140;
+		this.hitboxHeight = 196;
+		
+		isSliding = false;
+	}
 }
 
 class Tomato extends GameObject{
@@ -214,44 +258,7 @@ function addTomatoes(){
 	}
 }
 
-function slide(){
-	player.speed = 10;
-	if(direction == "Left"){
-		player.angle = 90;
-		player.y = canvas.height - 140;
-		player.x += player.width;
 
-		player.hitboxX = player.x - player.height;
-		player.hitboxY = canvas.height - 140;
-		player.hitboxWidth = player.height;
-		player.hitboxHeight = player.width;
-	}
-	else{
-		player.angle = 270
-		player.y = canvas.height;
-		player.x += player.width;
-
-		player.hitboxX = player.x;
-		player.hitboxY = canvas.height - 140;
-		player.hitboxWidth = player.height;
-		player.hitboxHeight = player.width;
-	}	
-	
-	isSliding = true;
-}
-function getUp(){
-	player.speed = 5;
-	player.angle = 0;
-	player.y = canvas.height - 196;
-	player.x -= player.width;
-
-	player.hitboxX = player.x;
-	player.hitboxY = player.y;
-	player.hitboxWidth = 140;
-	player.hitboxHeight = 196;
-
-	isSliding = false;
-}
 
 main();
 draw();
@@ -266,16 +273,20 @@ document.addEventListener("mousemove", mouseMoveHandler, false);
 
 function keyDownHandler(e){
 if(e.key == "Right" || e.key == "ArrowRight"){
-		rightPressed = true;
-		direction = "Right";
+		if(!isSliding){
+			rightPressed = true;
+			direction = "Right";
+		}
     }
     else if(e.key == "Left" || e.key == "ArrowLeft"){
-		leftPressed = true;
-		direction = "Left";
+		if(!isSliding){
+			leftPressed = true;
+			direction = "Left";
+		}
 	}
 	else if(e.key == "Down" || e.key == "ArrowDown"){
 		if(isSliding == false){
-			slide();
+			player.slide();
 		}
 	}
 }
@@ -288,7 +299,7 @@ function keyUpHandler(e){
 		leftPressed = false;
 	}
 	else if(e.key == "Down" || e.key == "ArrowDown"){
-		getUp();
+		player.getUp();
 	}
 }
 
