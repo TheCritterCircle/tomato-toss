@@ -79,48 +79,69 @@ class Player extends GameObject{
 			this.velX = 0;
 		}
 	}
-	slide(){
-		player.speed = 10;
+
+	collision(){
+		// Left Wall
+		if(this.hitboxX < 0){
+			if(isSliding) {
+				if(direction == "Left"){
+					this.endSlide();
+					direction = "Right";
+				}
+			}
+			this.x = 0 + this.x - this.hitboxX;
+			this.hitboxX = 0;
+		}
+
+		// Right Wall
+		if(this.hitboxX + this.hitboxWidth > canvas.width){
+			if(isSliding) {
+				if(direction == "Right") {
+					this.endSlide();
+					direction = "Left";
+				}
+			}
+			this.x = canvas.width - this.hitboxWidth + this.x - this.hitboxX;
+			this.hitboxX = canvas.width - this.hitboxWidth;
+		}
+	}
+
+	startSlide(){
+		this.speed = 10;
+
+		this.hitboxWidth = this.height;
+		this.hitboxHeight = this.width;
+		this.hitboxY = canvas.height - this.width;
+
 		if(direction == "Left"){
 			this.angle = 90;
-			this.y = canvas.height - 140;
-			this.x += player.width;
-	
-			this.hitboxX = player.x - player.height;
-			this.hitboxY = canvas.height - 140;
-			this.hitboxWidth = player.height;
-			this.hitboxHeight = player.width;
+			this.hitboxX += 0;
+			this.y += this.height - this.width;
+			this.x += this.height;
 		}
 		else{
-			this.angle = 270
-			this.y = canvas.height;
-			this.x -= player.width / 2;
-	
-			this.hitboxX = player.x;
-			this.hitboxY = canvas.height - 140;
-			this.hitboxWidth = player.height;
-			this.hitboxHeight = player.width;
-		}	
+			this.angle = 270;
+			this.hitboxX += this.width - this.height;
+			this.y += this.height;
+			this.x += this.width - this.height;
+		}
 		
 		isSliding = true;
 	}
-	getUp(){
+	endSlide(){
 		this.speed = 5;
 		this.angle = 0;
 
-		if(direction == "Left"){
-			this.y = canvas.height - 196;
-			this.x -= player.width;
-		}
-		else{
-			this.y = canvas.height - 196;
-			this.x += player.width / 2;
-		}
+		this.y = canvas.height - this.height;
+		if(direction == "Left")
+			this.x -= this.height;
+		else
+			this.x += this.height - this.width;
 
-		this.hitboxX = player.x;
-		this.hitboxY = player.y;
-		this.hitboxWidth = 140;
-		this.hitboxHeight = 196;
+		this.hitboxX = this.x;
+		this.hitboxY = this.y;
+		this.hitboxWidth = this.width;
+		this.hitboxHeight = this.height;
 		
 		isSliding = false;
 	}
@@ -203,6 +224,7 @@ function main(){
 
 	for(let i = 0; i < objects.length; i++){
 		objects[i].main();
+		objects[i].collision();
 	}
 
 	for(let i = 0; i < tomatoes.length; i++){
@@ -272,7 +294,7 @@ document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
 function keyDownHandler(e){
-if(e.key == "Right" || e.key == "ArrowRight"){
+	if(e.key == "Right" || e.key == "ArrowRight"){
 		if(!isSliding){
 			rightPressed = true;
 			direction = "Right";
@@ -286,7 +308,7 @@ if(e.key == "Right" || e.key == "ArrowRight"){
 	}
 	else if(e.key == "Down" || e.key == "ArrowDown"){
 		if(isSliding == false){
-			player.slide();
+			player.startSlide();
 		}
 	}
 }
@@ -299,7 +321,9 @@ function keyUpHandler(e){
 		leftPressed = false;
 	}
 	else if(e.key == "Down" || e.key == "ArrowDown"){
-		player.getUp();
+		if(isSliding == true){
+			player.endSlide();
+		}
 	}
 }
 
