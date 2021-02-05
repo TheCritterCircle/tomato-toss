@@ -216,6 +216,10 @@ let tomatoImg = new Image();
 tomatoImg.src = "Sprites/tomato.png";
 tomatoes = [new Tomato(250, 60, 50, 50, tomatoImg, 0, 0, 200, 200)];
 
+let backgroundImg = new Image();
+backgroundImg.src = "Sprites/background.png";
+background = new GameObject(0, 0, canvas.width, canvas.height, backgroundImg, 0, 0, 855, 480);
+
 let score = 0;
 
 objects = [player];
@@ -224,8 +228,9 @@ function main(){
 
 	for(let i = 0; i < objects.length; i++){
 		objects[i].main();
-		objects[i].collision();
+		
 	}
+	player.collision();
 
 	for(let i = 0; i < tomatoes.length; i++){
 		tomatoes[i].main();
@@ -244,6 +249,8 @@ function draw(){
 	
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	
+	background.draw();
+
 	for(let i = 0; i < objects.length; i++){
 		objects[i].draw();
 	}
@@ -291,7 +298,8 @@ draw();
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
-document.addEventListener("mousemove", mouseMoveHandler, false);
+document.addEventListener("mousedown", mouseDown, false);
+document.addEventListener("mouseup", mouseUp, false);
 
 function keyDownHandler(e){
 	if(e.key == "Right" || e.key == "ArrowRight"){
@@ -327,6 +335,17 @@ function keyUpHandler(e){
 	}
 }
 
-function mouseMoveHandler(e){
-        
+function mouseDown(e){
+	let rect = canvas.getBoundingClientRect();
+    if(e.clientX > rect.left + canvas.width / 2){
+		rightPressed = true;
+	}
+	else if(e.clientX < rect.left + canvas.width / 2){
+		leftPressed = true;
+	}
+}
+
+function mouseUp(e){
+	rightPressed = false;
+	leftPressed = false;
 }
