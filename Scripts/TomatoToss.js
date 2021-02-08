@@ -301,8 +301,8 @@ document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousedown", mouseDown, false);
 document.addEventListener("mouseup", mouseUp, false);
 
-canvas.addEventListener("touchstart", mouseDown, false);
-canvas.addEventListener("touchend", mouseUp, false);
+canvas.addEventListener("touchstart", TouchDown, false);
+canvas.addEventListener("touchend", TouchUp, false);
 
 function keyDownHandler(e){
 	if(e.key == "Right" || e.key == "ArrowRight"){
@@ -349,8 +349,21 @@ function mouseDown(e){
 		leftPressed = true;
 	}
 }
-
 function mouseUp(e){
+	rightPressed = false;
+	leftPressed = false;
+}
+
+function TouchDown(e){
+	let rect = canvas.getBoundingClientRect();
+    if(e.touches[i].clientX > rect.left + canvas.width / 2){
+		rightPressed = true;
+	}
+	else if(e.touches[i].clientX < rect.left + canvas.width / 2){
+		leftPressed = true;
+	}
+}
+function TouchUp(e){
 	rightPressed = false;
 	leftPressed = false;
 }
