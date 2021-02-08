@@ -356,10 +356,10 @@ function mouseUp(e){
 
 function TouchDown(e){
 	let rect = canvas.getBoundingClientRect();
-    if(e.touches[i].clientX > rect.left + canvas.width / 2){
+    if(e.touches[0].clientX > rect.left + canvas.width / 2){
 		rightPressed = true;
 	}
-	else if(e.touches[i].clientX < rect.left + canvas.width / 2){
+	else if(e.touches[0].clientX < rect.left + canvas.width / 2){
 		leftPressed = true;
 	}
 }
