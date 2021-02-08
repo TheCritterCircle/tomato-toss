@@ -301,8 +301,8 @@ document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousedown", mouseDown, false);
 document.addEventListener("mouseup", mouseUp, false);
 
-document.addEventListener("touchstart", mouseDown, false);
-document.addEventListener("touchend", mouseUp, false);
+canvas.addEventListener("touchstart", mouseDown, false);
+canvas.addEventListener("touchend", mouseUp, false);
 
 function keyDownHandler(e){
 	if(e.key == "Right" || e.key == "ArrowRight"){
