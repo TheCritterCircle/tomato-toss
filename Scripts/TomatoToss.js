@@ -7,6 +7,11 @@ class GameObject {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+
+		this.offsetX = 0;
+		this.offsetY = 0;
+		this.angle = 0;
+
 		this.img = img;
 		this.sx = sx;
 		this.sy = sy;
@@ -15,16 +20,13 @@ class GameObject {
 
 		this.velX = 0;
 		this.velY = 0;
-
-		this.offsetX = 0;
-		this.offsetY = 0;
-
-		this.angle = 0;
+		this.velAng = 0;
 	}
 
 	main(){
 		this.x += this.velX;
-		this.y += this.velY
+		this.y += this.velY;
+		this.angle += this.velAng;
 	}
 
 	draw(){
@@ -47,7 +49,7 @@ class GameObject {
 }
 
 class Player extends GameObject{
-	constructor(x, y, width, height, img, sx, sy, sWidth, sHeight, speed, hitboxX, hitboxY, hitboxWidth, hitboxHeight){
+	constructor(x, y, width, height, img, sx, sy, sWidth, sHeight, speed, hitX, hitY, hitWidth, hitHeight){
 		super(x, y, width, height, img, sx, sy, sWidth, sHeight);
 
 		this.velX = 0;
@@ -55,17 +57,17 @@ class Player extends GameObject{
 
 		this.speed = speed;
 
-		this.hitboxX = hitboxX;
-		this.hitboxY = hitboxY;
-		this.hitboxWidth = hitboxWidth;
-		this.hitboxHeight = hitboxHeight;
+		this.hitX = hitX;
+		this.hitY = hitY;
+		this.hitWidth = hitWidth;
+		this.hitHeight = hitHeight;
 	}
 
 	main(){
 		this.x += this.velX;
 		this.y += this.velY
-		this.hitboxX += this.velX;
-		this.hitboxY += this.velY
+		this.hitX += this.velX;
+		this.hitY += this.velY
 	}
 
 	move(){
@@ -82,46 +84,46 @@ class Player extends GameObject{
 
 	collision(){
 		// Left Wall
-		if(this.hitboxX < 0){
+		if(this.hitX < 0){
 			if(isSliding) {
 				if(direction == "Left"){
 					this.endSlide();
 					direction = "Right";
 				}
 			}
-			this.x = 0 + this.x - this.hitboxX;
-			this.hitboxX = 0;
+			this.x = 0 + this.x - this.hitX;
+			this.hitX = 0;
 		}
 
 		// Right Wall
-		if(this.hitboxX + this.hitboxWidth > canvas.width){
+		if(this.hitX + this.hitWidth > canvas.width){
 			if(isSliding) {
 				if(direction == "Right") {
 					this.endSlide();
 					direction = "Left";
 				}
 			}
-			this.x = canvas.width - this.hitboxWidth + this.x - this.hitboxX;
-			this.hitboxX = canvas.width - this.hitboxWidth;
+			this.x = canvas.width - this.hitWidth + this.x - this.hitX;
+			this.hitX = canvas.width - this.hitWidth;
 		}
 	}
 
 	startSlide(){
 		this.speed = 10;
 
-		this.hitboxWidth = this.height;
-		this.hitboxHeight = this.width;
-		this.hitboxY = canvas.height - this.width;
+		this.hitWidth = this.height;
+		this.hitHeight = this.width;
+		this.hitY = canvas.height - this.width;
 
 		if(direction == "Left"){
 			this.angle = 90;
-			this.hitboxX += 0;
+			this.hitX += 0;
 			this.y += this.height - this.width;
 			this.x += this.height;
 		}
 		else{
 			this.angle = 270;
-			this.hitboxX += this.width - this.height;
+			this.hitX += this.width - this.height;
 			this.y += this.height;
 			this.x += this.width - this.height;
 		}
@@ -138,10 +140,10 @@ class Player extends GameObject{
 		else
 			this.x += this.height - this.width;
 
-		this.hitboxX = this.x;
-		this.hitboxY = this.y;
-		this.hitboxWidth = this.width;
-		this.hitboxHeight = this.height;
+		this.hitX = this.x;
+		this.hitY = this.y;
+		this.hitWidth = this.width;
+		this.hitHeight = this.height;
 		
 		isSliding = false;
 	}
@@ -165,29 +167,33 @@ class Tomato extends GameObject{
 	}
 	
 	spin(){
-		if(this.velY > 0){
-			this.angle += this.velX + this.velY;
-		}
-		else{
-			this.angle += this.velX - this.velY;
-		}
+		this.velAng *= 0.995;
 	}
 
 	collision(){
 		//Wall & Ceiling
-		if(this.x + this.offsetX <= 0 || this.x + this.offsetX >= canvas.width - this.width){
+		if(this.x + this.offsetX <= 0){
+			this.x = 0 + this.width / 2;
 			this.velX = -this.velX;
+			this.velAng -= this.velX;
+		}
+		if(this.x + this.offsetX >= canvas.width - this.width){
+			this.x = canvas.width - this.width / 2;
+			this.velX = -this.velX;
+			this.velAng += this.velY;
 		}
 		if(this.y + this.offsetY <= 0){
 			this.y = 0 + this.height / 2;
 			this.velY = -this.velY;
+			this.velAng -= this.velY;
 		}
 		//Player
-		if(this.x + this.offsetX <= player.hitboxX + player.hitboxWidth && this.x + this.offsetX >= player.hitboxX - this.width){
-			if(this.y + this.offsetY >= player.hitboxY - this.height){
+		if(this.x + this.offsetX <= player.hitX + player.hitWidth && this.x + this.offsetX >= player.hitX - this.width){
+			if(this.y + this.offsetY >= player.hitY - this.height){
 				this.velY = -Math.random() * 3 - 1;
 				if(this.hasScored == false){
 					score += 10;
+					this.velAng -= player.velX - this.velX;
 				}
 				this.hasScored = true;
 			}
@@ -214,6 +220,8 @@ let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg
 
 let tomatoImg = new Image();
 tomatoImg.src = "Sprites/tomato.png";
+let orangeImg = new Image();
+orangeImg.src = "Sprites/orange.png";
 tomatoes = [new Tomato(250, 60, 50, 50, tomatoImg, 0, 0, 200, 200)];
 
 let backgroundImg = new Image();
@@ -266,7 +274,7 @@ function draw(){
 	ctx.fillText(score, 10, 30);
 
 	ctx.beginPath();
-	ctx.rect(player.hitboxX, player.hitboxY, player.hitboxWidth, player.hitboxHeight);
+	ctx.rect(player.hitX, player.hitY, player.hitWidth, player.hitHeight);
 	ctx.stroke();
 
 	setTimeout(draw, 10);
@@ -281,28 +289,19 @@ function addTomatoes(){
 			break;
 		case 2:
 			if(score > 200){
-				tomatoes.push(new Tomato(250, 60, 50, 50, tomatoImg, 0, 0, 200, 200))
+				tomatoes.push(new Tomato(250, 60, 50, 50, orangeImg, 0, 0, 200, 200))
 			}
 			break;
 	}
 }
 
-
-
 main();
 draw();
 
-
-//Inputs
+//Keyboard Controls
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-
-document.addEventListener("mousedown", mouseDown, false);
-document.addEventListener("mouseup", mouseUp, false);
-
-canvas.addEventListener("touchstart", TouchDown, false);
-canvas.addEventListener("touchend", TouchUp, false);
 
 function keyDownHandler(e){
 	if(e.key == "Right" || e.key == "ArrowRight"){
@@ -339,6 +338,12 @@ function keyUpHandler(e){
 }
 
 //Touch & Mouse Controls
+
+document.addEventListener("mousedown", mouseDown, false);
+document.addEventListener("mouseup", mouseUp, false);
+
+canvas.addEventListener("touchstart", TouchDown, false);
+canvas.addEventListener("touchend", TouchUp, false);
 
 function mouseDown(e){
 	let rect = canvas.getBoundingClientRect();
