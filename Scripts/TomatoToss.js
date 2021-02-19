@@ -85,11 +85,8 @@ class Player extends GameObject{
 	collision(){
 		// Left Wall
 		if(this.hitX < 0){
-			if(isSliding) {
-				if(direction == "Left"){
-					this.endSlide();
-					direction = "Right";
-				}
+			if(isSliding && direction == "Left")
+				this.endSlide();
 			}
 			this.x = 0 + this.x - this.hitX;
 			this.hitX = 0;
@@ -97,11 +94,8 @@ class Player extends GameObject{
 
 		// Right Wall
 		if(this.hitX + this.hitWidth > canvas.width){
-			if(isSliding) {
-				if(direction == "Right") {
+			if(isSliding && direction == "Right") {
 					this.endSlide();
-					direction = "Left";
-				}
 			}
 			this.x = canvas.width - this.hitWidth + this.x - this.hitX;
 			this.hitX = canvas.width - this.hitWidth;
@@ -109,26 +103,28 @@ class Player extends GameObject{
 	}
 
 	startSlide(){
-		this.speed = 10;
+		if (this.hitX > 0 && this.hitX + this.hitWidth < canvas.width) {
+			this.speed = 10;
 
-		this.hitWidth = this.height;
-		this.hitHeight = this.width;
-		this.hitY = canvas.height - this.width;
+			this.hitWidth = this.height;
+			this.hitHeight = this.width;
+			this.hitY = canvas.height - this.width;
 
-		if(direction == "Left"){
-			this.angle = 90;
-			this.hitX += 0;
-			this.y += this.height - this.width;
-			this.x += this.height;
+			if(direction == "Left"){
+				this.angle = 90;
+				this.hitX += 0;
+				this.y += this.height - this.width;
+				this.x += this.height;
+			}
+			else{
+				this.angle = 270;
+				this.hitX += this.width - this.height;
+				this.y += this.height;
+				this.x += this.width - this.height;
+			}
+			
+			isSliding = true;
 		}
-		else{
-			this.angle = 270;
-			this.hitX += this.width - this.height;
-			this.y += this.height;
-			this.x += this.width - this.height;
-		}
-		
-		isSliding = true;
 	}
 	endSlide(){
 		this.speed = 5;
