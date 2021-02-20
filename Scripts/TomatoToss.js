@@ -23,12 +23,6 @@ class GameObject {
 		this.velAng = 0;
 	}
 
-	main(){
-		this.x += this.velX;
-		this.y += this.velY;
-		this.angle += this.velAng;
-	}
-
 	draw(){
 		ctx.save();
 		ctx.translate(this.x, this.y);
@@ -55,7 +49,9 @@ class Player extends GameObject{
 		this.velX = 0;
 		this.velY = 0;
 
+		this.facing = "Right";
 		this.speed = speed;
+		this.isSliding = false;
 
 		this.hitX = hitX;
 		this.hitY = hitY;
@@ -64,17 +60,24 @@ class Player extends GameObject{
 	}
 
 	main(){
+		this.move();
 		this.x += this.velX;
 		this.y += this.velY
 		this.hitX += this.velX;
 		this.hitY += this.velY
+		this.collision();
+	}
+
+	draw(){
+		super.draw();
+		player.drawMore(playerImg, 27, 30, 80, 90, 63, 203, 40, 45);
 	}
 
 	move(){
-		if(rightPressed || isSliding && direction == "Right"){
+		if(rightPressed || this.isSliding && player.facing == "Right"){
 			this.velX = this.speed;
 		}
-		else if(leftPressed || isSliding && direction == "Left"){
+		else if(leftPressed || this.isSliding && player.facing == "Left"){
 			this.velX = -this.speed;
 		}
 		else{
@@ -85,7 +88,7 @@ class Player extends GameObject{
 	collision(){
 		// Left Wall
 		if(this.hitX < 0){
-			if(isSliding && direction == "Left")
+			if(this.isSliding && this.facing == "Left"){
 				this.endSlide();
 			}
 			this.x = 0 + this.x - this.hitX;
@@ -94,7 +97,7 @@ class Player extends GameObject{
 
 		// Right Wall
 		if(this.hitX + this.hitWidth > canvas.width){
-			if(isSliding && direction == "Right") {
+			if(this.isSliding && this.facing == "Right"){
 					this.endSlide();
 			}
 			this.x = canvas.width - this.hitWidth + this.x - this.hitX;
@@ -110,7 +113,7 @@ class Player extends GameObject{
 			this.hitHeight = this.width;
 			this.hitY = canvas.height - this.width;
 
-			if(direction == "Left"){
+			if(this.facing == "Left"){
 				this.angle = 90;
 				this.hitX += 0;
 				this.y += this.height - this.width;
@@ -123,7 +126,7 @@ class Player extends GameObject{
 				this.x += this.width - this.height;
 			}
 			
-			isSliding = true;
+			this.isSliding = true;
 		}
 	}
 	endSlide(){
@@ -131,7 +134,7 @@ class Player extends GameObject{
 		this.angle = 0;
 
 		this.y = canvas.height - this.height;
-		if(direction == "Left")
+		if(this.facing == "Left")
 			this.x -= this.height;
 		else
 			this.x += this.height - this.width;
@@ -141,7 +144,7 @@ class Player extends GameObject{
 		this.hitWidth = this.width;
 		this.hitHeight = this.height;
 		
-		isSliding = false;
+		this.isSliding = false;
 	}
 }
 
@@ -161,8 +164,13 @@ class Tomato extends GameObject{
 	gravity(){
 		this.velY += 0.01;
 	}
-	
-	spin(){
+
+	main(){
+		this.gravity();
+		this.collision();
+		this.x += this.velX;
+		this.y += this.velY;
+		this.angle += this.velAng;
 		this.velAng *= 0.995;
 	}
 
@@ -200,25 +208,18 @@ class Tomato extends GameObject{
 	}
 }
 
-
-
 //Functions & Code
 
 let rightPressed = false;
 let leftPressed = false;
 
-let direction = "Right";
-let isSliding = false;
-
 let playerImg = new Image();
 playerImg.src = "Sprites/hamster.png";
-let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5, canvas.width/2, canvas.height - 200, 140, 196);
 
 let tomatoImg = new Image();
 tomatoImg.src = "Sprites/tomato.png";
 let orangeImg = new Image();
 orangeImg.src = "Sprites/orange.png";
-tomatoes = [new Tomato(250, 60, 50, 50, tomatoImg, 0, 0, 200, 200)];
 
 let backgroundImg = new Image();
 backgroundImg.src = "Sprites/background.png";
@@ -226,46 +227,26 @@ background = new GameObject(0, 0, canvas.width, canvas.height, backgroundImg, 0,
 
 let score = 0;
 
+let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5, canvas.width/2, canvas.height - 200, 140, 196);
 objects = [player];
+tomatoes = [];
 
 function main(){
-
-	for(let i = 0; i < objects.length; i++){
-		objects[i].main();
-		
-	}
-	player.collision();
-
-	for(let i = 0; i < tomatoes.length; i++){
-		tomatoes[i].main();
-		tomatoes[i].gravity();
-		tomatoes[i].collision();
-	}
-
-	player.move();
-
+	objects.forEach(o => {o.main()});
 	addTomatoes();
 
 	setTimeout(main, 10);
 }
 
 function draw(){
-	
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	
 	background.draw();
-
-	for(let i = 0; i < objects.length; i++){
-		objects[i].draw();
-	}
+	objects.forEach(o => {o.draw()});
 
 	for(let i = 0; i < tomatoes.length; i++){
 		tomatoes[i].draw();
-		tomatoes[i].spin();
 	}
-
-	player.drawMore(playerImg, 27, 30, 80, 90, 63, 203, 40, 45);
-
 	ctx.font = "30px Arial";
 	ctx.fillText(score, 10, 30);
 
@@ -278,14 +259,25 @@ function draw(){
 
 function addTomatoes(){
 	switch(tomatoes.length){
+		case 0:
+			if(score >= 0){
+				let newTomato = new Tomato(250, 60, 50, 50, tomatoImg, 0, 0, 200, 200);
+				tomatoes.push(newTomato);
+				objects.push(newTomato);
+			}
+			break;
 		case 1:
-			if(score > 40){
-				tomatoes.push(new Tomato(250, 60, 50, 50, tomatoImg, 0, 0, 200, 200))
+			if(score >= 40){
+				let newTomato = new Tomato(250, 60, 50, 50, tomatoImg, 0, 0, 200, 200);
+				tomatoes.push(newTomato);
+				objects.push(newTomato);
 			}
 			break;
 		case 2:
-			if(score > 200){
-				tomatoes.push(new Tomato(250, 60, 50, 50, orangeImg, 0, 0, 200, 200))
+			if(score >= 200){
+				let newTomato = new Tomato(250, 60, 50, 50, orangeImg, 0, 0, 200, 200);
+				tomatoes.push(newTomato);
+				objects.push(newTomato);
 			}
 			break;
 	}
@@ -301,19 +293,19 @@ document.addEventListener("keyup", keyUpHandler, false);
 
 function keyDownHandler(e){
 	if(e.key == "Right" || e.key == "ArrowRight"){
-		if(!isSliding){
+		if(!player.isSliding){
 			rightPressed = true;
-			direction = "Right";
+			player.facing = "Right";
 		}
     }
     else if(e.key == "Left" || e.key == "ArrowLeft"){
-		if(!isSliding){
+		if(!player.isSliding){
 			leftPressed = true;
-			direction = "Left";
+			player.facing = "Left";
 		}
 	}
 	else if(e.key == "Down" || e.key == "ArrowDown"){
-		if(isSliding == false){
+		if(player.isSliding == false){
 			player.startSlide();
 		}
 	}
@@ -327,7 +319,7 @@ function keyUpHandler(e){
 		leftPressed = false;
 	}
 	else if(e.key == "Down" || e.key == "ArrowDown"){
-		if(isSliding == true){
+		if(player.isSliding == true){
 			player.endSlide();
 		}
 	}
