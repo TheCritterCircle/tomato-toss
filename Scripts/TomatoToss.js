@@ -206,6 +206,11 @@ class Tomato extends GameObject{
 		if(this.velY > 0){
 			this.hasScored = false;
 		}
+		//Ground
+		if(this.y + this.offsetY > canvas.height){
+			combo = 0;
+			splattedTomatoes.push(this);
+		}
 	}
 }
 
@@ -224,14 +229,17 @@ orangeImg.src = "Sprites/orange.png";
 
 let backgroundImg = new Image();
 backgroundImg.src = "Sprites/background.png";
+let gameoverImg = new Image();
+gameoverImg.src = "Sprites/gameover.png";
 background = new GameObject(0, 0, canvas.width, canvas.height, backgroundImg, 0, 0, 855, 480);
 
 let score = 0;
 let combo = 0;
 
 let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5, canvas.width/2, canvas.height - 200, 140, 196);
-objects = [player];
-tomatoes = [];
+let objects = [player];
+let tomatoes = [];
+let splattedTomatoes = [];
 
 function main(){
 	objects.forEach(o => {o.main()});
@@ -240,12 +248,26 @@ function main(){
 		addTomato();
 		combo %= 5;
 	}
+	splattedTomatoes.forEach(t => {
+		let i = tomatoes.indexOf(t);
+		tomatoes.splice(i, i+1);
+	});
+
+	if (tomatoes.length < 1){
+		return;
+	}
 
 	setTimeout(main, 10);
 }
 
 function draw(){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	if (tomatoes.length < 1){
+		background.img = gameoverImg;
+		background.draw();
+		return;
+	}
 
 	background.draw();
 	objects.forEach(o => {o.draw()});
