@@ -192,15 +192,16 @@ class Tomato extends GameObject{
 			this.velAng -= this.velY;
 		}
 		//Player
-		if(this.x + this.offsetX <= player.hitX + player.hitWidth && this.x + this.offsetX >= player.hitX - this.width){
-			if(this.y + this.offsetY >= player.hitY - this.height){
-				this.velY = -Math.random() * 3 - 1;
-				if(this.hasScored == false){
-					score += 10;
-					this.velAng -= player.velX - this.velX;
-				}
-				this.hasScored = true;
-			}
+		if(this.x + this.offsetX <= player.hitX + player.hitWidth
+		&& this.x + this.offsetX >= player.hitX - this.width
+		&& this.y + this.offsetY >= player.hitY - this.height
+		&& this.hasScored == false) {
+			this.velY = -Math.random() * 3 - 1;
+			this.velAng -= player.velX - this.velX;
+
+			score += 10;
+			combo += 1;
+			this.hasScored = true;
 		}
 		if(this.velY > 0){
 			this.hasScored = false;
@@ -226,6 +227,7 @@ backgroundImg.src = "Sprites/background.png";
 background = new GameObject(0, 0, canvas.width, canvas.height, backgroundImg, 0, 0, 855, 480);
 
 let score = 0;
+let combo = 0;
 
 let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5, canvas.width/2, canvas.height - 200, 140, 196);
 objects = [player];
@@ -233,56 +235,44 @@ tomatoes = [];
 
 function main(){
 	objects.forEach(o => {o.main()});
-	addTomatoes();
+
+	if (combo >= 5) {
+		addTomato();
+		combo %= 5;
+	}
 
 	setTimeout(main, 10);
 }
 
 function draw(){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	
+
 	background.draw();
 	objects.forEach(o => {o.draw()});
 
-	for(let i = 0; i < tomatoes.length; i++){
-		tomatoes[i].draw();
-	}
 	ctx.font = "30px Arial";
 	ctx.fillText(score, 10, 30);
 
+	/*
 	ctx.beginPath();
 	ctx.rect(player.hitX, player.hitY, player.hitWidth, player.hitHeight);
 	ctx.stroke();
+	*/
 
 	setTimeout(draw, 10);
 }
 
-function addTomatoes(){
-	switch(tomatoes.length){
-		case 0:
-			if(score >= 0){
-				let newTomato = new Tomato(250, 60, 50, 50, tomatoImg, 0, 0, 200, 200);
-				tomatoes.push(newTomato);
-				objects.push(newTomato);
-			}
-			break;
-		case 1:
-			if(score >= 40){
-				let newTomato = new Tomato(250, 60, 50, 50, tomatoImg, 0, 0, 200, 200);
-				tomatoes.push(newTomato);
-				objects.push(newTomato);
-			}
-			break;
-		case 2:
-			if(score >= 200){
-				let newTomato = new Tomato(250, 60, 50, 50, orangeImg, 0, 0, 200, 200);
-				tomatoes.push(newTomato);
-				objects.push(newTomato);
-			}
-			break;
-	}
+function addTomato(){
+	let img = tomatoImg;
+	if (tomatoes.length % 3 == 2)
+		img = orangeImg;
+
+	let newTomato = new Tomato(250, 60, 50, 50, img, 0, 0, 200, 200);
+	tomatoes.push(newTomato);
+	objects.push(newTomato);
 }
 
+addTomato();
 main();
 draw();
 
