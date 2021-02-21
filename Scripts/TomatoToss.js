@@ -1,8 +1,14 @@
 var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
 
+function findImage(name) {
+	let img = new Image();
+	img.src = "Sprites/" + name + ".png";
+	return img;
+}
+
 class GameObject {
-	constructor(x, y, width, height, img, sx, sy, sWidth, sHeight){
+	constructor(x, y, width, height, img, sx = 0, sy = 0, sWidth = 0, sHeight = 0){
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -15,8 +21,8 @@ class GameObject {
 		this.img = img;
 		this.sx = sx;
 		this.sy = sy;
-		this.sWidth = sWidth;
-		this.sHeight = sHeight;
+		this.sWidth = sWidth > 0 ? sWidth : img.width;
+		this.sHeight = sHeight > 0 ? sHeight : img.height;
 
 		this.velX = 0;
 		this.velY = 0;
@@ -219,19 +225,13 @@ class Tomato extends GameObject{
 let rightPressed = false;
 let leftPressed = false;
 
-let playerImg = new Image();
-playerImg.src = "Sprites/hamster.png";
+let playerImg = findImage("hamster");
+let tomatoImg = findImage("tomato");
+let orangeImg = findImage("orange");
+let backgroundImg = findImage("background");
+let gameoverImg = findImage("gameover");
 
-let tomatoImg = new Image();
-tomatoImg.src = "Sprites/tomato.png";
-let orangeImg = new Image();
-orangeImg.src = "Sprites/orange.png";
-
-let backgroundImg = new Image();
-backgroundImg.src = "Sprites/background.png";
-let gameoverImg = new Image();
-gameoverImg.src = "Sprites/gameover.png";
-background = new GameObject(0, 0, canvas.width, canvas.height, backgroundImg, 0, 0, 855, 480);
+let background = new GameObject(0, 0, canvas.width, canvas.height, backgroundImg);
 
 let score = 0;
 let combo = 0;
@@ -278,7 +278,7 @@ function addTomato(){
 	let img = tomatoImg;
 	if (tomatoes.length % 3 == 2) img = orangeImg;
 
-	let tomato = new Tomato(250, 60, 50, 50, img, 0, 0, 200, 200);
+	let tomato = new Tomato(250, 60, 50, 50, img);
 	tomatoes.push(tomato);
 	objects.push(tomato);
 
