@@ -248,14 +248,10 @@ function main(){
 		addTomato();
 		combo %= 5;
 	}
-	splattedTomatoes.forEach(t => {
-		let i = tomatoes.indexOf(t);
-		tomatoes.splice(i, i+1);
-	});
 
-	if (tomatoes.length < 1){
-		return;
-	}
+	splattedTomatoes.forEach(deleteTomato);
+	splattedTomatoes = [];
+	if (tomatoes.length < 1) return;
 
 	setTimeout(main, 10);
 }
@@ -275,23 +271,27 @@ function draw(){
 	ctx.font = "30px Arial";
 	ctx.fillText(score, 10, 30);
 
-	/*
-	ctx.beginPath();
-	ctx.rect(player.hitX, player.hitY, player.hitWidth, player.hitHeight);
-	ctx.stroke();
-	*/
-
 	setTimeout(draw, 10);
 }
 
 function addTomato(){
 	let img = tomatoImg;
-	if (tomatoes.length % 3 == 2)
-		img = orangeImg;
+	if (tomatoes.length % 3 == 2) img = orangeImg;
 
-	let newTomato = new Tomato(250, 60, 50, 50, img, 0, 0, 200, 200);
-	tomatoes.push(newTomato);
-	objects.push(newTomato);
+	let tomato = new Tomato(250, 60, 50, 50, img, 0, 0, 200, 200);
+	tomatoes.push(tomato);
+	objects.push(tomato);
+
+	return tomato;
+}
+
+function deleteTomato(tomato){
+	let i = tomatoes.indexOf(tomato);
+	let j = objects.indexOf(tomato);
+	tomatoes.splice(i, 1);
+	objects.splice(j, 1);
+	
+	delete tomato;
 }
 
 addTomato();
