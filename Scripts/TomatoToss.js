@@ -240,18 +240,6 @@ let objects = [];
 let tomatoes = [];
 let splattedTomatoes = [];
 
-setTimeout(init_assets, 50);
-
-function init_assets(){
-	playerImg = findImage("hamster");
-	tomatoImg = findImage("tomato");
-	orangeImg = findImage("orange");
-	backgroundImg = findImage("background");
-	gameoverImg = findImage("gameover");
-
-	setTimeout(init_rest, 50);
-}
-
 function init_rest(){
 	background = new GameObject(0, 0, canvas.width, canvas.height, backgroundImg);
 	player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5, canvas.width/2, canvas.height - 200, 140, 196);
@@ -261,6 +249,19 @@ function init_rest(){
 	main();
 	draw();
 }
+
+function init_assets(){
+	playerImg = findImage("hamster");
+	tomatoImg = findImage("tomato");
+	orangeImg = findImage("orange");
+	backgroundImg = findImage("background");
+	gameoverImg = findImage("gameover");
+
+	init_rest();
+}
+
+init_assets();
+
 
 function main(){
 	objects.forEach(o => {o.main()});
