@@ -222,24 +222,45 @@ class Tomato extends GameObject{
 
 //Functions & Code
 
+let playerImg;
+let tomatoImg;
+let orangeImg;
+let backgroundImg;
+let gameoverImg;
+
 let rightPressed = false;
 let leftPressed = false;
-
-let playerImg = findImage("hamster");
-let tomatoImg = findImage("tomato");
-let orangeImg = findImage("orange");
-let backgroundImg = findImage("background");
-let gameoverImg = findImage("gameover");
-
-let background = new GameObject(0, 0, canvas.width, canvas.height, backgroundImg);
 
 let score = 0;
 let combo = 0;
 
-let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5, canvas.width/2, canvas.height - 200, 140, 196);
-let objects = [player];
+let background;
+let player;
+let objects = [];
 let tomatoes = [];
 let splattedTomatoes = [];
+
+setTimeout(init_assets, 50);
+
+function init_assets(){
+	playerImg = findImage("hamster");
+	tomatoImg = findImage("tomato");
+	orangeImg = findImage("orange");
+	backgroundImg = findImage("background");
+	gameoverImg = findImage("gameover");
+
+	setTimeout(init_rest, 50);
+}
+
+function init_rest(){
+	background = new GameObject(0, 0, canvas.width, canvas.height, backgroundImg);
+	player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5, canvas.width/2, canvas.height - 200, 140, 196);
+	objects.push(player);
+
+	addTomato();
+	main();
+	draw();
+}
 
 function main(){
 	objects.forEach(o => {o.main()});
@@ -293,10 +314,6 @@ function deleteTomato(tomato){
 	
 	delete tomato;
 }
-
-addTomato();
-main();
-draw();
 
 //Keyboard Controls
 
