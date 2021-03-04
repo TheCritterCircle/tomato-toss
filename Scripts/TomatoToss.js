@@ -1,14 +1,8 @@
 var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
 
-function findImage(name) {
-	let img = new Image();
-	img.src = "Sprites/" + name + ".png";
-	return img;
-}
-
 class GameObject {
-	constructor(x, y, width, height, img, sx = 0, sy = 0, sWidth = 0, sHeight = 0){
+	constructor(x, y, width, height, img, sx, sy, sWidth, sHeight){
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -21,8 +15,8 @@ class GameObject {
 		this.img = img;
 		this.sx = sx;
 		this.sy = sy;
-		this.sWidth = sWidth > 0 ? sWidth : img.width;
-		this.sHeight = sHeight > 0 ? sHeight : img.height;
+		this.sWidth = sWidth;
+		this.sHeight = sHeight;
 
 		this.velX = 0;
 		this.velY = 0;
@@ -222,46 +216,30 @@ class Tomato extends GameObject{
 
 //Functions & Code
 
-let playerImg;
-let tomatoImg;
-let orangeImg;
-let backgroundImg;
-let gameoverImg;
-
 let rightPressed = false;
 let leftPressed = false;
+
+let playerImg = new Image();
+playerImg.src = "Sprites/hamster.png";
+
+let tomatoImg = new Image();
+tomatoImg.src = "Sprites/tomato.png";
+let orangeImg = new Image();
+orangeImg.src = "Sprites/orange.png";
+
+let backgroundImg = new Image();
+backgroundImg.src = "Sprites/background.png";
+let gameoverImg = new Image();
+gameoverImg.src = "Sprites/gameover.png";
+background = new GameObject(0, 0, canvas.width, canvas.height, backgroundImg, 0, 0, 855, 480);
 
 let score = 0;
 let combo = 0;
 
-let background;
-let player;
-let objects = [];
+let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5, canvas.width/2, canvas.height - 200, 140, 196);
+let objects = [player];
 let tomatoes = [];
 let splattedTomatoes = [];
-
-function init_rest(){
-	background = new GameObject(0, 0, canvas.width, canvas.height, backgroundImg);
-	player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5, canvas.width/2, canvas.height - 200, 140, 196);
-	objects.push(player);
-
-	addTomato();
-	main();
-	draw();
-}
-
-function init_assets(){
-	playerImg = findImage("hamster");
-	tomatoImg = findImage("tomato");
-	orangeImg = findImage("orange");
-	backgroundImg = findImage("background");
-	gameoverImg = findImage("gameover");
-
-	init_rest();
-}
-
-init_assets();
-
 
 function main(){
 	objects.forEach(o => {o.main()});
@@ -300,7 +278,7 @@ function addTomato(){
 	let img = tomatoImg;
 	if (tomatoes.length % 3 == 2) img = orangeImg;
 
-	let tomato = new Tomato(250, 60, 50, 50, img);
+	let tomato = new Tomato(250, 60, 50, 50, img, 0, 0, 200, 200);
 	tomatoes.push(tomato);
 	objects.push(tomato);
 
@@ -315,6 +293,10 @@ function deleteTomato(tomato){
 	
 	delete tomato;
 }
+
+addTomato();
+main();
+draw();
 
 //Keyboard Controls
 
