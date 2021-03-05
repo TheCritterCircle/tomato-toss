@@ -1,6 +1,14 @@
 var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
 
+const INPUT_RIGHT = ["d", "D", "Right", "ArrowRight"];
+const INPUT_LEFT = ["a", "A", "Left", "ArrowLeft"];
+const INPUT_DOWN = ["s", "S", "Down", "ArrowDown"];
+
+const GRAVITY = 0.02;
+const MIN_BOUNCE = -2;
+const MAX_BOUNCE = -4;
+
 function findImage(name) {
 	let img = new Image();
 	img.src = "Sprites/" + name + ".png";
@@ -180,7 +188,7 @@ class Tomato extends GameObject{
 	}
 
 	gravity(){
-		this.velY += 0.01;
+		this.velY += GRAVITY;
 	}
 
 	collision(){
@@ -205,7 +213,7 @@ class Tomato extends GameObject{
 		&& this.x + this.offsetX >= player.hitX - this.width
 		&& this.y + this.offsetY >= player.hitY - this.height
 		&& this.hasScored == false) {
-			this.velY = -Math.random() * 3 - 1;
+			this.velY = MIN_BOUNCE + Math.random() * (MAX_BOUNCE - MIN_BOUNCE);
 			this.velAng -= player.velX - this.velX;
 
 			score += 10;
@@ -307,19 +315,19 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
 function keyDownHandler(e){
-	if(e.key == "Right" || e.key == "ArrowRight"){
+	if(INPUT_RIGHT.includes(e.key)){
 		if(!player.isSliding){
 			rightPressed = true;
 			player.facing = "Right";
 		}
     }
-    else if(e.key == "Left" || e.key == "ArrowLeft"){
+    else if(INPUT_LEFT.includes(e.key)){
 		if(!player.isSliding){
 			leftPressed = true;
 			player.facing = "Left";
 		}
 	}
-	else if(e.key == "Down" || e.key == "ArrowDown"){
+	else if(INPUT_DOWN.includes(e.key)){
 		if(player.isSliding == false){
 			player.startSlide();
 		}
@@ -327,13 +335,13 @@ function keyDownHandler(e){
 }
 
 function keyUpHandler(e){
-	if(e.key == "Right" || e.key == "ArrowRight"){
+	if(INPUT_RIGHT.includes(e.key)){
 		rightPressed = false;
 	}
-    else if(e.key == "Left" || e.key == "ArrowLeft"){
+    else if(INPUT_LEFT.includes(e.key)){
 		leftPressed = false;
 	}
-	else if(e.key == "Down" || e.key == "ArrowDown"){
+	else if(INPUT_DOWN.includes(e.key)){
 		if(player.isSliding == true){
 			player.endSlide();
 		}
