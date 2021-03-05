@@ -5,9 +5,12 @@ const INPUT_RIGHT = ["d", "D", "Right", "ArrowRight"];
 const INPUT_LEFT = ["a", "A", "Left", "ArrowLeft"];
 const INPUT_DOWN = ["s", "S", "Down", "ArrowDown"];
 
-const GRAVITY = 0.02;
-const MIN_BOUNCE = -2;
-const MAX_BOUNCE = -4;
+const GRAVITY = 0.06;
+const MIN_BOUNCE = -4;
+const MAX_BOUNCE = -5;
+const CONTROL = 0.05;
+const WALK_SPEED = 5.5;
+const SLIDE_SPEED = 11;
 
 function findImage(name) {
 	let img = new Image();
@@ -59,14 +62,14 @@ class GameObject {
 }
 
 class Player extends GameObject{
-	constructor(x, y, width, height, img, sx, sy, sWidth, sHeight, speed, hitX, hitY, hitWidth, hitHeight){
+	constructor(x, y, width, height, img, sx, sy, sWidth, sHeight, hitX, hitY, hitWidth, hitHeight){
 		super(x, y, width, height, img, sx, sy, sWidth, sHeight);
 
 		this.velX = 0;
 		this.velY = 0;
 
 		this.facing = "Right";
-		this.speed = speed;
+		this.speed = WALK_SPEED;
 		this.isSliding = false;
 
 		this.hitX = hitX;
@@ -123,7 +126,7 @@ class Player extends GameObject{
 
 	startSlide(){
 		if (this.hitX > 0 && this.hitX + this.hitWidth < canvas.width) {
-			this.speed = 10;
+			this.speed = SLIDE_SPEED;
 
 			this.hitWidth = this.height;
 			this.hitHeight = this.width;
@@ -147,7 +150,7 @@ class Player extends GameObject{
 	}
 	
 	endSlide(){
-		this.speed = 5;
+		this.speed = WALK_SPEED;
 		this.angle = 0;
 
 		this.y = canvas.height - this.height;
@@ -181,10 +184,12 @@ class Tomato extends GameObject{
 	main(){
 		this.gravity();
 		this.collision();
+
 		this.x += this.velX;
 		this.y += this.velY;
 		this.angle += this.velAng;
 		this.velAng *= 0.995;
+		this.velX *= 0.995;
 	}
 
 	gravity(){
@@ -198,41 +203,47 @@ class Tomato extends GameObject{
 			this.velX = -this.velX;
 			this.velAng -= this.velX;
 		}
+
 		if(this.x + this.offsetX >= canvas.width - this.width){
 			this.x = canvas.width - this.width / 2;
 			this.velX = -this.velX;
 			this.velAng += this.velY;
 		}
+
 		if(this.y + this.offsetY <= 0){
 			this.y = 0 + this.height / 2;
 			this.velY = -this.velY;
 			this.velAng -= this.velY;
 		}
+
 		//Player
-		if(this.x + this.offsetX <= player.hitX + player.hitWidth
+		if (this.x + this.offsetX <= player.hitX + player.hitWidth
 		&& this.x + this.offsetX >= player.hitX - this.width
 		&& this.y + this.offsetY >= player.hitY - this.height
 		&& this.hasScored == false) {
 			this.velY = MIN_BOUNCE + Math.random() * (MAX_BOUNCE - MIN_BOUNCE);
+			this.velX += CONTROL * (this.x - (player.hitX + player.hitWidth / 2));
 			this.velAng -= player.velX - this.velX;
 
 			score += 10;
 			combo += 1;
 			this.hasScored = true;
 		}
-		if(this.velY > 0){
+
+		if (this.velY > 0) {
 			this.hasScored = false;
 		}
+
 		//Ground
-		if(this.y + this.offsetY > canvas.height){
+		if (this.y + this.offsetY > canvas.height) {
 			combo = 0;
 			splattedTomatoes.push(this);
 		}
 	}
 }
 
-//Functions & Code
 
+//Functions & Code
 
 let playerImg = findImage("hamster");
 let tomatoImg = findImage("tomato");
@@ -246,7 +257,7 @@ let score = 0;
 let combo = 0;
 
 let background = new GameObject(0, 0, canvas.width, canvas.height, backgroundImg);
-let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5, canvas.width/2, canvas.height - 200, 140, 196);
+let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, canvas.width/2, canvas.height - 200, 140, 196);
 
 let objects = [player];
 let tomatoes = [];
