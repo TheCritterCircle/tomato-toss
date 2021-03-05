@@ -1,8 +1,14 @@
 var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
 
+function findImage(name) {
+	let img = new Image();
+	img.src = "Sprites/" + name + ".png";
+	return img;
+}
+
 class GameObject {
-	constructor(x, y, width, height, img, sx, sy, sWidth, sHeight){
+	constructor(x, y, width, height, img, sx = 0, sy = 0, sWidth = 0, sHeight = 0){
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -24,6 +30,8 @@ class GameObject {
 	}
 
 	draw(){
+		if (this.sWidth == 0) this.sWidth = this.img.width;
+		if (this.sHeight == 0) this.sHeight = this.img.height;
 		ctx.save();
 		ctx.translate(this.x, this.y);
 		ctx.rotate(this.angle * Math.PI / 180);
@@ -70,7 +78,7 @@ class Player extends GameObject{
 
 	draw(){
 		super.draw();
-		player.drawMore(playerImg, 27, 30, 80, 90, 63, 203, 40, 45);
+		this.drawMore(this.img, 27, 30, 80, 90, 63, 203, 40, 45);
 	}
 
 	move(){
@@ -129,6 +137,7 @@ class Player extends GameObject{
 			this.isSliding = true;
 		}
 	}
+	
 	endSlide(){
 		this.speed = 5;
 		this.angle = 0;
@@ -161,10 +170,6 @@ class Tomato extends GameObject{
 		this.hasScored = false;
 	}
 
-	gravity(){
-		this.velY += 0.01;
-	}
-
 	main(){
 		this.gravity();
 		this.collision();
@@ -172,6 +177,10 @@ class Tomato extends GameObject{
 		this.y += this.velY;
 		this.angle += this.velAng;
 		this.velAng *= 0.995;
+	}
+
+	gravity(){
+		this.velY += 0.01;
 	}
 
 	collision(){
@@ -216,27 +225,21 @@ class Tomato extends GameObject{
 
 //Functions & Code
 
+
+let playerImg = findImage("hamster");
+let tomatoImg = findImage("tomato");
+let orangeImg = findImage("orange");
+let backgroundImg = findImage("background");
+let gameoverImg = findImage("gameover");
+
 let rightPressed = false;
 let leftPressed = false;
-
-let playerImg = new Image();
-playerImg.src = "Sprites/hamster.png";
-
-let tomatoImg = new Image();
-tomatoImg.src = "Sprites/tomato.png";
-let orangeImg = new Image();
-orangeImg.src = "Sprites/orange.png";
-
-let backgroundImg = new Image();
-backgroundImg.src = "Sprites/background.png";
-let gameoverImg = new Image();
-gameoverImg.src = "Sprites/gameover.png";
-background = new GameObject(0, 0, canvas.width, canvas.height, backgroundImg, 0, 0, 855, 480);
-
 let score = 0;
 let combo = 0;
 
+let background = new GameObject(0, 0, canvas.width, canvas.height, backgroundImg);
 let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, playerImg, 134, 100, 70, 98, 5, canvas.width/2, canvas.height - 200, 140, 196);
+
 let objects = [player];
 let tomatoes = [];
 let splattedTomatoes = [];
@@ -278,7 +281,7 @@ function addTomato(){
 	let img = tomatoImg;
 	if (tomatoes.length % 3 == 2) img = orangeImg;
 
-	let tomato = new Tomato(250, 60, 50, 50, img, 0, 0, 200, 200);
+	let tomato = new Tomato(250, 60, 50, 50, img);
 	tomatoes.push(tomato);
 	objects.push(tomato);
 
