@@ -1,17 +1,6 @@
 var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
 
-const INPUT_RIGHT = ["d", "D", "Right", "ArrowRight"];
-const INPUT_LEFT = ["a", "A", "Left", "ArrowLeft"];
-const INPUT_DOWN = ["s", "S", "Down", "ArrowDown"];
-
-const GRAVITY = 0.06;
-const MIN_BOUNCE = -4;
-const MAX_BOUNCE = -5;
-const CONTROL = 0.05;
-const WALK_SPEED = 5.5;
-const SLIDE_SPEED = 11;
-
 function findImage(name) {
 	let img = new Image();
 	img.src = "Sprites/" + name + ".png";
