@@ -6,16 +6,21 @@
 <style>
 	canvas{background: #eee; display: block; margin: 0 auto; }
 	body {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+            -webkit-user-drag: none;
+            user-drag: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -o-user-select: none;
+            user-select: none;
 	}
 </style>
 
 <body>
-	<canvas id="gameCanvas" width="855" height="480"></canvas>
+	<canvas id="gameCanvas" width="855" height="480" unselectable="on"
+            ondragstart="return false" onselectstart="return false" ontouchstart="return false" onmousedown="return false"></canvas>
 	<script src="Scripts/ImageFinder.js"></script>
 	<script src="Scripts/Consts.js"></script>
 	<script src="Scripts/Classes.js"></script>
