@@ -74,14 +74,23 @@ class Player extends GameObject{
 	}
 
 	move(){
-		if(rightPressed || this.isSliding && player.facing == "Right"){
-			this.velX = this.speed;
-		}
-		else if(leftPressed || this.isSliding && player.facing == "Left"){
-			this.velX = -this.speed;
-		}
-		else{
-			this.velX = 0;
+		if(!this.isSliding){
+			if(rightPressed){
+				this.velX = this.speed;
+			}
+			else if(leftPressed){
+				this.velX = -this.speed;
+			}
+			else{
+				this.velX = 0;
+			}
+		}else{
+			if(this.isSliding && player.facing == "Right"){
+				this.velX = this.speed;
+			}
+			else if(this.isSliding && player.facing == "Left"){
+				this.velX = -this.speed;
+			}
 		}
 	}
 
@@ -146,6 +155,11 @@ class Player extends GameObject{
 		this.hitHeight = this.height;
 		
 		this.isSliding = false;
+		if(leftPressed){
+			this.facing = "Left";
+		}else if(rightPressed){
+			this.facing = "Right";
+		}
 	}
 }
 

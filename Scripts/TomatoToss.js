@@ -93,14 +93,14 @@ document.addEventListener("keyup", keyUpHandler, false);
 
 function keyDownHandler(e){
 	if(INPUT_RIGHT.includes(e.key)){
+		rightPressed = true;
 		if(!player.isSliding){
-			rightPressed = true;
 			player.facing = "Right";
 		}
     }
     else if(INPUT_LEFT.includes(e.key)){
+		leftPressed = true;
 		if(!player.isSliding){
-			leftPressed = true;
 			player.facing = "Left";
 		}
 	}
