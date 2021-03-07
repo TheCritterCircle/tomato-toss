@@ -61,10 +61,10 @@ class Player extends GameObject{
 
 	main(){
 		this.move();
-		this.x += this.velX * TIME_SCALE;
-		this.y += this.velY * TIME_SCALE;
-		this.hitX += this.velX * TIME_SCALE;
-		this.hitY += this.velY * TIME_SCALE;
+		this.x += this.velX / TIME_SCALE;
+		this.y += this.velY / TIME_SCALE;
+		this.hitX += this.velX / TIME_SCALE;
+		this.hitY += this.velY / TIME_SCALE;
 		this.collision();
 	}
 
@@ -182,7 +182,7 @@ class Splat extends GameObject{
 			this.offsetY = -this.height / 2;
 		} else if (this.alpha > 0) {
 			// fades
-			this.alpha -= 0.01 * TIME_SCALE;
+			this.alpha -= 0.01 / TIME_SCALE;
 		} else {
 			// ends
 			finishedEffects.push(this);
@@ -216,8 +216,8 @@ class Tomato extends GameObject{
 		this.gravity();
 		this.collision();
 
-		this.x += this.velX * TIME_SCALE;
-		this.y += this.velY * TIME_SCALE;
+		this.x += this.velX / TIME_SCALE;
+		this.y += this.velY / TIME_SCALE;
 		this.angle += this.velAng;
 		this.velAng *= 0.995;
 		this.velX *= 0.995;
