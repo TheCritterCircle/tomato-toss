@@ -1,7 +1,7 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-let TIME_SCALE = 1;
+let timeScale = 1;
 
 //Functions & Code
 
@@ -34,7 +34,7 @@ function getFPS() {
   delta = (Date.now() - lastCalledTime)/1000;
   lastCalledTime = Date.now();
   fps = 1/delta;
-  TIME_SCALE = fps / 90;
+  timeScale = fps / 90;
   displayFPS();
 }
 

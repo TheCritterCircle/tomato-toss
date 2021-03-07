@@ -61,10 +61,10 @@ class Player extends GameObject{
 
 	main(){
 		this.move();
-		this.x += this.velX / TIME_SCALE;
-		this.y += this.velY / TIME_SCALE;
-		this.hitX += this.velX / TIME_SCALE;
-		this.hitY += this.velY / TIME_SCALE;
+		this.x += this.velX / timeScale;
+		this.y += this.velY / timeScale;
+		this.hitX += this.velX / timeScale;
+		this.hitY += this.velY / timeScale;
 		this.collision();
 	}
 
@@ -107,7 +107,7 @@ class Player extends GameObject{
 		// Right Wall
 		if(this.hitX + this.hitWidth > canvas.width){
 			if(this.isSliding && this.facing == "Right"){
-					this.endSlide();
+				this.endSlide();
 			}
 			this.x = canvas.width - this.hitWidth + this.x - this.hitX;
 			this.hitX = canvas.width - this.hitWidth;
@@ -144,7 +144,7 @@ class Player extends GameObject{
 		this.angle = 0;
 
 		this.y = canvas.height - this.height;
-		if(this.facing == "Left")
+		if (this.facing == "Left")
 			this.x -= this.height;
 		else
 			this.x += this.height - this.width;
@@ -155,11 +155,10 @@ class Player extends GameObject{
 		this.hitHeight = this.height;
 		
 		this.isSliding = false;
-		if(leftPressed){
+		if (leftPressed)
 			this.facing = "Left";
-		}else if(rightPressed){
+		else if (rightPressed)
 			this.facing = "Right";
-		}
 	}
 }
 
@@ -175,14 +174,14 @@ class Splat extends GameObject{
 	main(){
 		if (this.width < this.targetW * 0.995) {
 			// appears
-			this.width += (this.targetW - this.width) * 0.2;
-			this.height += (this.targetH - this.height) * 0.2;
+			this.width += (this.targetW - this.width) * 0.2 / timeScale;
+			this.height += (this.targetH - this.height) * 0.2 / timeScale;
 
 			this.offsetX = -this.width / 2;
 			this.offsetY = -this.height / 2;
 		} else if (this.alpha > 0) {
 			// fades
-			this.alpha -= 0.01 / TIME_SCALE;
+			this.alpha -= 0.01 / timeScale;
 		} else {
 			// ends
 			finishedEffects.push(this);
@@ -216,15 +215,15 @@ class Tomato extends GameObject{
 		this.gravity();
 		this.collision();
 
-		this.x += this.velX / TIME_SCALE;
-		this.y += this.velY / TIME_SCALE;
-		this.angle += this.velAng;
-		this.velAng *= 0.995;
-		this.velX *= 0.995;
+		this.x += this.velX / timeScale;
+		this.y += this.velY / timeScale;
+		this.angle += this.velAng / timeScale;
+		this.velAng *= 0.995 ** (1 / timeScale);
+		this.velX *= 0.995 ** (1 / timeScale);
 	}
 
 	gravity(){
-		this.velY += GRAVITY / TIME_SCALE;
+		this.velY += GRAVITY / timeScale;
 	}
 
 	collision(){
