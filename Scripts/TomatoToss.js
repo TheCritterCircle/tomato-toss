@@ -32,6 +32,7 @@ function main(){
 	//if (tomatoes.length < 1) return;
 
 	removeFinishedEffects();
+	getFPS();
 	setTimeout(main, 10);
 }
 
@@ -80,6 +81,26 @@ function deleteTomato(tomato){
 	objects.splice(j, 1);
 	
 	delete tomato;
+}
+
+let lastCalledTime;
+let fps;
+
+function getFPS() {
+
+  if(!lastCalledTime) {
+     lastCalledTime = Date.now();
+     fps = 0;
+     return;
+  }
+  delta = (Date.now() - lastCalledTime)/1000;
+  lastCalledTime = Date.now();
+  fps = 1/delta;
+  displayFPS();
+}
+
+function displayFPS(){
+	document.getElementById("fpscount").innerHTML = "FPS:" + fps.toString();
 }
 
 addTomato();
