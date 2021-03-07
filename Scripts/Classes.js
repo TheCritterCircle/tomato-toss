@@ -224,7 +224,7 @@ class Tomato extends GameObject{
 	}
 
 	gravity(){
-		this.velY += GRAVITY;
+		this.velY += GRAVITY / TIME_SCALE;
 	}
 
 	collision(){
