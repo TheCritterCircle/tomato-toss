@@ -19,6 +19,31 @@ let finishedEffects = [];
 let tomatoes = [];
 let splattedTomatoes = [];
 
+//FPS
+let lastCalledTime;
+let fps;
+let delta;
+
+function getFPS() {
+
+  if(!lastCalledTime) {
+     lastCalledTime = Date.now();
+     fps = 0;
+     return;
+  }
+  delta = (Date.now() - lastCalledTime)/1000;
+  lastCalledTime = Date.now();
+  fps = 1/delta;
+  TIME_SCALE = fps / 90;
+  displayFPS();
+}
+
+function displayFPS(){
+	document.getElementById("fpscount").innerHTML = "FPS:" + fps.toString();
+}
+
+
+//Functions
 function main(){
 	objects.forEach(o => {o.main()});
 
@@ -81,26 +106,6 @@ function deleteTomato(tomato){
 	objects.splice(j, 1);
 	
 	delete tomato;
-}
-
-let lastCalledTime;
-let fps;
-
-function getFPS() {
-
-  if(!lastCalledTime) {
-     lastCalledTime = Date.now();
-     fps = 0;
-     return;
-  }
-  delta = (Date.now() - lastCalledTime)/1000;
-  lastCalledTime = Date.now();
-  fps = 1/delta;
-  displayFPS();
-}
-
-function displayFPS(){
-	document.getElementById("fpscount").innerHTML = "FPS:" + fps.toString();
 }
 
 addTomato();
