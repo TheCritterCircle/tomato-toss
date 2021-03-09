@@ -115,6 +115,8 @@ class Player extends GameObject{
 	}
 
 	startSlide(){
+		if (this.isSliding) return;
+
 		if (this.hitX > 0 && this.hitX + this.hitWidth < canvas.width) {
 			this.speed = SLIDE_SPEED;
 
@@ -140,6 +142,8 @@ class Player extends GameObject{
 	}
 	
 	endSlide(){
+		if (!this.isSliding) return;
+
 		this.speed = WALK_SPEED;
 		this.angle = 0;
 

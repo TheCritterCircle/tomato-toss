@@ -3,6 +3,7 @@
 const INPUT_RIGHT = ["d", "D", "Right", "ArrowRight"];
 const INPUT_LEFT = ["a", "A", "Left", "ArrowLeft"];
 const INPUT_DOWN = ["s", "S", "Down", "ArrowDown"];
+const DOUBLE_TAP_MAX = 200;
 
 
 // Tomato

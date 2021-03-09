@@ -4,9 +4,7 @@ const ctx = canvas.getContext("2d");
 let timeScale = 1;
 
 //Functions & Code
-
-let rightPressed = false;
-let leftPressed = false;
+let currentGame = 0;
 let score = 0;
 let combo = 0;
 
@@ -18,6 +16,12 @@ let finishedEffects = [];
 
 let tomatoes = [];
 let splattedTomatoes = [];
+
+//Input
+let rightPressed = false;
+let leftPressed = false;
+//let lastTouchedTime;
+//let lastTouchedDir;
 
 //FPS
 let lastCalledTime;
@@ -44,7 +48,28 @@ function displayFPS(){
 
 
 //Functions
-function main(){
+
+function init_game(){
+	score = 0;
+	combo = 0;
+
+	background.img = BACKGROUND_IMG;
+	player = new Player(canvas.width/2, canvas.height - 200, 140, 196, PLAYER_IMG, 134, 100, 70, 98, canvas.width/2, canvas.height - 200, 140, 196);
+
+	objects = [player];
+	finishedEffects = [];
+	tomatoes = [];
+	splattedTomatoes = [];
+	lastCalledTime = undefined;
+
+	currentGame++;
+
+	addTomato();
+	main(currentGame);
+	draw(currentGame);
+}
+
+function main(game){
 	objects.forEach(o => {o.main()});
 
 	while (combo >= 5) {
@@ -58,7 +83,8 @@ function main(){
 
 	removeFinishedEffects();
 	getFPS();
-	setTimeout(main, 10);
+	if (game == currentGame)
+		setTimeout(main, 10, game);
 }
 
 function removeFinishedEffects() {
@@ -69,7 +95,7 @@ function removeFinishedEffects() {
 	finishedEffects = [];
 }
 
-function draw(){
+function draw(game){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 	if (tomatoes.length < 1){
@@ -85,7 +111,8 @@ function draw(){
 	ctx.font = "30px Arial";
 	ctx.fillText(score, 10, 30);
 
-	setTimeout(draw, 10);
+	if (game == currentGame)
+		setTimeout(draw, 10, game);
 }
 
 function addTomato(){
@@ -108,9 +135,7 @@ function deleteTomato(tomato){
 	delete tomato;
 }
 
-addTomato();
-main();
-draw();
+init_game();
 
 //Keyboard Controls
 
@@ -131,9 +156,7 @@ function keyDownHandler(e){
 		}
 	}
 	else if(INPUT_DOWN.includes(e.key)){
-		if(player.isSliding == false){
-			player.startSlide();
-		}
+		player.startSlide();
 	}
 }
 
@@ -156,8 +179,8 @@ function keyUpHandler(e){
 document.addEventListener("mousedown", mouseDown, false);
 document.addEventListener("mouseup", mouseUp, false);
 
-canvas.addEventListener("touchstart", TouchDown, false);
-canvas.addEventListener("touchend", TouchUp, false);
+canvas.addEventListener("touchstart", touchDown, false);
+canvas.addEventListener("touchend", touchUp, false);
 
 function mouseDown(e){
 	let rect = canvas.getBoundingClientRect();
@@ -173,16 +196,35 @@ function mouseUp(e){
 	leftPressed = false;
 }
 
-function TouchDown(e){
+function touchDown(e){
 	let rect = canvas.getBoundingClientRect();
-    if(e.touches[0].clientX > rect.left + canvas.width / 2){
+	/*
+	let dir;
+	let now = Date.now();
+	*/
+
+    if (e.touches[0].clientX > rect.left + canvas.width / 2){
 		rightPressed = true;
+		dir = "Right"
 	}
-	else if(e.touches[0].clientX < rect.left + canvas.width / 2){
+	else if (e.touches[0].clientX < rect.left + canvas.width / 2){
 		leftPressed = true;
+		dir = "Left";
 	}
+
+	/*
+	if (!lastTouchedTime) {
+		lastTouchedTime = now;
+	}
+	else if (now - lastTouchedTime < DOUBLE_TAP_MAX && dir == lastTouchedDir) {
+		player.startSlide();
+	}
+
+	lastCalledTime = now;
+	lastTouchedDir = dir;
+	*/
 }
-function TouchUp(e){
+function touchUp(e){
 	rightPressed = false;
 	leftPressed = false;
 }
