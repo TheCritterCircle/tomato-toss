@@ -111,13 +111,11 @@ function draw(game){
 }
 
 function tryEndSlide() {
-	console.log("try end slide")
 	let now = Date.now();
 
 	if (now - lastSlideTime > SLIDE_DURATION) {
 		player.endSlide();
 		lastSlideTime = 0;
-		console.log("end slide")
 	}
 }
 
@@ -237,16 +235,18 @@ function mouseUp(e){
 
 function touchDown(e){
 	let rect = canvas.getBoundingClientRect();
+	let touch = e.touches[e.touches.length];
+
 	let dir;
 	let now = Date.now();
 
-    if (e.touches[0].clientX > rect.left + canvas.width / 2){
+    if (touch.clientX > rect.left + canvas.width / 2){
 		rightPressed = true;
 		dir = "Right";
 		if (!player.isSliding)
 			player.facing = "Right";
 	}
-	else if (e.touches[0].clientX < rect.left + canvas.width / 2){
+	else if (touch.clientX < rect.left + canvas.width / 2){
 		leftPressed = true;
 		dir = "Left";
 		if (!player.isSliding)
