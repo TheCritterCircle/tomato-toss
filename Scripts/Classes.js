@@ -8,6 +8,7 @@ class GameObject {
 		this.offsetX = 0;
 		this.offsetY = 0;
 		this.angle = 0;
+		this.visible = true;
 
 		this.img = img;
 		this.sx = sx;
@@ -22,6 +23,7 @@ class GameObject {
 	}
 
 	draw(){
+		if (!this.visible) return;
 		if (this.sWidth == 0) this.sWidth = this.img.width;
 		if (this.sHeight == 0) this.sHeight = this.img.height;
 		ctx.save();
@@ -218,17 +220,25 @@ class Tomato extends GameObject{
 		this.offsetY = -this.height / 2;
 
 		this.hasScored = false;
+		this.animTimer = 0;
 	}
 
 	main(){
-		this.gravity();
-		this.collision();
+		if (this.animTimer < BLINK_DUR * NUM_BLINKS) {
+			this.visible = this.animTimer / BLINK_DUR % 1 < 1/2;
+			this.animTimer += 90 / timeScale;
+		} else {
+			this.visible = true;
+			this.gravity();
+			this.collision();
 
-		this.x += this.velX / timeScale;
-		this.y += this.velY / timeScale;
-		this.angle += this.velAng / timeScale;
-		this.velAng *= 0.995 ** (1 / timeScale);
-		this.velX *= 0.995 ** (1 / timeScale);
+			this.x += this.velX / timeScale;
+			this.y += this.velY / timeScale;
+			this.angle += this.velAng / timeScale;
+			this.velAng *= 0.995 ** (1 / timeScale);
+			this.velX *= 0.995 ** (1 / timeScale);
+
+		}
 	}
 
 	gravity(){

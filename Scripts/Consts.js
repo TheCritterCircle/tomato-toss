@@ -14,7 +14,11 @@ const MIN_BOUNCE = -4;
 const MAX_BOUNCE = -5;
 // How much a tomato's trajectory is influenced by how it hits the player.
 const CONTROL = 0.05;
+
 const TOMATO_TYPES = ["tomato", "orange"];
+const NEW_TOMATO_COMBO = 5;
+const BLINK_DUR = 6000; // Heh, blink ;)
+const NUM_BLINKS = 2;
 
 
 // Player

@@ -75,9 +75,9 @@ function init_game(){
 function main(game){
 	objects.forEach(o => {o.main()});
 
-	while (combo >= 5) {
+	while (combo >= NEW_TOMATO_COMBO) {
 		addTomato();
-		combo %= 5;
+		combo %= NEW_TOMATO_COMBO;
 	}
 
 	splattedTomatoes.forEach(deleteTomato);
