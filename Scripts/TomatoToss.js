@@ -235,18 +235,16 @@ function mouseUp(e){
 
 function touchDown(e){
 	let rect = canvas.getBoundingClientRect();
-	let touch = e.touches[e.touches.length];
-
 	let dir;
 	let now = Date.now();
 
-    if (touch.clientX > rect.left + canvas.width / 2){
+    if (e.touches[0].clientX > rect.left + canvas.width / 2){
 		rightPressed = true;
 		dir = "Right";
 		if (!player.isSliding)
 			player.facing = "Right";
 	}
-	else if (touch.clientX < rect.left + canvas.width / 2){
+	else if (e.touches[0].clientX < rect.left + canvas.width / 2){
 		leftPressed = true;
 		dir = "Left";
 		if (!player.isSliding)
