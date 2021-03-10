@@ -22,6 +22,7 @@ let rightPressed = false;
 let leftPressed = false;
 let lastTouchTime;
 let lastTouchDir;
+let lastSlideTime = 0;
 
 //FPS
 let lastCalledTime;
@@ -80,19 +81,13 @@ function main(game){
 	splattedTomatoes.forEach(deleteTomato);
 	splattedTomatoes = [];
 	//if (tomatoes.length < 1) return;
+	if (lastSlideTime > 0) tryEndSlide();
 
 	removeFinishedEffects();
 	getFPS();
+
 	if (game == currentGame)
 		setTimeout(main, 10, game);
-}
-
-function removeFinishedEffects() {
-	finishedEffects.forEach(e => {
-		let i = objects.indexOf(e);
-		objects.splice(i, 1);
-	});
-	finishedEffects = [];
 }
 
 function draw(game){
@@ -113,6 +108,25 @@ function draw(game){
 
 	if (game == currentGame)
 		setTimeout(draw, 10, game);
+}
+
+function tryEndSlide() {
+	console.log("try end slide")
+	let now = Date.now();
+
+	if (now - lastSlideTime > SLIDE_DURATION) {
+		player.endSlide();
+		lastSlideTime = 0;
+		console.log("end slide")
+	}
+}
+
+function removeFinishedEffects() {
+	finishedEffects.forEach(e => {
+		let i = objects.indexOf(e);
+		objects.splice(i, 1);
+	});
+	finishedEffects = [];
 }
 
 function addTomato(){
@@ -205,6 +219,7 @@ function mouseDown(e){
 	}
 	else if (now - lastTouchTime < DOUBLE_TAP_MAX && dir == lastTouchDir) {
 		player.startSlide();
+		lastSlideTime = now;
 	}
 
 	lastTouchTime = now;
@@ -214,8 +229,10 @@ function mouseUp(e){
 	rightPressed = false;
 	leftPressed = false;
 
+	/*
 	if (player.isSliding)
 		player.endSlide();
+	*/
 }
 
 function touchDown(e){
@@ -241,7 +258,7 @@ function touchDown(e){
 	}
 	else if (now - lastTouchTime < DOUBLE_TAP_MAX && dir == lastTouchDir) {
 		player.startSlide();
-		setTimeout(_ => {player.endSlide()}, 1000);
+		lastSlideTime = now;
 	}
 
 	lastTouchTime = now;
@@ -250,7 +267,4 @@ function touchDown(e){
 function touchUp(e){
 	rightPressed = false;
 	leftPressed = false;
-	
-	if (player.isSliding)
-		player.endSlide();
 }

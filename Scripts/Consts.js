@@ -3,7 +3,7 @@
 const INPUT_RIGHT = ["d", "D", "Right", "ArrowRight"];
 const INPUT_LEFT = ["a", "A", "Left", "ArrowLeft"];
 const INPUT_DOWN = ["s", "S", "Down", "ArrowDown"];
-const DOUBLE_TAP_MAX = 200;
+const DOUBLE_TAP_MAX = 300;
 
 
 // Tomato
@@ -21,6 +21,7 @@ const TOMATO_TYPES = ["tomato", "orange"];
 
 const WALK_SPEED = 5.5;
 const SLIDE_SPEED = 11;
+const SLIDE_DURATION = 250;
 
 
 // Images
