@@ -212,7 +212,7 @@ class Tomato extends GameObject{
 	constructor(x, y, width, height, type){
 		super(x, y, width, height, TOMATO_IMGS[type], -1);
 
-		this.velX = Math.random() * 3;
+		this.velX = 0;
 		this.velY = 0;
 		this.type = type;
 

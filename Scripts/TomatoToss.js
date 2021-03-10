@@ -132,8 +132,9 @@ function removeFinishedEffects() {
 function addTomato(){
 	let type = 0;
 	if (tomatoes.length % 3 == 2) type = 1;
+	let x = Math.random() * canvas.width * 0.9;
 
-	let tomato = new Tomato(250, 60, 50, 50, type);
+	let tomato = new Tomato(x, NEW_TOMATO_Y, 50, 50, type);
 	tomatoes.push(tomato);
 	objects.push(tomato);
 

@@ -16,7 +16,10 @@ const MAX_BOUNCE = -5;
 const CONTROL = 0.05;
 
 const TOMATO_TYPES = ["tomato", "orange"];
+// Combo needed to spawn a new tomato and initial y value.
 const NEW_TOMATO_COMBO = 5;
+const NEW_TOMATO_Y = 60;
+// Duration of each blink and total number of blinks when a tomato spawns.
 const BLINK_DUR = 6000; // Heh, blink ;)
 const NUM_BLINKS = 2;
 
