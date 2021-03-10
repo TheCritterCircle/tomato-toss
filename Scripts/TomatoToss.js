@@ -9,7 +9,7 @@ let score = 0;
 let combo = 0;
 
 let background = new GameObject(0, 0, canvas.width, canvas.height, BACKGROUND_IMG);
-let player = new Player(canvas.width/2, canvas.height - 200, 140, 196, PLAYER_IMG, 134, 100, 70, 98, canvas.width/2, canvas.height - 200, 140, 196);
+let player = new Player(canvas.width/2, canvas.height, 140, 196, PLAYER_IMG, 134, 100, 70, 98);
 
 let objects = [player];
 let finishedEffects = [];
@@ -55,7 +55,7 @@ function init_game(){
 	combo = 0;
 
 	background.img = BACKGROUND_IMG;
-	player = new Player(canvas.width/2, canvas.height - 200, 140, 196, PLAYER_IMG, 134, 100, 70, 98, canvas.width/2, canvas.height - 200, 140, 196);
+	player = new Player(canvas.width/2, canvas.height - 4, 140, 196, PLAYER_IMG, 134, 100, 70, 98);
 
 	objects = [player];
 	finishedEffects = [];

@@ -37,40 +37,69 @@ class GameObject {
 		ctx.translate(this.x, this.y);
 		ctx.rotate(this.angle * Math.PI / 180);
 		ctx.translate(-this.x, -this.y);
-		ctx.drawImage(img, sx, sy, sWidth, sHeight, x + this.x, y + this.y, width, height);
+		ctx.drawImage(img, sx, sy, sWidth, sHeight, x + this.offsetX + this.x, y + this.offsetY + this.y, width, height);
 		ctx.restore();
 	}
 }
 
 class Player extends GameObject{
 	constructor(x, y, width, height, img, sx, sy, sWidth, sHeight, hitX, hitY, hitWidth, hitHeight){
-		super(x, y, width, height, img, 0, sx, sy, sWidth, sHeight);
+		super(x, y - width/2, width, height, img, 0, sx, sy, sWidth, sHeight);
 
 		this.velX = 0;
 		this.velY = 0;
+		this.offsetX = -width/2;
+		this.offsetY = -height + width/2;
+		this.targetAng = 0;
 
 		this.facing = "Right";
 		this.speed = WALK_SPEED;
 		this.isSliding = false;
 
-		this.hitX = hitX;
-		this.hitY = hitY;
-		this.hitWidth = hitWidth;
-		this.hitHeight = hitHeight;
+		this.hitX;
+		this.hitY;
+		this.hitWidth;
+		this.hitHeight;
+
+		this.updateHitbox();
 	}
 
 	main(){
 		this.move();
+		this.updateHitbox();
 		this.x += this.velX / timeScale;
 		this.y += this.velY / timeScale;
-		this.hitX += this.velX / timeScale;
-		this.hitY += this.velY / timeScale;
+		this.angle += (this.targetAng - this.angle) * 0.4 / timeScale;
 		this.collision();
 	}
 
 	draw(){
 		super.draw();
 		this.drawMore(this.img, 27, 30, 80, 90, 63, 203, 40, 45);
+	}
+
+	drawHitbox() {
+		ctx.beginPath();
+		ctx.rect(this.hitX, this.hitY, this.hitWidth, this.hitHeight);
+		ctx.stroke();
+	}
+
+	updateHitbox(){
+		if (!this.isSliding) {
+			this.hitX = this.x + this.offsetX;
+			this.hitY = this.y + this.offsetY;
+			this.hitWidth = this.width;
+			this.hitHeight = this.height;
+		} else {
+			this.hitWidth = this.height;
+			this.hitHeight = this.width;
+			this.hitY = canvas.height - this.width;
+
+			if (this.facing == "Left")
+				this.hitX = this.x - this.width/2;
+			else
+				this.hitX = this.x + this.width/2 - this.height;
+		}
 	}
 
 	move(){
@@ -101,7 +130,6 @@ class Player extends GameObject{
 				this.endSlide();
 			}
 			this.x = 0 + this.x - this.hitX;
-			this.hitX = 0;
 		}
 
 		// Right Wall
@@ -110,59 +138,36 @@ class Player extends GameObject{
 				this.endSlide();
 			}
 			this.x = canvas.width - this.hitWidth + this.x - this.hitX;
-			this.hitX = canvas.width - this.hitWidth;
 		}
 	}
 
 	startSlide(){
-		if (this.isSliding) return;
+		if (!this.isSliding) {
+			if (this.hitX > 0 && this.hitX + this.hitWidth < canvas.width) {
+				this.speed = SLIDE_SPEED;
 
-		if (this.hitX > 0 && this.hitX + this.hitWidth < canvas.width) {
-			this.speed = SLIDE_SPEED;
-
-			this.hitWidth = this.height;
-			this.hitHeight = this.width;
-			this.hitY = canvas.height - this.width;
-
-			if(this.facing == "Left"){
-				this.angle = 90;
-				this.hitX += 0;
-				this.y += this.height - this.width;
-				this.x += this.height;
+				if (this.facing == "Left")
+					this.targetAng = 90;
+				else
+					this.targetAng = -90;
+				
+				this.isSliding = true;
 			}
-			else{
-				this.angle = 270;
-				this.hitX += this.width - this.height;
-				this.y += this.height;
-				this.x += this.width - this.height;
-			}
-			
-			this.isSliding = true;
 		}
 	}
 	
 	endSlide(){
-		if (!this.isSliding) return;
+		if (this.isSliding) {
+			this.speed = WALK_SPEED;
+			this.targetAng = 0;
 
-		this.speed = WALK_SPEED;
-		this.angle = 0;
-
-		this.y = canvas.height - this.height;
-		if (this.facing == "Left")
-			this.x -= this.height;
-		else
-			this.x += this.height - this.width;
-
-		this.hitX = this.x;
-		this.hitY = this.y;
-		this.hitWidth = this.width;
-		this.hitHeight = this.height;
-		
-		this.isSliding = false;
-		if (leftPressed)
-			this.facing = "Left";
-		else if (rightPressed)
-			this.facing = "Right";
+			if (leftPressed)
+				this.facing = "Left";
+			else if (rightPressed)
+				this.facing = "Right";
+			
+			this.isSliding = false;
+		}		
 	}
 }
 
