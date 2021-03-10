@@ -22,7 +22,7 @@ let rightPressed = false;
 let leftPressed = false;
 let lastTouchTime;
 let lastTouchDir;
-let lastSlideTime = 0;
+let lastSlideTime;
 
 //FPS
 let lastCalledTime;
@@ -62,6 +62,8 @@ function init_game(){
 	tomatoes = [];
 	splattedTomatoes = [];
 	lastCalledTime = undefined;
+	lastTouchTime = undefined;
+	lastSlideTime = undefined;
 
 	currentGame++;
 
@@ -146,8 +148,6 @@ function deleteTomato(tomato){
 	
 	delete tomato;
 }
-
-init_game();
 
 //Keyboard Controls
 
