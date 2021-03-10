@@ -20,8 +20,8 @@ let splattedTomatoes = [];
 //Input
 let rightPressed = false;
 let leftPressed = false;
-//let lastTouchedTime;
-//let lastTouchedDir;
+let lastTouchTime;
+let lastTouchDir;
 
 //FPS
 let lastCalledTime;
@@ -184,47 +184,73 @@ canvas.addEventListener("touchend", touchUp, false);
 
 function mouseDown(e){
 	let rect = canvas.getBoundingClientRect();
+	let dir;
+	let now = Date.now();
+
     if(e.clientX > rect.left + canvas.width / 2){
 		rightPressed = true;
+		dir = "Right";
+		if (!player.isSliding)
+			player.facing = "Right";
 	}
 	else if(e.clientX < rect.left + canvas.width / 2){
 		leftPressed = true;
+		dir = "Left";
+		if (!player.isSliding)
+			player.facing = "Left";
 	}
+
+	if (!lastTouchTime) {
+		lastTouchTime = now;
+	}
+	else if (now - lastTouchTime < DOUBLE_TAP_MAX && dir == lastTouchDir) {
+		player.startSlide();
+	}
+
+	lastTouchTime = now;
+	lastTouchDir = dir;
 }
 function mouseUp(e){
 	rightPressed = false;
 	leftPressed = false;
+
+	if (player.isSliding)
+		player.endSlide();
 }
 
 function touchDown(e){
 	let rect = canvas.getBoundingClientRect();
-	/*
 	let dir;
 	let now = Date.now();
-	*/
 
     if (e.touches[0].clientX > rect.left + canvas.width / 2){
 		rightPressed = true;
-		dir = "Right"
+		dir = "Right";
+		if (!player.isSliding)
+			player.facing = "Right";
 	}
 	else if (e.touches[0].clientX < rect.left + canvas.width / 2){
 		leftPressed = true;
 		dir = "Left";
+		if (!player.isSliding)
+			player.facing = "Left";
 	}
 
-	/*
-	if (!lastTouchedTime) {
-		lastTouchedTime = now;
+	if (!lastTouchTime) {
+		lastTouchTime = now;
 	}
-	else if (now - lastTouchedTime < DOUBLE_TAP_MAX && dir == lastTouchedDir) {
+	else if (now - lastTouchTime < DOUBLE_TAP_MAX && dir == lastTouchDir) {
 		player.startSlide();
+		setTimeout(_ => {player.endSlide()}, 1000);
 	}
 
-	lastCalledTime = now;
-	lastTouchedDir = dir;
-	*/
+	lastTouchTime = now;
+	lastTouchDir = dir;
 }
 function touchUp(e){
 	rightPressed = false;
 	leftPressed = false;
+	
+	if (player.isSliding)
+		player.endSlide();
 }
