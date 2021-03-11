@@ -4,3 +4,6 @@ function findImage(name) {
 	return img;
 }
 
+function findAudio(name) {
+	return new Audio("Sounds/" + name + ".wav");
+}

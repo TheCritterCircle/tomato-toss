@@ -38,3 +38,5 @@ const TOMATO_IMGS = TOMATO_TYPES.map(findImage);
 const SPLAT_IMGS = TOMATO_TYPES.map(x => findImage(x + "_splat"));
 const BACKGROUND_IMG = findImage("background");
 const GAMEOVER_IMG = findImage("gameover");
+
+// Audio

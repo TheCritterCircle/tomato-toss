@@ -237,7 +237,6 @@ class Tomato extends GameObject{
 			this.angle += this.velAng / timeScale;
 			this.velAng *= 0.995 ** (1 / timeScale);
 			this.velX *= 0.995 ** (1 / timeScale);
-
 		}
 	}
 
@@ -251,18 +250,21 @@ class Tomato extends GameObject{
 			this.x = 0 + this.width / 2;
 			this.velX = -this.velX;
 			this.velAng -= this.velX;
+			findAudio("collision").play();
 		}
 
 		if(this.x + this.offsetX >= canvas.width - this.width){
 			this.x = canvas.width - this.width / 2;
 			this.velX = -this.velX;
 			this.velAng += this.velY;
+			findAudio("collision").play();
 		}
 
 		if(this.y + this.offsetY <= 0){
 			this.y = 0 + this.height / 2;
 			this.velY = -this.velY;
 			this.velAng -= this.velY;
+			findAudio("collision").play();
 		}
 
 		//Player
@@ -277,6 +279,7 @@ class Tomato extends GameObject{
 			score += 10;
 			combo += 1;
 			this.hasScored = true;
+			findAudio("collision").play();
 		}
 
 		if (this.velY > 0) {
@@ -287,6 +290,7 @@ class Tomato extends GameObject{
 		if (this.y - this.offsetY > canvas.height) {
 			combo = 0;
 			let splat = new Splat(this.x, this.y, this.width * 2, this.height * 0.75, SPLAT_IMGS[this.type])
+			findAudio("splat").play();
 			objects.push(splat);
 			splattedTomatoes.push(this);
 		}
