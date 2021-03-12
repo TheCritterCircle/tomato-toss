@@ -54,7 +54,7 @@ class Plate extends GameObject{
 
 class Player extends GameObject{
 	constructor(x, y, width, height, img){
-		super(x, y - width/2, width, height, img, 0, sx, sy, sWidth, sHeight);
+		super(x, y - width/2, width, height, img, 0);
 
 		this.velX = 0;
 		this.velY = 0;
@@ -65,7 +65,7 @@ class Player extends GameObject{
 		this.facing = "Right";
 		this.speed = WALK_SPEED;
 		this.isSliding = false;
-		this.plate = new Plate()
+		//this.plate = new Plate()
 
 		this.hitX;
 		this.hitY;
