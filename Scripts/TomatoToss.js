@@ -9,7 +9,7 @@ let score = 0;
 let combo = 0;
 
 let background = new GameObject(0, 0, canvas.width, canvas.height, BACKGROUND_IMG);
-let player = new Player(canvas.width/2, canvas.height, 140, 196, PLAYER_IMG, 134, 100, 70, 98);
+let player = new Player(canvas.width/2, canvas.height, 120, 200, PLAYER_R_IMG);
 
 let objects = [player];
 let finishedEffects = [];
@@ -55,7 +55,7 @@ function init_game(){
 	combo = 0;
 
 	background.img = BACKGROUND_IMG;
-	player = new Player(canvas.width/2, canvas.height - 4, 140, 196, PLAYER_IMG, 134, 100, 70, 98);
+	player = new Player(canvas.width/2, canvas.height - 4, 120, 200, PLAYER_R_IMG);
 
 	objects = [player];
 	finishedEffects = [];
@@ -158,15 +158,11 @@ document.addEventListener("keyup", keyUpHandler, false);
 function keyDownHandler(e){
 	if(INPUT_RIGHT.includes(e.key)){
 		rightPressed = true;
-		if(!player.isSliding){
-			player.facing = "Right";
-		}
+		player.face("Right");
     }
     else if(INPUT_LEFT.includes(e.key)){
 		leftPressed = true;
-		if(!player.isSliding){
-			player.facing = "Left";
-		}
+		player.face("Left");
 	}
 	else if(INPUT_DOWN.includes(e.key)){
 		player.startSlide();
@@ -203,14 +199,12 @@ function mouseDown(e){
     if(e.clientX > rect.left + canvas.width / 2){
 		rightPressed = true;
 		dir = "Right";
-		if (!player.isSliding)
-			player.facing = "Right";
+		player.face("Right");
 	}
 	else if(e.clientX < rect.left + canvas.width / 2){
 		leftPressed = true;
 		dir = "Left";
-		if (!player.isSliding)
-			player.facing = "Left";
+		player.face("Left");
 	}
 
 	if (!lastTouchTime) {
@@ -242,14 +236,12 @@ function touchDown(e){
     if (e.touches[0].clientX > rect.left + canvas.width / 2){
 		rightPressed = true;
 		dir = "Right";
-		if (!player.isSliding)
-			player.facing = "Right";
+		player.face("Right");
 	}
 	else if (e.touches[0].clientX < rect.left + canvas.width / 2){
 		leftPressed = true;
 		dir = "Left";
-		if (!player.isSliding)
-			player.facing = "Left";
+		player.face("Left");
 	}
 
 	if (!lastTouchTime) {

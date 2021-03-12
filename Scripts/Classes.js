@@ -44,8 +44,16 @@ class GameObject {
 	}
 }
 
+/*
+class Plate extends GameObject{
+	constructor(x, y, width, height, hitWidth, hitHeight){
+
+	}
+}
+*/
+
 class Player extends GameObject{
-	constructor(x, y, width, height, img, sx, sy, sWidth, sHeight, hitX, hitY, hitWidth, hitHeight){
+	constructor(x, y, width, height, img){
 		super(x, y - width/2, width, height, img, 0, sx, sy, sWidth, sHeight);
 
 		this.velX = 0;
@@ -57,6 +65,7 @@ class Player extends GameObject{
 		this.facing = "Right";
 		this.speed = WALK_SPEED;
 		this.isSliding = false;
+		this.plate = new Plate()
 
 		this.hitX;
 		this.hitY;
@@ -64,6 +73,17 @@ class Player extends GameObject{
 		this.hitHeight;
 
 		this.updateHitbox();
+	}
+
+	face(direction){
+		if (!player.isSliding) {
+			this.facing = direction;
+
+			if (direction == "Left")
+				this.img = PLAYER_L_IMG;
+			else
+				this.img = PLAYER_R_IMG
+		}
 	}
 
 	main(){
@@ -77,7 +97,6 @@ class Player extends GameObject{
 
 	draw(){
 		super.draw();
-		this.drawMore(this.img, 27, 30, 80, 90, 63, 203, 40, 45);
 	}
 
 	drawHitbox() {

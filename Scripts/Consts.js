@@ -33,7 +33,9 @@ const SLIDE_DURATION = 250;
 
 // Images
 
-const PLAYER_IMG = findImage("hamster");
+const PLAYER_L_IMG = findImage("critter_left");
+const PLAYER_R_IMG = findImage("critter_right");
+const PLATE_IMG = findImage("plate");
 const TOMATO_IMGS = TOMATO_TYPES.map(findImage);
 const SPLAT_IMGS = TOMATO_TYPES.map(x => findImage(x + "_splat"));
 const BACKGROUND_IMG = findImage("background");
