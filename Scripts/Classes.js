@@ -9,6 +9,7 @@ class GameObject {
 		this.offsetY = 0;
 		this.angle = 0;
 		this.visible = true;
+		this.flipped = false;
 
 		this.img = img;
 		this.sx = sx;
@@ -30,7 +31,16 @@ class GameObject {
 		ctx.translate(this.x, this.y);
 		ctx.rotate(this.angle * Math.PI / 180);
 		ctx.translate(-this.x, -this.y);
-		ctx.drawImage(this.img, this.sx, this.sy, this.sWidth, this.sHeight, this.x + this.offsetX, this.y + this.offsetY, this.width, this.height);
+		let x = this.x;
+		if (this.flipped) {
+			ctx.save();
+			ctx.scale(-1, 1);
+			x *= -1;
+		}
+		ctx.drawImage(this.img, this.sx, this.sy, this.sWidth, this.sHeight, x + this.offsetX, this.y + this.offsetY, this.width, this.height);
+		if (this.flipped) {
+			ctx.restore();
+		}
 		ctx.restore();
 	}
 
@@ -47,7 +57,9 @@ class GameObject {
 class Plate extends GameObject{
 	constructor(x, y, width, height, hitWidth, hitHeight){
 		super(x, y, width, height, PLATE_IMG, 0);
+
 		this.offsetX = -width/2;
+		this.targetX = x;
 
 		this.hitX = x - hitWidth/2;
 		this.hitY = y;
@@ -56,27 +68,45 @@ class Plate extends GameObject{
 	}
 
 	updatePos(x, y) {
-		this.x = x;
+		this.targetX = x;
 		this.y = y;
-		this.hitX = x - this.hitWidth/2;
-		this.hitY = y;
+	}
+
+	main() {
+		this.x += (this.targetX - this.x) * 0.3 / timeScale;
+		this.hitX = this.x - this.hitWidth/2;
+		this.hitY = this.y;
 	}
 }
 
 class Player extends GameObject{
 	constructor(x, y, width, height, img){
-		super(x, y - width/2, width, height, img, 0);
+		super(
+			x,
+			y - width/2 * PLAYER_SIZE,
+			width * PLAYER_SIZE,
+			height * PLAYER_SIZE,
+			img,
+			0
+		);
 
 		this.velX = 0;
 		this.velY = 0;
-		this.offsetX = -width/2;
-		this.offsetY = -height + width/2;
+		this.offsetX = -this.width/2;
+		this.offsetY = -this.height + this.width/2;
 		this.targetAng = 0;
 
 		this.facing = "Right";
 		this.speed = WALK_SPEED;
 		this.isSliding = false;
-		this.plate = new Plate(this.x, canvas.height, 208, 48, 208, 70)
+		this.plate = new Plate(
+			this.x,
+			this.y - 140,
+			208 * PLAYER_SIZE,
+			48 * PLAYER_SIZE,
+			208 * PLAYER_SIZE,
+			70 * PLAYER_SIZE
+		);
 
 		this.hitX;
 		this.hitY;
@@ -89,27 +119,30 @@ class Player extends GameObject{
 	face(direction){
 		if (!player.isSliding) {
 			this.facing = direction;
-
-			if (direction == "Left")
-				this.img = PLAYER_L_IMG;
-			else
-				this.img = PLAYER_R_IMG;
+			this.flipped = direction == "Left";
+			this.plate.flipped = this.flipped;
 		}
 	}
 
 	main(){
 		this.move();
 		this.updateHitbox();
+
 		this.x += this.velX / timeScale;
 		this.y += this.velY / timeScale;
 		this.angle += (this.targetAng - this.angle) * 0.4 / timeScale;
 		this.collision();
 
-		let plateY = - 140 + 40/90 * Math.abs(this.angle);
+		this.updatePlate()
+		this.plate.main()
+	}
+
+	updatePlate() {
+		let plateY = (- 140 + 40/90 * Math.abs(this.angle)) * PLAYER_SIZE;
 		let plateX = 0;
 		if (this.isSliding)
-			if (this.facing == "Left") plateX = 30;
-			else plateX = -30;
+			if (this.facing == "Left") plateX = 30 * PLAYER_SIZE;
+			else plateX = -30 * PLAYER_SIZE;
 		this.plate.updatePos(this.x + plateX, this.y + plateY);
 	}
 

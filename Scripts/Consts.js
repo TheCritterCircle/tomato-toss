@@ -29,12 +29,12 @@ const NUM_BLINKS = 2;
 const WALK_SPEED = 5.5;
 const SLIDE_SPEED = 11;
 const SLIDE_DURATION = 250;
+const PLAYER_SIZE = 0.9;
 
 
 // Images
 
-const PLAYER_L_IMG = findImage("critter_left");
-const PLAYER_R_IMG = findImage("critter_right");
+const PLAYER_IMG = findImage("critter_right");
 const PLATE_IMG = findImage("plate");
 const TOMATO_IMGS = TOMATO_TYPES.map(findImage);
 const SPLAT_IMGS = TOMATO_TYPES.map(x => findImage(x + "_splat"));
