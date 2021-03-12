@@ -44,13 +44,24 @@ class GameObject {
 	}
 }
 
-/*
 class Plate extends GameObject{
 	constructor(x, y, width, height, hitWidth, hitHeight){
+		super(x, y, width, height, PLATE_IMG, 0);
+		this.offsetX = -width/2;
 
+		this.hitX = x - hitWidth/2;
+		this.hitY = y;
+		this.hitWidth = hitWidth;
+		this.hitHeight = hitHeight
+	}
+
+	updatePos(x, y) {
+		this.x = x;
+		this.y = y;
+		this.hitX = x - this.hitWidth/2;
+		this.hitY = y;
 	}
 }
-*/
 
 class Player extends GameObject{
 	constructor(x, y, width, height, img){
@@ -65,7 +76,7 @@ class Player extends GameObject{
 		this.facing = "Right";
 		this.speed = WALK_SPEED;
 		this.isSliding = false;
-		//this.plate = new Plate()
+		this.plate = new Plate(this.x, canvas.height, 208, 48, 208, 70)
 
 		this.hitX;
 		this.hitY;
@@ -82,7 +93,7 @@ class Player extends GameObject{
 			if (direction == "Left")
 				this.img = PLAYER_L_IMG;
 			else
-				this.img = PLAYER_R_IMG
+				this.img = PLAYER_R_IMG;
 		}
 	}
 
@@ -93,9 +104,17 @@ class Player extends GameObject{
 		this.y += this.velY / timeScale;
 		this.angle += (this.targetAng - this.angle) * 0.4 / timeScale;
 		this.collision();
+
+		let plateY = - 140 + 40/90 * Math.abs(this.angle);
+		let plateX = 0;
+		if (this.isSliding)
+			if (this.facing == "Left") plateX = 30;
+			else plateX = -30;
+		this.plate.updatePos(this.x + plateX, this.y + plateY);
 	}
 
 	draw(){
+		this.plate.draw();
 		super.draw();
 	}
 
@@ -194,7 +213,7 @@ class Player extends GameObject{
 
 class Splat extends GameObject{
 	constructor(x, y, targetW, targetH, img){
-		super(x, y, 0, 0, img, 1);
+		super(x, y, 0, 0, img, 5);
 
 		this.targetW = targetW;
 		this.targetH = targetH;
@@ -287,12 +306,13 @@ class Tomato extends GameObject{
 		}
 
 		//Player
-		if (this.x + this.offsetX <= player.hitX + player.hitWidth
-		&& this.x + this.offsetX >= player.hitX - this.width
-		&& this.y + this.offsetY >= player.hitY - this.height
+		let plate = player.plate;
+		if (this.x + this.offsetX <= plate.hitX + plate.hitWidth
+		&& this.x + this.offsetX >= plate.hitX - this.width
+		&& this.y + this.offsetY >= plate.hitY - this.height
 		&& this.hasScored == false) {
 			this.velY = MIN_BOUNCE + Math.random() * (MAX_BOUNCE - MIN_BOUNCE);
-			this.velX += CONTROL * (this.x - (player.hitX + player.hitWidth / 2));
+			this.velX += CONTROL * (this.x - (plate.hitX + plate.hitWidth / 2));
 			this.velAng -= player.velX - this.velX;
 
 			score += 10;

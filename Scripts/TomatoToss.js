@@ -9,7 +9,7 @@ let score = 0;
 let combo = 0;
 
 let background = new GameObject(0, 0, canvas.width, canvas.height, BACKGROUND_IMG);
-let player = new Player(canvas.width/2, canvas.height, 120, 200, PLAYER_R_IMG);
+let player = new Player(canvas.width/2, canvas.height - 4, 120, 200, PLAYER_R_IMG);
 
 let objects = [player];
 let finishedEffects = [];
