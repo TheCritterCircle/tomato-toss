@@ -37,7 +37,7 @@ const WALK_ANIM_SCALE = 0.03;
 
 // Images
 
-const PLAYER_IMG = findImage("critter_right");
+const PLAYER_IMG = findImage("critter");
 const PLATE_IMG = findImage("plate");
 const TOMATO_IMGS = TOMATO_TYPES.map(findImage);
 const SPLAT_IMGS = TOMATO_TYPES.map(x => findImage(x + "_splat"));
