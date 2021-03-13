@@ -17,6 +17,9 @@ let finishedEffects = [];
 let tomatoes = [];
 let splattedTomatoes = [];
 
+//Music
+let music;
+
 //Input
 let rightPressed = false;
 let leftPressed = false;
@@ -47,7 +50,6 @@ function displayFPS(){
 	document.getElementById("fpscount").innerHTML = "FPS:" + fps.toString();
 }
 
-
 //Functions
 
 function init_game(){
@@ -64,6 +66,12 @@ function init_game(){
 	lastCalledTime = undefined;
 	lastTouchTime = undefined;
 	lastSlideTime = undefined;
+
+	if(currentGame <= 0){
+		music = findAudio("TonatoToss");
+		music.play();
+		music.loop = true;
+	}
 
 	currentGame++;
 
@@ -82,7 +90,7 @@ function main(game){
 
 	splattedTomatoes.forEach(deleteTomato);
 	splattedTomatoes = [];
-	//if (tomatoes.length < 1) return;
+	if (tomatoes.length < 1) endGame();
 	if (lastSlideTime > 0) tryEndSlide();
 
 	removeFinishedEffects();
@@ -95,12 +103,6 @@ function main(game){
 function draw(game){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-	if (tomatoes.length < 1){
-		background.img = GAMEOVER_IMG;
-		//background.draw();
-		//return;
-	}
-
 	background.draw();
 	let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);
 	toDraw.forEach(o => {o.draw()});
@@ -110,6 +112,14 @@ function draw(game){
 
 	if (game == currentGame)
 		setTimeout(draw, 10, game);
+}
+
+function endGame(){
+	if (tomatoes.length < 1){
+		background.img = GAMEOVER_IMG;
+		//background.draw();
+		//return;
+	}
 }
 
 function tryEndSlide() {

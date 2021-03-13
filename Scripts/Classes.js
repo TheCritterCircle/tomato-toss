@@ -347,14 +347,16 @@ class Tomato extends GameObject{
 			this.x = 0 + this.width / 2;
 			this.velX = -this.velX;
 			this.velAng -= this.velX;
-			findAudio("collision").play();
+			if(this.velX != 0)
+				findAudio("collision").play();
 		}
 
 		if(this.x + this.offsetX >= canvas.width - this.width){
 			this.x = canvas.width - this.width / 2;
 			this.velX = -this.velX;
 			this.velAng += this.velY;
-			findAudio("collision").play();
+			if(this.velX != 0)
+				findAudio("collision").play();
 		}
 
 		if(this.y + this.offsetY <= 0){
