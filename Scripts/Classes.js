@@ -91,8 +91,9 @@ class Player extends GameObject{
 		this.targetAng = 0;
 		this.animTimer = 0;
 
-		this.baseW = width
-		this.baseH = height;
+		this.baseW = width * PLAYER_SIZE;
+		this.baseH = height * PLAYER_SIZE;
+		this.baseY = y;
 
 		this.facing = "Right";
 		this.speed = WALK_SPEED;
@@ -144,7 +145,7 @@ class Player extends GameObject{
 			else
 				plateX = -30 * PLAYER_SIZE;
 		} else {
-			plateY -= 0.75 * (this.height - this.baseH);
+			plateY -= 1 * (this.height - this.baseH);
 		}
 
 		this.plate.updatePos(this.x + plateX, this.y + plateY);
@@ -158,6 +159,7 @@ class Player extends GameObject{
 
 			this.width = this.baseW * squash;
 			this.height = this.baseH * stretch;
+			this.y = this.baseY - this.width/2;
 		}
 		else {
 			this.width = this.baseW;
