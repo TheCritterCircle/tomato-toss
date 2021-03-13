@@ -57,9 +57,7 @@ class GameObject {
 class Plate extends GameObject{
 	constructor(x, y, width, height, hitWidth, hitHeight){
 		super(x, y, width, height, PLATE_IMG, 0);
-
 		this.offsetX = -width/2;
-		this.targetX = x;
 
 		this.hitX = x - hitWidth/2;
 		this.hitY = y;
@@ -68,12 +66,8 @@ class Plate extends GameObject{
 	}
 
 	updatePos(x, y) {
-		this.targetX = x;
+		this.x = x;
 		this.y = y;
-	}
-
-	main() {
-		this.x += (this.targetX - this.x) * 0.3 / timeScale;
 		this.hitX = this.x - this.hitWidth/2;
 		this.hitY = this.y;
 	}
@@ -95,6 +89,10 @@ class Player extends GameObject{
 		this.offsetX = -this.width/2;
 		this.offsetY = -this.height + this.width/2;
 		this.targetAng = 0;
+		this.animTimer = 0;
+
+		this.baseW = width
+		this.baseH = height;
 
 		this.facing = "Right";
 		this.speed = WALK_SPEED;
@@ -104,8 +102,8 @@ class Player extends GameObject{
 			this.y - 140,
 			208 * PLAYER_SIZE,
 			48 * PLAYER_SIZE,
-			208 * PLAYER_SIZE,
-			70 * PLAYER_SIZE
+			215 * PLAYER_SIZE,
+			60 * PLAYER_SIZE
 		);
 
 		this.hitX;
@@ -133,20 +131,46 @@ class Player extends GameObject{
 		this.angle += (this.targetAng - this.angle) * 0.4 / timeScale;
 		this.collision();
 
-		this.updatePlate()
-		this.plate.main()
+		this.updatePlate();
 	}
 
 	updatePlate() {
 		let plateY = (- 140 + 40/90 * Math.abs(this.angle)) * PLAYER_SIZE;
 		let plateX = 0;
-		if (this.isSliding)
-			if (this.facing == "Left") plateX = 30 * PLAYER_SIZE;
-			else plateX = -30 * PLAYER_SIZE;
+
+		if (this.isSliding) {
+			if (this.facing == "Left")
+				plateX = 30 * PLAYER_SIZE;
+			else
+				plateX = -30 * PLAYER_SIZE;
+		} else {
+			plateY -= 0.75 * (this.height - this.baseH);
+		}
+
 		this.plate.updatePos(this.x + plateX, this.y + plateY);
 	}
 
+	animate() {
+		if (this.velX != 0 && !this.isSliding) {
+			let sine = Math.sin(this.animTimer * WALK_ANIM_SPEED);
+			let stretch = 1 - WALK_ANIM_SCALE * sine;
+			let squash = 1 + WALK_ANIM_SCALE * sine;
+
+			this.width = this.baseW * squash;
+			this.height = this.baseH * stretch;
+		}
+		else {
+			this.width = this.baseW;
+			this.height = this.baseH;
+		}
+
+		this.offsetX = -this.width/2;
+		this.offsetY = -this.height + this.width/2;
+		this.animTimer += 90 / timeScale;
+	}
+
 	draw(){
+		this.animate();
 		this.plate.draw();
 		super.draw();
 	}
@@ -161,17 +185,17 @@ class Player extends GameObject{
 		if (!this.isSliding) {
 			this.hitX = this.x + this.offsetX;
 			this.hitY = this.y + this.offsetY;
-			this.hitWidth = this.width;
-			this.hitHeight = this.height;
+			this.hitWidth = this.baseW;
+			this.hitHeight = this.baseH;
 		} else {
-			this.hitWidth = this.height;
-			this.hitHeight = this.width;
-			this.hitY = canvas.height - this.width;
+			this.hitWidth = this.baseH;
+			this.hitHeight = this.baseW;
+			this.hitY = canvas.height - this.baseW;
 
 			if (this.facing == "Left")
-				this.hitX = this.x - this.width/2;
+				this.hitX = this.x - this.baseW/2;
 			else
-				this.hitX = this.x + this.width/2 - this.height;
+				this.hitX = this.x + this.baseW/2 - this.baseH;
 		}
 	}
 

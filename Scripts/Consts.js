@@ -31,6 +31,9 @@ const SLIDE_SPEED = 11;
 const SLIDE_DURATION = 250;
 const PLAYER_SIZE = 0.9;
 
+const WALK_ANIM_SPEED = 1 / 200;
+const WALK_ANIM_SCALE = 0.03;
+
 
 // Images
 
