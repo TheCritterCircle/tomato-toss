@@ -98,6 +98,7 @@ class Player extends GameObject{
 		this.facing = "Right";
 		this.speed = WALK_SPEED;
 		this.isSliding = false;
+
 		this.plate = new Plate(
 			this.x,
 			this.y - 140,
@@ -111,6 +112,8 @@ class Player extends GameObject{
 		this.hitY;
 		this.hitWidth;
 		this.hitHeight;
+
+		this.speedUp = false;
 
 		this.updateHitbox();
 	}
@@ -202,22 +205,25 @@ class Player extends GameObject{
 	}
 
 	move(){
+		let speedBoost = (this.speedUp ? 1.5 : 1);
+		console.log(speedBoost);
+
 		if(!this.isSliding){
 			if(rightPressed){
-				this.velX = this.speed;
+				this.velX = this.speed * speedBoost;
 			}
 			else if(leftPressed){
-				this.velX = -this.speed;
+				this.velX = -this.speed * speedBoost;
 			}
 			else{
 				this.velX = 0;
 			}
 		}else{
 			if(this.isSliding && player.facing == "Right"){
-				this.velX = this.speed;
+				this.velX = this.speed * speedBoost;
 			}
 			else if(this.isSliding && player.facing == "Left"){
-				this.velX = -this.speed;
+				this.velX = -this.speed * speedBoost;
 			}
 		}
 	}
@@ -292,7 +298,7 @@ class Splat extends GameObject{
 			this.alpha -= 0.01 / timeScale;
 		} else {
 			// ends
-			finishedEffects.push(this);
+			toDelete.push(this);
 		}
 	}
 
@@ -393,6 +399,70 @@ class Tomato extends GameObject{
 			findAudio("splat").play();
 			objects.push(splat);
 			splattedTomatoes.push(this);
+		}
+	}
+}
+
+class PowerUp extends GameObject {
+	constructor(x, y, width, height, type){
+		super(x, y, width, height, POWERUP_IMGS[type], -1);
+
+		this.baseW = width;
+		this.velX = 0;
+		this.velY = 0;
+		this.type = type;
+
+		this.offsetX = -this.width / 2;
+		this.offsetY = -this.height / 2;
+
+		this.animTimer = 0;
+	}
+
+	main(){
+		if (this.animTimer < BLINK_DUR * NUM_BLINKS) {
+			this.visible = this.animTimer / BLINK_DUR % 1 < 1/2;
+		} else {
+			this.visible = true;
+			this.animate();
+
+			this.y += POWERUP_SPEED / timeScale;
+			this.collision();
+		}
+
+		this.animTimer += 90 / timeScale;
+	}
+	
+	animate() {
+		let sine = Math.sin(this.animTimer * SPIN_ANIM_SPEED);
+
+		this.width = this.baseW * Math.abs(sine);
+		this.flipped = sine < 0;
+
+		this.offsetX = -this.width/2;
+	}
+
+	collision(){
+		//Player
+		let plate = player.plate;
+		if (this.x + this.offsetX <= plate.hitX + plate.hitWidth
+		&& this.x + this.offsetX >= plate.hitX - this.width
+		&& this.y + this.offsetY >= plate.hitY - this.height) {
+
+			this.hasScored = true;
+			findAudio("powerup").play();
+
+			switch (this.type) {
+				case 0:
+					player.speedUp = true;
+					break;
+			}
+
+			toDelete.push(this);
+		}
+
+		//Exited screen
+		if (this.y + this.offsetY > canvas.height) {
+			toDelete.push(this);
 		}
 	}
 }

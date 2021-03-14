@@ -12,7 +12,7 @@ let background = new GameObject(0, 0, canvas.width, canvas.height, BACKGROUND_IM
 let player = new Player(canvas.width/2, canvas.height - 4, 120, 200, PLAYER_IMG);
 
 let objects = [player];
-let finishedEffects = [];
+let toDelete = [];
 
 let tomatoes = [];
 let splattedTomatoes = [];
@@ -60,7 +60,7 @@ function init_game(){
 	player = new Player(canvas.width/2, canvas.height - 4, 120, 200, PLAYER_IMG);
 
 	objects = [player];
-	finishedEffects = [];
+	toDelete = [];
 	tomatoes = [];
 	splattedTomatoes = [];
 	lastCalledTime = undefined;
@@ -75,7 +75,7 @@ function init_game(){
 
 	currentGame++;
 
-	addTomato();
+	addTomato(canvas.width/2, NEW_ITEM_Y, "tomato");
 	main(currentGame);
 	draw(currentGame);
 }
@@ -83,9 +83,9 @@ function init_game(){
 function main(game){
 	objects.forEach(o => {o.main()});
 
-	while (combo >= NEW_TOMATO_COMBO) {
-		addTomato();
-		combo %= NEW_TOMATO_COMBO;
+	while (combo >= NEW_ITEM_COMBO) {
+		addItem();
+		combo %= NEW_ITEM_COMBO;
 	}
 
 	splattedTomatoes.forEach(deleteTomato);
@@ -93,7 +93,7 @@ function main(game){
 	if (tomatoes.length < 1) endGame();
 	if (lastSlideTime > 0) tryEndSlide();
 
-	removeFinishedEffects();
+	cleanUp();
 	getFPS();
 
 	if (game == currentGame)
@@ -131,24 +131,46 @@ function tryEndSlide() {
 	}
 }
 
-function removeFinishedEffects() {
-	finishedEffects.forEach(e => {
+function cleanUp() {
+	toDelete.forEach(e => {
 		let i = objects.indexOf(e);
 		objects.splice(i, 1);
 	});
-	finishedEffects = [];
+	toDelete = [];
 }
 
-function addTomato(){
-	let type = 0;
-	if (tomatoes.length % 3 == 2) type = 1;
-	let x = Math.random() * canvas.width * 0.9;
+function addTomato(x, y, type){
+	type = TOMATO_TYPES.indexOf(type);
+	let tomato = new Tomato(x, y, 50, 50, type);
 
-	let tomato = new Tomato(x, NEW_TOMATO_Y, 50, 50, type);
 	tomatoes.push(tomato);
 	objects.push(tomato);
+}
 
-	return tomato;
+function addPowerup(x, y, type){
+	type = POWERUP_TYPES.indexOf(type);
+	let powerup = new PowerUp(x, y, 75, 75, type);
+
+	objects.push(powerup);
+}
+
+function addItem(){
+	let rand = Math.random() * 100;
+	let type;
+
+	for (type of Object.keys(ITEM_PROBS)) {
+		if (rand <= ITEM_PROBS[type]) break;
+		rand -= ITEM_PROBS[type];
+	}
+	console.log(type);
+
+	let x = Math.random() * canvas.width * 0.9;
+
+	if (TOMATO_TYPES.includes(type))
+		addTomato(x, NEW_ITEM_Y, type);
+
+	if (POWERUP_TYPES.includes(type))
+		addPowerup(x, NEW_ITEM_Y, type)
 }
 
 function deleteTomato(tomato){
