@@ -313,7 +313,7 @@ class Splat extends GameObject{
 
 class Tomato extends GameObject{
 	constructor(x, y, width, height, type){
-		super(x, y, width, height, TOMATO_IMGS[type], -1);
+		super(x, y, width, height, TOMATO_IMGS[TOMATO_TYPES.indexOf(type)], -1);
 
 		this.velX = 0;
 		this.velY = 0;
@@ -395,7 +395,7 @@ class Tomato extends GameObject{
 		//Ground
 		if (this.y - this.offsetY > canvas.height) {
 			combo = 0;
-			let splat = new Splat(this.x, this.y, this.width * 2, this.height * 0.75, SPLAT_IMGS[this.type])
+			let splat = new Splat(this.x, this.y, this.width * 2, this.height * 0.75, SPLAT_IMGS[TOMATO_TYPES.indexOf(type)])
 			findAudio("splat").play();
 			objects.push(splat);
 			splattedTomatoes.push(this);
@@ -405,7 +405,7 @@ class Tomato extends GameObject{
 
 class PowerUp extends GameObject {
 	constructor(x, y, width, height, type){
-		super(x, y, width, height, POWERUP_IMGS[type], -1);
+		super(x, y, width, height, POWERUP_IMGS[POWERUP_TYPES.indexOf(type)], -1);
 
 		this.baseW = width;
 		this.velX = 0;
@@ -452,7 +452,7 @@ class PowerUp extends GameObject {
 			findAudio("powerup").play();
 
 			switch (this.type) {
-				case 0:
+				case "speed_up":
 					player.speedUp = true;
 					break;
 			}

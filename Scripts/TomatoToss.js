@@ -13,6 +13,7 @@ let player = new Player(canvas.width/2, canvas.height - 4, 120, 200, PLAYER_IMG)
 
 let objects = [player];
 let toDelete = [];
+let effects = {};
 
 let tomatoes = [];
 let splattedTomatoes = [];
@@ -61,8 +62,11 @@ function init_game(){
 
 	objects = [player];
 	toDelete = [];
+	effects = {};
+
 	tomatoes = [];
 	splattedTomatoes = [];
+
 	lastCalledTime = undefined;
 	lastTouchTime = undefined;
 	lastSlideTime = undefined;
@@ -140,17 +144,13 @@ function cleanUp() {
 }
 
 function addTomato(x, y, type){
-	type = TOMATO_TYPES.indexOf(type);
 	let tomato = new Tomato(x, y, 50, 50, type);
-
 	tomatoes.push(tomato);
 	objects.push(tomato);
 }
 
 function addPowerup(x, y, type){
-	type = POWERUP_TYPES.indexOf(type);
 	let powerup = new PowerUp(x, y, 75, 75, type);
-
 	objects.push(powerup);
 }
 
