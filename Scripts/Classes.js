@@ -113,8 +113,6 @@ class Player extends GameObject{
 		this.hitWidth;
 		this.hitHeight;
 
-		this.speedUp = false;
-
 		this.updateHitbox();
 	}
 
@@ -205,7 +203,7 @@ class Player extends GameObject{
 	}
 
 	move(){
-		let speedBoost = (this.speedUp ? 1.5 : 1);
+		let speedBoost = (effects["speed_up"] ? 2 : 1);
 		console.log(speedBoost);
 
 		if(!this.isSliding){
@@ -395,7 +393,7 @@ class Tomato extends GameObject{
 		//Ground
 		if (this.y - this.offsetY > canvas.height) {
 			combo = 0;
-			let splat = new Splat(this.x, this.y, this.width * 2, this.height * 0.75, SPLAT_IMGS[TOMATO_TYPES.indexOf(type)])
+			let splat = new Splat(this.x, this.y, this.width * 2, this.height * 0.75, SPLAT_IMGS[TOMATO_TYPES.indexOf(this.type)])
 			findAudio("splat").play();
 			objects.push(splat);
 			splattedTomatoes.push(this);
@@ -453,7 +451,7 @@ class PowerUp extends GameObject {
 
 			switch (this.type) {
 				case "speed_up":
-					player.speedUp = true;
+					effects[this.type] = 5;
 					break;
 			}
 

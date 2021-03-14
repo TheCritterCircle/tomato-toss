@@ -86,6 +86,7 @@ function init_game(){
 
 function main(game){
 	objects.forEach(o => {o.main()});
+	Object.keys(effects).forEach(updateEffect);
 
 	while (combo >= NEW_ITEM_COMBO) {
 		addItem();
@@ -119,11 +120,16 @@ function draw(game){
 }
 
 function endGame(){
-	if (tomatoes.length < 1){
-		background.img = GAMEOVER_IMG;
-		//background.draw();
-		//return;
-	}
+	background.img = GAMEOVER_IMG;
+	//background.draw();
+	//return;
+}
+
+function updateEffect(e){
+	if (effects[e] <= 0) return;
+
+	effects[e] -= delta;
+	if (effects[e] < 0) effects[e] = 0;
 }
 
 function tryEndSlide() {
@@ -162,7 +168,6 @@ function addItem(){
 		if (rand <= ITEM_PROBS[type]) break;
 		rand -= ITEM_PROBS[type];
 	}
-	console.log(type);
 
 	let x = Math.random() * canvas.width * 0.9;
 

@@ -43,8 +43,8 @@ const SPIN_ANIM_SPEED = 1 / 500;
 const POWERUP_TYPES = ["speed_up"];
 const ITEM_PROBS = {
     "tomato": 50,
-    "orange": 0,
-    "speed_up": 50,
+    "orange": 25,
+    "speed_up": 25,
 };
 
 
