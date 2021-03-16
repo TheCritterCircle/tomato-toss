@@ -129,7 +129,7 @@ function updateEffect(e){
 	if (effects[e] <= 0) return;
 
 	effects[e] -= delta;
-	if (effects[e] < 0) effects[e] = 0;
+	if (effects[e] < 0) delete effects[e];
 }
 
 function tryEndSlide() {

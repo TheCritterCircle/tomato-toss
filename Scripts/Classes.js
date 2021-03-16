@@ -203,8 +203,7 @@ class Player extends GameObject{
 	}
 
 	move(){
-		let speedBoost = (effects["speed_up"] ? 2 : 1);
-		console.log(speedBoost);
+		let speedBoost = (effects["speed_up"] ? 1.5 : 1);
 
 		if(!this.isSliding){
 			if(rightPressed){

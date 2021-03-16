@@ -23,8 +23,8 @@ const NUM_BLINKS = 2;
 
 // Player
 
-const WALK_SPEED = 5.5;
-const SLIDE_SPEED = 11;
+const WALK_SPEED = 6;
+const SLIDE_SPEED = 12;
 const SLIDE_DURATION = 250;
 const PLAYER_SIZE = 0.9;
 
@@ -35,7 +35,7 @@ const WALK_ANIM_SCALE = 0.03;
 // Items
 
 // Combo needed to spawn a new tomato and initial y value.
-const NEW_ITEM_COMBO = 2;
+const NEW_ITEM_COMBO = 5;
 const NEW_ITEM_Y = 60;
 
 const POWERUP_SPEED = 2.5;
