@@ -98,6 +98,7 @@ class Player extends GameObject{
 		this.facing = "Right";
 		this.speed = WALK_SPEED;
 		this.isSliding = false;
+		this.isMoving = false;
 
 		this.plate = new Plate(
 			this.x,
@@ -113,6 +114,9 @@ class Player extends GameObject{
 		this.hitWidth;
 		this.hitHeight;
 
+		this.newX = this.x;
+		this.newY = this.y;
+
 		this.updateHitbox();
 	}
 
@@ -126,14 +130,6 @@ class Player extends GameObject{
 
 	main(){
 		this.move();
-		this.updateHitbox();
-
-		this.x += this.velX / timeScale;
-		this.y += this.velY / timeScale;
-		this.angle += (this.targetAng - this.angle) * 0.4 / timeScale;
-		this.collision();
-
-		this.updatePlate();
 	}
 
 	updatePlate() {
@@ -184,10 +180,10 @@ class Player extends GameObject{
 		ctx.stroke();
 	}
 
-	updateHitbox(){
+	updateHitbox(x, y){
 		if (!this.isSliding) {
-			this.hitX = this.x + this.offsetX;
-			this.hitY = this.y + this.offsetY;
+			this.hitX = x + this.offsetX;
+			this.hitY = y + this.offsetY;
 			this.hitWidth = this.baseW;
 			this.hitHeight = this.baseH;
 		} else {
@@ -196,9 +192,9 @@ class Player extends GameObject{
 			this.hitY = canvas.height - this.baseW;
 
 			if (this.facing == "Left")
-				this.hitX = this.x - this.baseW/2;
+				this.hitX = x - this.baseW/2;
 			else
-				this.hitX = this.x + this.baseW/2 - this.baseH;
+				this.hitX = x + this.baseW/2 - this.baseH;
 		}
 	}
 
@@ -223,6 +219,18 @@ class Player extends GameObject{
 				this.velX = -this.speed * speedBoost;
 			}
 		}
+
+		this.newX = this.x + this.velX / timeScale;
+		this.newY = this.y + this.velY / timeScale;
+		this.angle += (this.targetAng - this.angle) * 0.4 / timeScale;
+
+		this.updateHitbox(this.newX, this.newY);
+		this.collision();
+
+		this.x = this.newX;
+		this.y = this.newY;
+		
+		this.updatePlate();
 	}
 
 	collision(){
@@ -231,7 +239,7 @@ class Player extends GameObject{
 			if(this.isSliding && this.facing == "Left"){
 				this.endSlide();
 			}
-			this.x = 0 + this.x - this.hitX;
+			this.newX = 0 + this.newX - this.hitX;
 		}
 
 		// Right Wall
@@ -239,7 +247,7 @@ class Player extends GameObject{
 			if(this.isSliding && this.facing == "Right"){
 				this.endSlide();
 			}
-			this.x = canvas.width - this.hitWidth + this.x - this.hitX;
+			this.newX = canvas.width - this.hitWidth + this.newX - this.hitX;
 		}
 	}
 
