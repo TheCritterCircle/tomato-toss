@@ -15,7 +15,7 @@ const MAX_BOUNCE = -5;
 // How much a tomato's trajectory is influenced by how it hits the player.
 const CONTROL = 0.05;
 
-const TOMATO_TYPES = ["tomato", "orange"];
+const TOMATO_TYPES = ["tomato", "orange", "egg"];
 // Duration of each blink and total number of blinks when a tomato spawns.
 const BLINK_DUR = 6000; // Heh, blink ;)
 const NUM_BLINKS = 2;
@@ -43,7 +43,8 @@ const SPIN_ANIM_SPEED = 1 / 500;
 const POWERUP_TYPES = ["speed_up"];
 const ITEM_PROBS = {
     "tomato": 50,
-    "orange": 25,
+    "orange": 10,
+    "egg": 5,
     "speed_up": 25,
 };
 
