@@ -343,8 +343,11 @@ class Tomato extends GameObject{
 			this.x += this.velX / timeScale;
 			this.y += this.velY / timeScale;
 			this.angle += this.velAng / timeScale;
-			this.velAng *= 0.995 ** (1 / timeScale);
-			this.velX *= 0.995 ** (1 / timeScale);
+			this.velAng *= (1 - DECEL) ** (1 / timeScale);
+			this.velX *= (1 - DECEL) ** (1 / timeScale);
+
+			if (effects["magnet"])
+				this.velX += MAGNET_STR * (player.x - this.x);
 		}
 	}
 
@@ -458,7 +461,8 @@ class PowerUp extends GameObject {
 
 			switch (this.type) {
 				case "speed_up":
-					effects[this.type] = 5;
+				case "magnet":
+					effects[this.type] = 7;
 					break;
 			}
 

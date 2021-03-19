@@ -41,13 +41,16 @@ const NEW_ITEM_Y = 60;
 
 const POWERUP_SPEED = 2.5;
 const SPIN_ANIM_SPEED = 1 / 500;
-const POWERUP_TYPES = ["speed_up"];
+const POWERUP_TYPES = ["speed_up", "magnet"];
 const ITEM_PROBS = {
-    "tomato": 50,
+    "tomato": 40,
     "orange": 10,
     "egg": 5,
-    "speed_up": 25,
+    "speed_up": 5,
+    "magnet": 5,
 };
+
+const MAGNET_STR = 0.00025;
 
 
 // Images

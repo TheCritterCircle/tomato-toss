@@ -156,7 +156,7 @@ function addTomato(x, y, type){
 }
 
 function addPowerup(x, y, type){
-	let powerup = new PowerUp(x, y, 75, 75, type);
+	let powerup = new PowerUp(x, y, 70, 70, type);
 	objects.push(powerup);
 }
 
