@@ -71,6 +71,12 @@ class Plate extends GameObject{
 		this.hitX = this.x - this.hitWidth/2;
 		this.hitY = this.y;
 	}
+
+	drawHitbox() {
+		ctx.beginPath();
+		ctx.rect(this.hitX, this.hitY, this.hitWidth, this.hitHeight);
+		ctx.stroke();
+	}
 }
 
 class Player extends GameObject{
@@ -346,8 +352,14 @@ class Tomato extends GameObject{
 			this.velAng *= (1 - DECEL) ** (1 / timeScale);
 			this.velX *= (1 - DECEL) ** (1 / timeScale);
 
-			if (effects["magnet"])
-				this.velX += MAGNET_STR * (player.x - this.x);
+			if (effects["magnet"]) {
+				let dist = Math.abs(player.x - this.x);
+				let force = MAGNET_STR * Math.log(dist);
+
+				this.velX += force * (player.x - this.x) / dist;
+
+				//this.velX += MAGNET_STR * (player.x - this.x);
+			}
 		}
 	}
 
@@ -383,6 +395,7 @@ class Tomato extends GameObject{
 		//Player
 		let plate = player.plate;
 		if (this.x + this.offsetX <= plate.hitX + plate.hitWidth
+		&& this.y + this.offsetY <= plate.hitY + plate.hitHeight
 		&& this.x + this.offsetX >= plate.hitX - this.width
 		&& this.y + this.offsetY >= plate.hitY - this.height
 		&& this.hasScored == false) {

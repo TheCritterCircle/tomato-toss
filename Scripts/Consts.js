@@ -50,7 +50,7 @@ const ITEM_PROBS = {
     "magnet": 5,
 };
 
-const MAGNET_STR = 0.00025;
+const MAGNET_STR = 0.005;
 
 
 // Images
