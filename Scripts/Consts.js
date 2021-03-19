@@ -10,10 +10,11 @@ const DOUBLE_TAP_MAX = 300;
 
 const GRAVITY = 0.06;
 // Min and max values for the boost that a tomato gets when bounced.
-const MIN_BOUNCE = -4; 
+const MIN_BOUNCE = -4.5; 
 const MAX_BOUNCE = -5;
 // How much a tomato's trajectory is influenced by how it hits the player.
 const CONTROL = 0.05;
+const DECEL = 0.01;
 
 const TOMATO_TYPES = ["tomato", "orange", "egg"];
 // Duration of each blink and total number of blinks when a tomato spawns.
