@@ -104,7 +104,7 @@ function main(game){
 	splattedTomatoes.forEach(deleteTomato);
 	splattedTomatoes = [];
 	if (tomatoes.length < 1) endGame();
-	if (lastSlideTime > 0) tryEndSlide();
+	//if (lastSlideTime > 0) tryEndSlide();
 
 	if(trueCombo >= level * 10){
 		trueCombo = 0;
@@ -255,8 +255,8 @@ function keyUpHandler(e){
 
 //Touch & Mouse Controls
 
-document.addEventListener("mousedown", mouseDown, false);
-document.addEventListener("mouseup", mouseUp, false);
+canvas.addEventListener("mousedown", mouseDown, false);
+canvas.addEventListener("mouseup", mouseUp, false);
 
 canvas.addEventListener("touchstart", touchDown, false);
 canvas.addEventListener("touchend", touchUp, false);
@@ -292,6 +292,7 @@ function mouseUp(e){
 	rightPressed = false;
 	leftPressed = false;
 
+	player.endSlide();
 	/*
 	if (player.isSliding)
 		player.endSlide();
@@ -328,4 +329,6 @@ function touchDown(e){
 function touchUp(e){
 	rightPressed = false;
 	leftPressed = false;
+
+	player.endSlide();
 }
