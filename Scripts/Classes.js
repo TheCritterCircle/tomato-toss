@@ -405,6 +405,7 @@ class Tomato extends GameObject{
 
 			score += 10;
 			combo += 1;
+			trueCombo += 1;
 			this.hasScored = true;
 			findAudio("collision").play();
 		}
@@ -416,6 +417,7 @@ class Tomato extends GameObject{
 		//Ground
 		if (this.y - this.offsetY > canvas.height) {
 			combo = 0;
+			trueCombo = 0;
 			let splat = new Splat(this.x, this.y, this.width * 2, this.height * 0.75, SPLAT_IMGS[TOMATO_TYPES.indexOf(this.type)])
 			findAudio("splat").play();
 			objects.push(splat);

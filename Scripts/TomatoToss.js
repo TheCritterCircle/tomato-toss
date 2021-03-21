@@ -7,6 +7,9 @@ let timeScale = 1;
 let currentGame = 0;
 let score = 0;
 let combo = 0;
+let trueCombo = 0;
+
+let level = 1;
 
 let background = new GameObject(0, 0, canvas.width, canvas.height, BACKGROUND_IMG);
 let player = new Player(canvas.width/2, canvas.height - 4, 120, 200, PLAYER_IMG);
@@ -56,6 +59,9 @@ function displayFPS(){
 function init_game(){
 	score = 0;
 	combo = 0;
+	trueCombo = 0;
+
+	level = 1;
 
 	background.img = BACKGROUND_IMG;
 	player = new Player(canvas.width/2, canvas.height - 4, 120, 200, PLAYER_IMG);
@@ -98,6 +104,11 @@ function main(game){
 	if (tomatoes.length < 1) endGame();
 	if (lastSlideTime > 0) tryEndSlide();
 
+	if(trueCombo >= level * 10){
+		trueCombo = 0;
+		level++;
+	}
+
 	cleanUp();
 	getFPS();
 
@@ -112,12 +123,24 @@ function draw(game){
 	let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);
 	toDraw.forEach(o => {o.draw()});
 
+	ctx.beginPath();
+	ctx.rect(10, 10, (canvas.width - 20) / (level * 10) * trueCombo, 20);
+	ctx.fillStyle = "#FF0000";
+	ctx.fill();
+	ctx.closePath();
+
+	ctx.fillStyle = "#000000";
 	ctx.font = "30px Arial";
-	ctx.fillText(score, 10, 30);
+	ctx.fillText(score, 10, 60);
+
+	ctx.fillText("Level: " + level, 10, 90);
 
 	if (game == currentGame)
 		setTimeout(draw, 10, game);
 }
+
+
+
 
 function endGame(){
 	background.img = GAMEOVER_IMG;
