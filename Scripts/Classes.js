@@ -406,8 +406,7 @@ class Tomato extends GameObject{
 			this.velAng -= player.velX - this.velX;
 
 			score += 10;
-			combo += 1;
-			trueCombo += 1;
+			incCombo(1);
 			this.HP -= 1;
 			this.hasScored = true;
 			findAudio("collision").play();
@@ -424,15 +423,7 @@ class Tomato extends GameObject{
 
 		//Ground
 		if (this.y - this.offsetY > canvas.height) {
-			combo = 0;
-
-			if(trueCombo - level * 10 / 3 >= 0){
-				trueCombo -= level * 10 / 3;
-			}
-			else{
-				trueCombo = 0;
-			}
-
+			breakCombo();
 			let splat = new Splat(this.x, this.y, this.width * 2, this.height * 0.75, SPLAT_IMGS[TOMATO_TYPES.indexOf(this.type)])
 			findAudio("splat").play();
 			objects.push(splat);

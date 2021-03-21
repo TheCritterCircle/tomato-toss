@@ -96,20 +96,10 @@ function main(game){
 	objects.forEach(o => {o.main()});
 	Object.keys(effects).forEach(updateEffect);
 
-	while (combo >= NEW_ITEM_COMBO) {
-		addItem();
-		combo %= NEW_ITEM_COMBO;
-	}
-
 	splattedTomatoes.forEach(deleteTomato);
 	splattedTomatoes = [];
 	if (tomatoes.length < 1) endGame();
 	//if (lastSlideTime > 0) tryEndSlide();
-
-	if(trueCombo >= level * 10){
-		trueCombo = 0;
-		level++;
-	}
 
 	cleanUp();
 	getFPS();
@@ -150,12 +140,34 @@ function drawGUI(){
 	ctx.fillText("Level: " + level, 10, 95);
 }
 
-
-
 function endGame(){
 	background.img = GAMEOVER_IMG;
 	//background.draw();
 	//return;
+}
+
+function incCombo(points) {
+	combo += points;
+	trueCombo += points;
+
+	if (combo >= NEW_ITEM_COMBO) {
+		combo = 0;
+		addItem();
+	}
+
+	if(trueCombo >= level * 10){
+		trueCombo = 0;
+		level++;
+	}
+}
+
+function breakCombo() {
+	combo = 0;
+
+	if(trueCombo - level * 10 / 3 >= 0)
+		trueCombo -= level * 10 / 3;
+	else
+		trueCombo = 0;
 }
 
 function updateEffect(e){
