@@ -123,6 +123,18 @@ function draw(game){
 	let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);
 	toDraw.forEach(o => {o.draw()});
 
+	drawGUI();
+
+	if (game == currentGame)
+		setTimeout(draw, 10, game);
+}
+
+function drawGUI(){
+	ctx.beginPath();
+	ctx.rect(5, 5, canvas.width - 10, 30);
+	ctx.fillStyle = "#FFFFFF";
+	ctx.fill();
+	ctx.closePath();
 	ctx.beginPath();
 	ctx.rect(10, 10, (canvas.width - 20) / (level * 10) * trueCombo, 20);
 	ctx.fillStyle = "#FF0000";
@@ -131,14 +143,10 @@ function draw(game){
 
 	ctx.fillStyle = "#000000";
 	ctx.font = "30px Arial";
-	ctx.fillText(score, 10, 60);
+	ctx.fillText(score, 10, 65);
 
-	ctx.fillText("Level: " + level, 10, 90);
-
-	if (game == currentGame)
-		setTimeout(draw, 10, game);
+	ctx.fillText("Level: " + level, 10, 95);
 }
-
 
 
 
