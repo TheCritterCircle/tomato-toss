@@ -21,6 +21,8 @@ let effects = {};
 let tomatoes = [];
 let splattedTomatoes = [];
 
+let timeMultiplier = 1;
+
 //Music
 let music;
 
