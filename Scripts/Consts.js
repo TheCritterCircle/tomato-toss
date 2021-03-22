@@ -43,11 +43,11 @@ const POWERUP_SPEED = 2.5;
 const SPIN_ANIM_SPEED = 1 / 500;
 const POWERUP_TYPES = ["speed_up", "magnet"];
 const ITEM_PROBS = {
-    "tomato": 40,
-    "orange": 10,
-    "egg": 5,
-    "speed_up": 5,
-    "magnet": 5,
+    "tomato": 50,
+    "orange": 20,
+    "egg": 10,
+    "speed_up": 10,
+    "magnet": 10,
 };
 
 const MAGNET_STR = 0.005;
