@@ -60,7 +60,7 @@ class Plate extends GameObject{
 		this.offsetX = -width/2;
 
 		this.hitX = x - hitWidth/2;
-		this.hitY = y;
+		this.hitY = y + 12;
 		this.hitWidth = hitWidth;
 		this.hitHeight = hitHeight
 	}
@@ -68,8 +68,8 @@ class Plate extends GameObject{
 	updatePos(x, y) {
 		this.x = x;
 		this.y = y;
-		this.hitX = this.x - this.hitWidth/2;
-		this.hitY = this.y;
+		this.hitX = x - this.hitWidth/2;
+		this.hitY = y + 12;
 	}
 
 	drawHitbox() {
@@ -77,6 +77,13 @@ class Plate extends GameObject{
 		ctx.rect(this.hitX, this.hitY, this.hitWidth, this.hitHeight);
 		ctx.stroke();
 	}
+
+	/*
+	draw() {
+		super.draw();
+		this.drawHitbox();
+	}
+	*/
 }
 
 class Player extends GameObject{
@@ -108,9 +115,9 @@ class Player extends GameObject{
 
 		this.plate = new Plate(
 			this.x,
-			this.y - 140,
+			this.y - 152,
 			208 * PLAYER_SIZE,
-			48 * PLAYER_SIZE,
+			60 * PLAYER_SIZE,
 			215 * PLAYER_SIZE,
 			60 * PLAYER_SIZE
 		);
@@ -139,7 +146,7 @@ class Player extends GameObject{
 	}
 
 	updatePlate() {
-		let plateY = (- 140 + 40/90 * Math.abs(this.angle)) * PLAYER_SIZE;
+		let plateY = (- 152 + 40/90 * Math.abs(this.angle)) * PLAYER_SIZE;
 		let plateX = 0;
 
 		if (this.isSliding) {
@@ -176,8 +183,8 @@ class Player extends GameObject{
 
 	draw(){
 		this.animate();
-		this.plate.draw();
 		super.draw();
+		this.plate.draw();
 	}
 
 	drawHitbox() {
@@ -424,7 +431,7 @@ class Tomato extends GameObject{
 		//Ground
 		if (this.y - this.offsetY > canvas.height) {
 			breakCombo();
-			let splat = new Splat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[type].splatImg)
+			let splat = new Splat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[this.type].splatImg)
 			findAudio("splat").play();
 			objects.push(splat);
 			splattedTomatoes.push(this);
