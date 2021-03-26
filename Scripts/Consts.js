@@ -16,11 +16,21 @@ const MAX_BOUNCE = -5;
 const CONTROL = 0.05;
 const DECEL = 0.01;
 
-const TOMATO_TYPES = ["tomato", "orange", "egg"];
 // Duration of each blink and total number of blinks when a tomato spawns.
 const BLINK_DUR = 6000; // Heh, blink ;)
 const NUM_BLINKS = 2;
 
+const TOMATOES = {
+    "tomato": {
+        "prob": 60,
+    },
+    "orange": {
+        "prob": 25,
+    },
+    "egg": {
+        "prob": 15,
+    },
+};
 
 // Player
 
@@ -42,12 +52,9 @@ const NEW_ITEM_Y = 60;
 const POWERUP_SPEED = 2.5;
 const SPIN_ANIM_SPEED = 1 / 500;
 const POWERUP_TYPES = ["speed_up", "magnet"];
-const ITEM_PROBS = {
-    "tomato": 50,
-    "orange": 20,
-    "egg": 10,
-    "speed_up": 10,
-    "magnet": 10,
+const POWERUP_PROBS = {
+    "speed_up": 50,
+    "magnet": 50,
 };
 
 const MAGNET_STR = 0.005;
@@ -57,9 +64,11 @@ const MAGNET_STR = 0.005;
 
 const PLAYER_IMG = findImage("critter");
 const PLATE_IMG = findImage("plate");
-const TOMATO_IMGS = TOMATO_TYPES.map(findImage);
+for (type of Object.keys(TOMATOES)) {
+    TOMATOES[type].img = findImage(type);
+    TOMATOES[type].splatImg = findImage(type + "_splat");
+}
 const POWERUP_IMGS = POWERUP_TYPES.map(findImage);
-const SPLAT_IMGS = TOMATO_TYPES.map(x => findImage(x + "_splat"));
 const BACKGROUND_IMG = findImage("background");
 const GAMEOVER_IMG = findImage("gameover");
 

@@ -324,7 +324,7 @@ class Splat extends GameObject{
 
 class Tomato extends GameObject{
 	constructor(x, y, width, height, type){
-		super(x, y, width, height, TOMATO_IMGS[TOMATO_TYPES.indexOf(type)], -1);
+		super(x, y, width, height, TOMATOES[type].img, -1);
 
 		this.HP = 15;
 
@@ -424,7 +424,7 @@ class Tomato extends GameObject{
 		//Ground
 		if (this.y - this.offsetY > canvas.height) {
 			breakCombo();
-			let splat = new Splat(this.x, this.y, this.width * 2, this.height * 0.75, SPLAT_IMGS[TOMATO_TYPES.indexOf(this.type)])
+			let splat = new Splat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[type].splatImg)
 			findAudio("splat").play();
 			objects.push(splat);
 			splattedTomatoes.push(this);

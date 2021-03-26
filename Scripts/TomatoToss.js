@@ -195,32 +195,39 @@ function cleanUp() {
 }
 
 function addTomato(x, y, type){
+	let rand = Math.random() * 100;
+
+	if (type == "random")
+		for (type of Object.keys(TOMATOES)) {
+			if (rand <= TOMATOES[type].prob) break;
+			rand -= TOMATOES[type].prob;
+		}
+
 	let tomato = new Tomato(x, y, 50, 50, type);
 	tomatoes.push(tomato);
 	objects.push(tomato);
 }
 
 function addPowerup(x, y, type){
+	let rand = Math.random() * 100;
+
+	if (type == "random")
+		for (type of POWERUP_TYPES) {
+			if (rand <= POWERUP_PROBS[type]) break;
+			rand -= POWERUP_PROBS[type];
+		}
+	
 	let powerup = new PowerUp(x, y, 70, 70, type);
 	objects.push(powerup);
 }
 
 function addItem(){
-	let rand = Math.random() * 100;
-	let type;
-
-	for (type of Object.keys(ITEM_PROBS)) {
-		if (rand <= ITEM_PROBS[type]) break;
-		rand -= ITEM_PROBS[type];
-	}
-
 	let x = Math.random() * canvas.width * 0.9;
 
-	if (TOMATO_TYPES.includes(type))
-		addTomato(x, NEW_ITEM_Y, type);
-
-	if (POWERUP_TYPES.includes(type))
-		addPowerup(x, NEW_ITEM_Y, type)
+	if (Math.random() < 0.6)
+		addTomato(x, NEW_ITEM_Y, "random");
+	else
+		addPowerup(x, NEW_ITEM_Y, "random");
 }
 
 function deleteTomato(tomato){
