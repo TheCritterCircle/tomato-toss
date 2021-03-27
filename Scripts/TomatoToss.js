@@ -58,6 +58,8 @@ function displayFPS(){
 
 //Functions
 
+let currentState;
+
 function init_game(){
 	score = 0;
 	combo = 0;
@@ -88,38 +90,10 @@ function init_game(){
 	currentGame++;
 
 	addTomato(canvas.width/2, NEW_ITEM_Y, "tomato");
-	main(currentGame);
-	draw(currentGame);
+	currentState = new PlayState(currentGame);
 }
 
-function main(game){
-	objects.forEach(o => {o.main()});
-	Object.keys(effects).forEach(updateEffect);
 
-	splattedTomatoes.forEach(deleteTomato);
-	splattedTomatoes = [];
-	if (tomatoes.length < 1) endGame();
-	//if (lastSlideTime > 0) tryEndSlide();
-
-	cleanUp();
-	getFPS();
-
-	if (game == currentGame)
-		setTimeout(main, 10, game);
-}
-
-function draw(game){
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-	background.draw();
-	let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);
-	toDraw.forEach(o => {o.draw()});
-
-	drawUI();
-
-	if (game == currentGame)
-		setTimeout(draw, 10, game);
-}
 
 function drawUI(){
 	ctx.fillStyle = "#000000";

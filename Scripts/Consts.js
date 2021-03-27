@@ -17,8 +17,8 @@ const CONTROL = 0.05;
 const DECEL = 0.01;
 
 // Duration of each blink and total number of blinks when a tomato spawns.
-const BLINK_DUR = 6000; // Heh, blink ;)
-const NUM_BLINKS = 2;
+const BLINK_DUR = 6500; // Heh, blink ;)
+const NUM_BLINKS = 3;
 
 const TOMATOES = {
     "tomato": {
