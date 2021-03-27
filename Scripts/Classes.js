@@ -347,7 +347,7 @@ class PlateSplat extends Splat {
 
 class Tomato extends GameObject{
 	constructor(x, y, width, height, type){
-		super(x, y, width, height, TOMATOES[type].img, -2);
+		super(x, y, width, height, TOMATOES[type].img, -2 + 0.5 * Math.random());
 
 		this.hp = TOMATOES[type].hp || -1;
 
