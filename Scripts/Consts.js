@@ -22,13 +22,18 @@ const NUM_BLINKS = 2;
 
 const TOMATOES = {
     "tomato": {
-        "prob": 60,
+        "prob": 0,
+        "bounce_pts": 1,
     },
     "orange": {
-        "prob": 25,
+        "prob": 50,
+        "hp": 7,
+        "bounce_pts": 2,
     },
     "egg": {
-        "prob": 15,
+        "prob": 50,
+        "hp": 5,
+        "pinata_pts": 25,
     },
 };
 

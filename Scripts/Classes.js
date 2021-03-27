@@ -333,7 +333,7 @@ class Tomato extends GameObject{
 	constructor(x, y, width, height, type){
 		super(x, y, width, height, TOMATOES[type].img, -1);
 
-		this.HP = 15;
+		this.hp = TOMATOES[type].hp;
 
 		this.velX = 0;
 		this.velY = 0;
@@ -414,13 +414,15 @@ class Tomato extends GameObject{
 
 			score += 10;
 			incCombo(1);
-			this.HP -= 1;
 			this.hasScored = true;
 			findAudio("collision").play();
 
-			if(tomatoes.length >= 2 && this.HP <= 0){
-				splattedTomatoes.push(this);
-				findAudio("splat").play();
+			if(tomatoes.length > 1 && this.hp > 0) {
+				this.hp--;
+				if (this.hp == 0){
+					splattedTomatoes.push(this);
+					findAudio("splat").play();
+				} 
 			}
 		}
 
