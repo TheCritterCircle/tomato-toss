@@ -4,7 +4,6 @@ const ctx = canvas.getContext("2d");
 let timeScale = 1;
 
 //Functions & Code
-let currentGame = 0;
 let score = 0;
 let combo = 0;
 let trueCombo = 0;
@@ -81,20 +80,16 @@ function init_game(){
 	lastCalledTime = undefined;
 	lastTouchTime = undefined;
 	lastSlideTime = undefined;
-
-	if(currentGame <= 0){
-		music = findAudio("TonatoToss");
-		music.play();
-		music.loop = true;
-	}
-
-	currentGame++;
+	
+	if (music) {music.pause(), delete music}
+	music = findAudio("TonatoToss");
+	music.play();
+	music.loop = true;
 
 	addTomato(canvas.width/2, NEW_ITEM_Y, "tomato");
-	currentState = new PlayState(currentGame);
+	if (currentState) currentState.end();
+	currentState = new PlayState();
 }
-
-
 
 function drawUI(){
 	ctx.fillStyle = "#000000";

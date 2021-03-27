@@ -1,10 +1,11 @@
 class PlayState{
-    constructor(game){
-        this.main(game);
-        this.draw(game);
+    constructor(){
+        this.main();
+        this.draw();
+        this.ended = false;
     }
 
-    main(game){
+    main(){
         objects.forEach(o => {o.main()});
         Object.keys(effects).forEach(updateEffect);
     
@@ -15,11 +16,11 @@ class PlayState{
     
         cleanUp();
         getFPS();
-    
-        if (game == currentGame)
-            setTimeout(function(){currentState.main(currentGame);}, 10);
+
+        if (!this.ended) setTimeout(_ => {this.main()}, 10);
     }
-    draw(game){
+
+    draw(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     
         background.draw();
@@ -28,7 +29,11 @@ class PlayState{
     
         drawUI();
     
-        if (game == currentGame)
-            setTimeout(function(){currentState.draw(currentGame);}, 10);
+        if (!this.ended) setTimeout(_ => {this.draw()}, 10);
+    }
+
+    end(){
+        this.ended = true;
+        delete this;
     }
 }
