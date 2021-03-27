@@ -128,7 +128,7 @@ function incCombo(points) {
 
 	if (combo >= NEW_ITEM_COMBO) {
 		combo = 0;
-		addItem();
+		addItem("random");
 	}
 
 	if(trueCombo >= level * 10){
@@ -197,13 +197,20 @@ function addPowerup(x, y, type){
 	objects.push(powerup);
 }
 
-function addItem(){
+function addItem(type){
 	let x = Math.random() * canvas.width * 0.9;
 
-	if (Math.random() < 0.6 || tomatoes.length == 1)
+	if (type == "tomato")
 		addTomato(x, NEW_ITEM_Y, "random");
-	else
+
+	if (type == "powerup")
 		addPowerup(x, NEW_ITEM_Y, "random");
+
+	if (type == "random")
+		if (Math.random() < 0.6 || tomatoes.length == 1)
+			addTomato(x, NEW_ITEM_Y, "random");
+		else
+			addPowerup(x, NEW_ITEM_Y, "random");
 }
 
 function deleteTomato(tomato){

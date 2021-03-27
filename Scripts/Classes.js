@@ -425,13 +425,15 @@ class Tomato extends GameObject{
 		&& this.y + this.offsetY >= plate.hitY - this.height
 		&& this.hasScored == false) {
 
-			if (tomatoes.length > 1 && this.hp > 0) {
+			if (this.hp > 0) {
 				this.hp--;
 				if (this.hp == 0){
 					score += TOMATOES[this.type].pinata_pts || 0;
 					findAudio("splat").play();
 					new PlateSplat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[this.type].splatImg);
 					splattedTomatoes.push(this);
+					addItem("tomato");
+					combo = 0;
 					return;
 				} 
 			}
