@@ -301,6 +301,8 @@ class Splat extends GameObject{
 		this.targetW = targetW;
 		this.targetH = targetH;
 		this.alpha = 1;
+
+		objects.push(this);
 	}
 
 	main(){
@@ -329,9 +331,23 @@ class Splat extends GameObject{
 	}
 }
 
+class PlateSplat extends Splat {
+	constructor(x, y, targetW, targetH, img) {
+		super(x, y, targetW, targetH, img);
+		this.relX = x - player.plate.x;
+		this.depth = -1;
+	}
+
+	main() {
+		super.main();
+		this.x = player.plate.x + this.relX;
+		this.y = player.plate.y + 20;
+	}
+}
+
 class Tomato extends GameObject{
 	constructor(x, y, width, height, type){
-		super(x, y, width, height, TOMATOES[type].img, -1);
+		super(x, y, width, height, TOMATOES[type].img, -2);
 
 		this.hp = TOMATOES[type].hp || -1;
 
@@ -413,8 +429,9 @@ class Tomato extends GameObject{
 				this.hp--;
 				if (this.hp == 0){
 					score += TOMATOES[this.type].pinata_pts || 0;
-					splattedTomatoes.push(this);
 					findAudio("splat").play();
+					new PlateSplat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[this.type].splatImg);
+					splattedTomatoes.push(this);
 					return;
 				} 
 			}
@@ -436,9 +453,8 @@ class Tomato extends GameObject{
 		//Ground
 		if (this.y - this.offsetY > canvas.height) {
 			breakCombo();
-			let splat = new Splat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[this.type].splatImg)
 			findAudio("splat").play();
-			objects.push(splat);
+			new Splat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[this.type].splatImg)
 			splattedTomatoes.push(this);
 		}
 	}
@@ -446,7 +462,7 @@ class Tomato extends GameObject{
 
 class PowerUp extends GameObject {
 	constructor(x, y, width, height, type){
-		super(x, y, width, height, POWERUP_IMGS[POWERUP_TYPES.indexOf(type)], -1);
+		super(x, y, width, height, POWERUP_IMGS[POWERUP_TYPES.indexOf(type)], -2);
 
 		this.baseW = width;
 		this.velX = 0;
