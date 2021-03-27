@@ -363,19 +363,21 @@ class Tomato extends GameObject{
 	}
 
 	main(){
+		let timeSpeed = effects["slow_time"] ? 0.75 : 1;
+
 		if (this.animTimer < BLINK_DUR * NUM_BLINKS) {
 			this.visible = this.animTimer / BLINK_DUR % 1 < 1/2;
 			this.animTimer += 90 / timeScale;
 		} else {
 			this.visible = true;
-			this.gravity();
-			this.collision();
-
-			this.x += this.velX / timeScale;
-			this.y += this.velY / timeScale;
-			this.angle += this.velAng / timeScale;
-			this.velAng *= (1 - DECEL) ** (1 / timeScale);
-			this.velX *= (1 - DECEL) ** (1 / timeScale);
+			
+			this.velX *= (1 - DECEL) ** (1 / timeScale * timeSpeed);
+			this.velY += GRAVITY / timeScale * timeSpeed;
+			this.velAng *= (1 - DECEL) ** (1 / timeScale * timeSpeed);
+			
+			this.x += this.velX / timeScale * timeSpeed;
+			this.y += this.velY / timeScale * timeSpeed;
+			this.angle += this.velAng / timeScale * timeSpeed;
 
 			if (effects["magnet"]) {
 				let dist = Math.abs(player.x - this.x);
@@ -385,11 +387,9 @@ class Tomato extends GameObject{
 
 				//this.velX += MAGNET_STR * (player.x - this.x);
 			}
-		}
-	}
 
-	gravity(){
-		this.velY += GRAVITY / timeScale;
+			this.collision();
+		}
 	}
 
 	collision(){
@@ -513,6 +513,7 @@ class PowerUp extends GameObject {
 			switch (this.type) {
 				case "speed_up":
 				case "magnet":
+				case "slow_time":
 					effects[this.type] = 7;
 					break;
 			}

@@ -56,10 +56,11 @@ const NEW_ITEM_Y = 100;
 
 const POWERUP_SPEED = 2.5;
 const SPIN_ANIM_SPEED = 1 / 500;
-const POWERUP_TYPES = ["speed_up", "magnet"];
+const POWERUP_TYPES = ["speed_up", "magnet", "slow_time"];
 const POWERUP_PROBS = {
-    "speed_up": 50,
-    "magnet": 50,
+    "speed_up": 35,
+    "magnet": 35,
+    "slow_time": 30,
 };
 
 const MAGNET_STR = 0.005;
