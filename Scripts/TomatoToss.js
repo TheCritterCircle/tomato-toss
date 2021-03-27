@@ -9,6 +9,7 @@ let score = 0;
 let combo = 0;
 let trueCombo = 0;
 
+let comboBar = 0;
 let level = 1;
 
 let background = new GameObject(0, 0, canvas.width, canvas.height, BACKGROUND_IMG);
@@ -102,6 +103,8 @@ function drawUI(){
 	let scoreText = "Score: " + score;
 	let levelText = "Level: " + level;
 	let scorewidth = Math.max(ctx.measureText(scoreText).width, ctx.measureText(levelText).width);
+	let targetComboBar = (canvas.width - scorewidth - 35) / (level * 10) * trueCombo;
+	comboBar += (targetComboBar - comboBar) * 0.5;
 
 	ctx.fillText(scoreText, 10, 30);
 	ctx.fillText(levelText, 10, 60);
@@ -112,7 +115,7 @@ function drawUI(){
 	ctx.fill();
 	ctx.closePath();
 	ctx.beginPath();
-	ctx.rect(25 + scorewidth, 10, (canvas.width - scorewidth - 35) / (level * 10) * trueCombo, 50);
+	ctx.rect(25 + scorewidth, 10, comboBar, 50);
 	ctx.fillStyle = "#FF0000";
 	ctx.fill();
 	ctx.closePath();
