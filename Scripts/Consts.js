@@ -27,13 +27,13 @@ const TOMATOES = {
     },
     "orange": {
         "prob": 50,
-        "hp": 7,
+        "hp": 5,
         "bounce_pts": 2,
     },
     "egg": {
         "prob": 50,
         "hp": 5,
-        "pinata_pts": 25,
+        "pinata_pts": 15,
     },
 };
 

@@ -224,7 +224,7 @@ function addPowerup(x, y, type){
 function addItem(){
 	let x = Math.random() * canvas.width * 0.9;
 
-	if (Math.random() < 0.6)
+	if (Math.random() < 0.6 || tomatoes.length == 1)
 		addTomato(x, NEW_ITEM_Y, "random");
 	else
 		addPowerup(x, NEW_ITEM_Y, "random");
