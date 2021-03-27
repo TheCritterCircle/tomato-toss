@@ -431,9 +431,9 @@ class Tomato extends GameObject{
 					score += TOMATOES[this.type].pinata_pts || 0;
 					findAudio("splat").play();
 					new PlateSplat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[this.type].splatImg);
-					splattedTomatoes.push(this);
 					addItem("tomato");
 					combo = 0;
+					splattedTomatoes.push(this);
 					return;
 				} 
 			}
