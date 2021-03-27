@@ -122,22 +122,26 @@ function draw(game){
 }
 
 function drawUI(){
+	ctx.fillStyle = "#000000";
+	ctx.font = "30px Arial";
+
+	let scoreText = "Score: " + score;
+	let levelText = "Level: " + level;
+	let scorewidth = Math.max(ctx.measureText(scoreText).width, ctx.measureText(levelText).width);
+
+	ctx.fillText(scoreText, 10, 30);
+	ctx.fillText(levelText, 10, 60);
+
 	ctx.beginPath();
-	ctx.rect(5, 5, canvas.width - 10, 30);
+	ctx.rect(20 + scorewidth, 5, canvas.width - scorewidth - 25, 60);
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fill();
 	ctx.closePath();
 	ctx.beginPath();
-	ctx.rect(10, 10, (canvas.width - 20) / (level * 10) * trueCombo, 20);
+	ctx.rect(25 + scorewidth, 10, (canvas.width - scorewidth - 35) / (level * 10) * trueCombo, 50);
 	ctx.fillStyle = "#FF0000";
 	ctx.fill();
 	ctx.closePath();
-
-	ctx.fillStyle = "#000000";
-	ctx.font = "30px Arial";
-
-	ctx.fillText("Score: " + score, 10, 65);
-	ctx.fillText("Level: " + level, 10, 95);
 }
 
 function endGame(){
