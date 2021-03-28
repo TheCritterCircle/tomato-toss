@@ -6,8 +6,9 @@ let timeScale = 1;
 //Functions & Code
 let score = 0;
 let combo = 0;
-let trueCombo = 0;
+let xp = 0;
 
+let xpBar = 0;
 let comboBar = 0;
 let level = 1;
 
@@ -63,7 +64,7 @@ let currentState;
 function init_game(){
 	score = 0;
 	combo = 0;
-	trueCombo = 0;
+	xp = 0;
 
 	level = 1;
 
@@ -97,21 +98,35 @@ function drawUI(){
 
 	let scoreText = "Score: " + score;
 	let levelText = "Level: " + level;
-	let scorewidth = Math.max(ctx.measureText(scoreText).width, ctx.measureText(levelText).width);
-	let targetComboBar = (canvas.width - scorewidth - 35) / (level * 10) * trueCombo;
-	comboBar += (targetComboBar - comboBar) * 0.5;
+	let scoreW = Math.max(ctx.measureText(scoreText).width, ctx.measureText(levelText).width);
+	
+	let xpBarTarget = (canvas.width - scoreW - 35) * xp / (level * 10);
+	let comboBarTarget = (canvas.width - scoreW - 35) * combo / NEW_ITEM_COMBO;
+	xpBar += (xpBarTarget - xpBar) * 0.5;
+	comboBar += (comboBarTarget - comboBar) * 0.5;
 
 	ctx.fillText(scoreText, 10, 30);
 	ctx.fillText(levelText, 10, 60);
 
 	ctx.beginPath();
-	ctx.rect(20 + scorewidth, 5, canvas.width - scorewidth - 25, 60);
+	ctx.rect(20 + scoreW, 5, canvas.width - scoreW - 25, 25);
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fill();
 	ctx.closePath();
 	ctx.beginPath();
-	ctx.rect(25 + scorewidth, 10, comboBar, 50);
+	ctx.rect(25 + scoreW, 10, xpBar, 15);
 	ctx.fillStyle = "#FF0000";
+	ctx.fill();
+	ctx.closePath();
+
+	ctx.beginPath();
+	ctx.rect(20 + scoreW, 35, canvas.width - scoreW - 25, 25);
+	ctx.fillStyle = "#FFFFFF";
+	ctx.fill();
+	ctx.closePath();
+	ctx.beginPath();
+	ctx.rect(25 + scoreW, 40, comboBar, 15);
+	ctx.fillStyle = "#009900";
 	ctx.fill();
 	ctx.closePath();
 }
@@ -124,15 +139,15 @@ function endGame(){
 
 function incCombo(points) {
 	combo += points;
-	trueCombo += points;
+	xp += points;
 
 	if (combo >= NEW_ITEM_COMBO) {
 		combo = 0;
 		addItem("random");
 	}
 
-	if(trueCombo >= level * 10){
-		trueCombo = 0;
+	if(xp >= level * 10){
+		xp = 0;
 		level++;
 	}
 }
@@ -140,10 +155,10 @@ function incCombo(points) {
 function breakCombo() {
 	combo = 0;
 
-	if(trueCombo - level * 10 / 3 >= 0)
-		trueCombo -= level * 10 / 3;
+	if(xp - level * 10 / 3 >= 0)
+		xp -= level * 10 / 3;
 	else
-		trueCombo = 0;
+		xp = 0;
 }
 
 function updateEffect(e){
