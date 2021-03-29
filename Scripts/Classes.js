@@ -214,23 +214,13 @@ class Player extends GameObject{
 	move(){
 		let speedBoost = (effects["speed_up"] ? 1.5 : 1);
 
-		if(!this.isSliding){
-			if(rightPressed){
-				this.velX = this.speed * speedBoost;
-			}
-			else if(leftPressed){
-				this.velX = -this.speed * speedBoost;
-			}
-			else{
-				this.velX = 0;
-			}
-		}else{
-			if(this.isSliding && player.facing == "Right"){
-				this.velX = this.speed * speedBoost;
-			}
-			else if(this.isSliding && player.facing == "Left"){
-				this.velX = -this.speed * speedBoost;
-			}
+		if (rightPressed || leftPressed || this.isSliding) {
+			if(this.facing == "Right")
+					this.velX = this.speed * speedBoost;
+			if(this.facing == "Left")
+					this.velX = -this.speed * speedBoost;
+		} else {
+			this.velX = 0;
 		}
 
 		this.newX = this.x + this.velX / timeScale;
@@ -267,29 +257,27 @@ class Player extends GameObject{
 	startSlide(){
 		if (!this.isSliding) {
 			if (this.hitX > 0 && this.hitX + this.hitWidth < canvas.width) {
+				this.isSliding = true;
 				this.speed = SLIDE_SPEED;
 
 				if (this.facing == "Left")
 					this.targetAng = 90;
-				else
+				if (this.facing == "Right")
 					this.targetAng = -90;
-				
-				this.isSliding = true;
 			}
 		}
 	}
 	
 	endSlide(){
 		if (this.isSliding) {
+			this.isSliding = false;
 			this.speed = WALK_SPEED;
 			this.targetAng = 0;
 
-			if (leftPressed)
-				this.facing = "Left";
-			else if (rightPressed)
-				this.facing = "Right";
-			
-			this.isSliding = false;
+			if (leftPressed && this.facing == "Right")
+				this.face("Left");
+			if (rightPressed && this.facing == "Left")
+				this.face("Right");
 		}		
 	}
 }

@@ -244,26 +244,34 @@ document.addEventListener("keyup", keyUpHandler, false);
 
 function keyDownHandler(e){
 	if(INPUT_RIGHT.includes(e.key)){
+		//console.log("start right");
 		rightPressed = true;
 		player.face("Right");
     }
-    else if(INPUT_LEFT.includes(e.key)){
+    if(INPUT_LEFT.includes(e.key)){
+		//console.log("start left");
 		leftPressed = true;
 		player.face("Left");
 	}
-	else if(INPUT_DOWN.includes(e.key)){
+	if(INPUT_DOWN.includes(e.key)){
+		//console.log("start down");
 		player.startSlide();
 	}
 }
 
 function keyUpHandler(e){
 	if(INPUT_RIGHT.includes(e.key)){
+		//console.log("end right");
 		rightPressed = false;
+		if (leftPressed) player.face("Left");
 	}
-    else if(INPUT_LEFT.includes(e.key)){
+    if(INPUT_LEFT.includes(e.key)){
+		//console.log("end left");
 		leftPressed = false;
+		if (rightPressed) player.face("Right");
 	}
-	else if(INPUT_DOWN.includes(e.key)){
+	if(INPUT_DOWN.includes(e.key)){
+		//console.log("end down");
 		if(player.isSliding == true){
 			player.endSlide();
 		}
