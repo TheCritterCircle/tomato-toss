@@ -155,8 +155,8 @@ function incCombo(points) {
 function breakCombo() {
 	combo = 0;
 
-	if(xp - level * 10 / 3 >= 0)
-		xp -= level * 10 / 3;
+	if(xp - 10 >= 0)
+		xp -= 10;
 	else
 		xp = 0;
 }
