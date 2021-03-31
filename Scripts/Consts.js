@@ -68,11 +68,11 @@ const MAGNET_STR = 0.005;
 
 // Images
 
-const PLAYER_IMG = findImage("critter");
+const PLAYER_IMG = findImage("critter_joke");
 const PLATE_IMG = findImage("plate");
 for (type of Object.keys(TOMATOES)) {
-    TOMATOES[type].img = findImage(type);
-    TOMATOES[type].splatImg = findImage(type + "_splat");
+    TOMATOES[type].img = findImage(type + "_joke");
+    TOMATOES[type].splatImg = findImage(type + "_splat_joke");
 }
 const POWERUP_IMGS = POWERUP_TYPES.map(findImage);
 const BACKGROUND_IMG = findImage("background");
