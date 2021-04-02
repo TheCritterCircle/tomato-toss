@@ -138,7 +138,7 @@ function endGame(){
 }
 
 function incCombo(points) {
-	combo += points;
+	combo += points / tomatoes.length;
 	xp += points;
 
 	if (combo >= NEW_ITEM_COMBO) {

@@ -51,7 +51,7 @@ const WALK_ANIM_SCALE = 0.03;
 // Items
 
 // Combo needed to spawn a new tomato and initial y value.
-const NEW_ITEM_COMBO = 5;
+const NEW_ITEM_COMBO = 3;
 const NEW_ITEM_Y = 100;
 
 const POWERUP_SPEED = 2.5;
