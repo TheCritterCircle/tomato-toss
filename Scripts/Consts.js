@@ -68,6 +68,18 @@ const MAGNET_STR = 0.005;
 
 // Images
 let file = "";
+
+let date = new Date();
+let month = date.getMonth();
+let day = date.getDate();
+
+if(month == 3 && day == 1){
+    file = "April Fools/";
+}
+else if(month == 11 && day == 25){
+    file = "Christmas/";
+}
+
 const PLAYER_IMG = findImage(file + "critter");
 const PLATE_IMG = findImage("plate");
 for (type of Object.keys(TOMATOES)) {
