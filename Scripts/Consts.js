@@ -65,9 +65,12 @@ const POWERUP_PROBS = {
 };
 const ITEM_TYPES = ["tomato", "powerup", "fork"];
 const ITEM_PROBS = {
-    "tomato": 55,
-    "powerup": 40,
-    "fork": 5,
+    "tomato": 0,
+    "powerup": 0,
+    "fork": 100,
+    //"tomato": 50,
+    //"powerup": 40,
+    //"fork": 10,
 };
 
 const MAGNET_STR = 0.005;
