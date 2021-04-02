@@ -83,7 +83,7 @@ let day = date.getDate();
 if(month == 3 && day == 1){
     file = "April Fools/";
 }
-else if(month == 11 && day == 25){
+else if(month == 11 && day <= 25 && day >= 13){
     file = "Christmas/";
 }
 
