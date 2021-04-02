@@ -67,12 +67,12 @@ const MAGNET_STR = 0.005;
 
 
 // Images
-let file = "April Fools/";
-const PLAYER_IMG = findImage(file + "critter_joke");
+let file = "";
+const PLAYER_IMG = findImage(file + "critter");
 const PLATE_IMG = findImage("plate");
 for (type of Object.keys(TOMATOES)) {
-    TOMATOES[type].img = findImage(file + type + "_joke");
-    TOMATOES[type].splatImg = findImage(file + type + "_splat_joke");
+    TOMATOES[type].img = findImage(file + type);
+    TOMATOES[type].splatImg = findImage(file + type + "_splat");
 }
 const POWERUP_IMGS = POWERUP_TYPES.map(findImage);
 const BACKGROUND_IMG = findImage("background");
