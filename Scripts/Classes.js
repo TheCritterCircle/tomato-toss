@@ -515,3 +515,62 @@ class PowerUp extends GameObject {
 		}
 	}
 }
+
+class Fork extends GameObject{
+	constructor(x, y, width, height, hitWidth, hitHeight){
+		super(x, y, width, height, FORK_IMG, 0);
+		this.offsetX = -width/2;
+		this.offsetY = -height + width/2;
+
+		this.hitX = x - hitWidth/2;
+		this.hitY = y - hitHeight/2;
+		this.hitWidth = hitWidth;
+		this.hitHeight = hitHeight;
+
+		this.animTimer = 0;
+		this.stuck = false;
+
+	}
+	
+	main(){
+		if (this.animTimer < BLINK_DUR * NUM_BLINKS) {
+			this.visible = this.animTimer / BLINK_DUR % 1 < 1/2;
+			this.animTimer += 90 / timeScale;
+		} else {
+			this.visible = true;
+			
+			this.y += FORK_SPEED / timeScale;
+			this.hitY = this.y - this.hitWidth/2;
+			this.collision();
+		}
+	}
+	
+	/*
+	draw(){
+		super.draw();
+		this.drawHitbox();
+	}
+	*/
+
+	collision(){
+		//Plate
+		let plate = player.plate;
+		if (this.x + this.offsetX <= plate.hitX + plate.hitWidth
+		&& this.y + this.offsetY <= plate.hitY + plate.hitHeight
+		&& this.x + this.offsetX >= plate.hitX - this.width
+		&& this.y + this.offsetY >= plate.hitY - this.height) {
+			toDelete.push(this);
+		}
+
+		//Ground
+		if (this.y - this.offsetY > canvas.height) {
+			toDelete.push(this);
+		}
+	}
+
+	drawHitbox() {
+		ctx.beginPath();
+		ctx.rect(this.hitX, this.hitY, this.hitWidth, this.hitHeight);
+		ctx.stroke();
+	}
+}

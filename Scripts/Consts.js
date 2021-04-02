@@ -55,12 +55,19 @@ const NEW_ITEM_COMBO = 3;
 const NEW_ITEM_Y = 100;
 
 const POWERUP_SPEED = 2.5;
+const FORK_SPEED = 5;
 const SPIN_ANIM_SPEED = 1 / 500;
 const POWERUP_TYPES = ["speed_up", "magnet", "slow_time"];
 const POWERUP_PROBS = {
     "speed_up": 35,
     "magnet": 35,
     "slow_time": 30,
+};
+const ITEM_TYPES = ["tomato", "powerup", "fork"];
+const ITEM_PROBS = {
+    "tomato": 55,
+    "powerup": 40,
+    "fork": 5,
 };
 
 const MAGNET_STR = 0.005;
@@ -87,6 +94,8 @@ for (type of Object.keys(TOMATOES)) {
     TOMATOES[type].splatImg = findImage(file + type + "_splat");
 }
 const POWERUP_IMGS = POWERUP_TYPES.map(findImage);
+const FORK_IMG = findImage("fork");
+
 const BACKGROUND_IMG = findImage("background");
 const GAMEOVER_IMG = findImage("gameover");
 

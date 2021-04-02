@@ -212,6 +212,11 @@ function addPowerup(x, y, type){
 	objects.push(powerup);
 }
 
+function addFork(x, y){	
+	let fork = new Fork(x, y, 50, 75, 30, 30);
+	objects.push(fork);
+}
+
 function addItem(type){
 	let x = Math.random() * canvas.width * 0.9;
 
@@ -221,11 +226,25 @@ function addItem(type){
 	if (type == "powerup")
 		addPowerup(x, NEW_ITEM_Y, "random");
 
-	if (type == "random")
-		if (Math.random() < 0.6 || tomatoes.length == 1)
-			addTomato(x, NEW_ITEM_Y, "random");
+	if (type == "random") {
+		let rand = Math.random() * 100;
+		console.log(rand);
+
+		if (tomatoes.length > 1)
+			for (type of ITEM_TYPES) {
+				if (rand <= ITEM_PROBS[type]) break;
+				rand -= ITEM_PROBS[type];
+			}
 		else
+			type = "tomato";
+
+		if (type == "tomato")
+			addTomato(x, NEW_ITEM_Y, "random");
+		if (type == "powerup")
 			addPowerup(x, NEW_ITEM_Y, "random");
+		if (type == "fork")
+			addFork(x, NEW_ITEM_Y);
+	}
 }
 
 function deleteTomato(tomato){
