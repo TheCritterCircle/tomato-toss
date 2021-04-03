@@ -102,7 +102,7 @@ function drawUI(){
 	let scoreW = Math.max(ctx.measureText(scoreText).width, ctx.measureText(levelText).width);
 	
 	let xpBarTarget = (canvas.width - scoreW - 35) * xp / (level * 10);
-	let comboBarTarget = (canvas.width - scoreW - 35) * combo / NEW_ITEM_COMBO;
+	let comboBarTarget = (canvas.width - scoreW - 35) * combo / currentRuleset.new_item_combo;
 	xpBar += (xpBarTarget - xpBar) * 0.5;
 	comboBar += (comboBarTarget - comboBar) * 0.5;
 
