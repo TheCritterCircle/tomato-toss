@@ -57,6 +57,12 @@ const NEW_ITEM_Y = 100;
 const POWERUP_SPEED = 2.5;
 const FORK_SPEED = 5;
 const SPIN_ANIM_SPEED = 1 / 500;
+const TOMATO_TYPES = Object.keys(TOMATOES);
+const TOMATO_PROBS = {
+    "tomato": 60,
+    "orange": 25,
+    "egg": 15,
+};
 const POWERUP_TYPES = ["speed_up", "magnet", "slow_time"];
 const POWERUP_PROBS = {
     "speed_up": 35,
@@ -65,12 +71,9 @@ const POWERUP_PROBS = {
 };
 const ITEM_TYPES = ["tomato", "powerup", "fork"];
 const ITEM_PROBS = {
-    "tomato": 0,
-    "powerup": 0,
-    "fork": 100,
-    //"tomato": 50,
-    //"powerup": 40,
-    //"fork": 10,
+    "tomato": 50,
+    "powerup": 40,
+    "fork": 10,
 };
 
 const MAGNET_STR = 0.005;

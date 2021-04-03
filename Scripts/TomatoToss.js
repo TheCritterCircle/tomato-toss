@@ -60,6 +60,7 @@ function displayFPS(){
 //Functions
 
 let currentState;
+let currentRuleset = DEFAULT_RULESET;
 
 function init_game(){
 	score = 0;
@@ -141,7 +142,7 @@ function incCombo(points) {
 	combo += points / tomatoes.length;
 	xp += points;
 
-	if (combo >= NEW_ITEM_COMBO) {
+	if (combo >= currentRuleset.new_item_combo) {
 		combo = 0;
 		addItem("random");
 	}
@@ -190,8 +191,9 @@ function addTomato(x, y, type){
 
 	if (type == "random")
 		for (type of Object.keys(TOMATOES)) {
-			if (rand <= TOMATOES[type].prob) break;
-			rand -= TOMATOES[type].prob;
+			let prob = currentRuleset.tomato_probs[type];
+			if (rand <= prob) break;
+			rand -= prob;
 		}
 
 	let tomato = new Tomato(x, y, 50, 50, type);
@@ -204,8 +206,9 @@ function addPowerup(x, y, type){
 
 	if (type == "random")
 		for (type of POWERUP_TYPES) {
-			if (rand <= POWERUP_PROBS[type]) break;
-			rand -= POWERUP_PROBS[type];
+			let prob = currentRuleset.powerup_probs[type];
+			if (rand <= prob) break;
+			rand -= prob;
 		}
 	
 	let powerup = new PowerUp(x, y, 70, 70, type);
@@ -232,12 +235,13 @@ function addItem(type){
 
 		if (tomatoes.length > 1)
 			for (type of ITEM_TYPES) {
-				if (rand <= ITEM_PROBS[type]) break;
-				rand -= ITEM_PROBS[type];
+				let prob = currentRuleset.item_probs[type];
+				if (rand <= prob) break;
+				rand -= prob;
 			}
 		else
 			type = "tomato";
-
+		
 		if (type == "tomato")
 			addTomato(x, NEW_ITEM_Y, "random");
 		if (type == "powerup")
