@@ -354,6 +354,10 @@ class Tomato extends GameObject{
 		this.hasScored = false;
 		this.animTimer = 0;
 		this.isSpawning = true;
+
+		this.beenHit = false;
+		this.fork = null;
+		this.relX;
 	}
 
 	main(){
@@ -367,10 +371,14 @@ class Tomato extends GameObject{
 				this.isSpawning = false;
 		} else {
 			this.visible = true;
-			
-			this.velX *= (1 - DECEL) ** (1 / timeScale * timeSpeed);
-			this.velY += GRAVITY / timeScale * timeSpeed;
-			this.velAng *= (1 - DECEL) ** (1 / timeScale * timeSpeed);
+
+			if (this.fork != null) {
+				this.y = this.fork.y;
+				this.x = this.fork.x + this.relX;
+			} else {
+				this.velY += GRAVITY / timeScale * timeSpeed;
+				if (effects["magnet"]) this.beAtracted();
+			}
 			
 			this.x += this.velX / timeScale * timeSpeed;
 			this.y += this.velY / timeScale * timeSpeed;
@@ -381,17 +389,35 @@ class Tomato extends GameObject{
 			this.hitWidth = this.width;
 			this.hitHeight = this.height;
 
-			if (effects["magnet"]) {
-				let dist = Math.abs(player.x - this.x);
-				let force = MAGNET_STR * Math.log(dist);
-
-				this.velX += force * (player.x - this.x) / dist;
-
-				//this.velX += MAGNET_STR * (player.x - this.x);
-			}
+			this.velX *= (1 - DECEL) ** (1 / timeScale * timeSpeed);
+			this.velAng *= (1 - DECEL) ** (1 / timeScale * timeSpeed);
 
 			this.collision();
 		}
+	}
+
+	beAtracted(){
+		let dist = Math.abs(player.x - this.x);
+		let force = MAGNET_STR * Math.log(dist);
+
+		this.velX += force * (player.x - this.x) / timeScale * timeSpeed / dist;
+
+		//this.velX += MAGNET_STR * (player.x - this.x);
+	}
+
+	stickTo(fork){
+		this.velX = 0;
+		this.velY = 0;
+		this.velAng = 0;
+		this.hp = 1;
+
+		this.fork = fork;
+		this.relX = this.x - fork.x;
+		this.beenHit = true;
+	}
+
+	detach(){
+		this.fork = null;
 	}
 
 	collision(){
@@ -433,7 +459,7 @@ class Tomato extends GameObject{
 					score += TOMATOES[this.type].pinata_pts || 0;
 					findAudio("splat").play();
 					new PlateSplat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[this.type].splatImg);
-					addItem("tomato");
+					if (!this.beenHit) addItem("tomato");
 					combo = 0;
 					splattedTomatoes.push(this);
 					return;
@@ -555,6 +581,8 @@ class Fork extends GameObject{
 		this.onGround = false;
 		this.onPlate = false;
 		this.relX = 0;
+
+		this.tomatoes = [];
 	}
 
 	main(){
@@ -596,6 +624,18 @@ class Fork extends GameObject{
 	*/
 
 	collision(){
+		//Tomatoes
+		for (let t of tomatoes)
+			if (!t.isSpawning
+			&& t.fork == null
+			&& this.hitX <= t.hitX + t.hitWidth
+			&& this.hitY <= t.hitY + t.hitHeight
+			&& this.hitX + this.hitWidth >= t.hitX
+			&& this.hitY + this.hitHeight >= t.hitY) {
+				t.stickTo(this);
+				this.tomatoes.push(t);
+			}
+		
 		//Plate
 		let plate = player.plate;
 		if (this.hitX <= plate.hitX + plate.hitWidth
@@ -606,6 +646,7 @@ class Fork extends GameObject{
 			this.relX = this.x - player.plate.x;
 			this.depth = -1;
 			this.animTimer = 0;
+			this.tomatoes.forEach(t => {t.detach()})
 		}
 
 		//Ground
@@ -613,17 +654,8 @@ class Fork extends GameObject{
 			this.ground = true;
 			this.depth = 1;
 			this.animTimer = 0;
+			this.tomatoes.forEach(t => {t.detach()})
 		}
-
-		//Tomatoes
-		for (let t of tomatoes)
-			if (!t.isSpawning
-			&& this.hitX <= t.hitX + t.hitWidth
-			&& this.hitY <= t.hitY + t.hitHeight
-			&& this.hitX + this.hitWidth >= t.hitX
-			&& this.hitY + this.hitHeight >= t.hitY) {
-				t.kill();
-			}
 	}
 
 	draw(){
