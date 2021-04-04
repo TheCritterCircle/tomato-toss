@@ -397,6 +397,7 @@ class Tomato extends GameObject{
 	}
 
 	beAtracted(){
+		let timeSpeed = effects["slow_time"] ? 0.75 : 1;
 		let dist = Math.abs(player.x - this.x);
 		let force = MAGNET_STR * Math.log(dist);
 
