@@ -358,6 +358,7 @@ class Tomato extends GameObject{
 		this.beenHit = false;
 		this.fork = null;
 		this.relX;
+		this.timeLeft = -1;
 	}
 
 	main(){
@@ -393,6 +394,11 @@ class Tomato extends GameObject{
 			this.velAng *= (1 - DECEL) ** (1 / timeScale * timeSpeed);
 
 			this.collision();
+		}
+
+		if (this.timeLeft >= 0) {
+			this.timeLeft -= 90 / timeScale;
+			if (this.timeLeft < 0) this.kill();
 		}
 	}
 

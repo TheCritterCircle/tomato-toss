@@ -60,7 +60,7 @@ const TOMATO_TYPES = Object.keys(TOMATOES);
 const POWERUP_TYPES = ["speed_up", "magnet", "slow_time"];
 const ITEM_TYPES = ["tomato", "powerup", "fork"];
 
-const MAGNET_STR = 0.005;
+const MAGNET_STR = 0.007;
 
 
 // Images

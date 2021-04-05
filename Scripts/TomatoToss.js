@@ -88,7 +88,7 @@ function init_game(){
 	music.play();
 	music.loop = true;
 
-	addTomato(canvas.width/2, NEW_ITEM_Y, "tomato");
+	addTomato(canvas.width/2, NEW_ITEM_Y, currentRuleset.first_tomato);
 	if (currentState) currentState.end();
 	currentState = new PlayState();
 }
@@ -150,6 +150,12 @@ function incCombo(points) {
 	if(xp >= level * 10){
 		xp = 0;
 		level++;
+		for (let i = 0; i < tomatoes.length; i++) {
+			let t = tomatoes[i];
+			if (t.isSpawning) deleteTomato(t);
+			else t.timeLeft = 2000 * i;
+		};
+		addTomato(canvas.width/2, NEW_ITEM_Y, currentRuleset.first_tomato);
 	}
 }
 
