@@ -222,7 +222,7 @@ function addPowerup(x, y, type){
 }
 
 function addFork(x, y){	
-	let fork = new Fork(x, y, 50, 75, 30, 30);
+	let fork = new ForkV(x, y, 50, 75, 30, 30);
 	objects.push(fork);
 }
 

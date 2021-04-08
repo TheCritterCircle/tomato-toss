@@ -570,11 +570,10 @@ class PowerUp extends GameObject {
 	}
 }
 
+
 class Fork extends GameObject{
 	constructor(x, y, width, height, hitWidth, hitHeight){
 		super(x, y, width, height, FORK_IMG, -2);
-		this.offsetX = -width/2;
-		this.offsetY = -height + width/2;
 
 		this.hitX = x - hitWidth/2;
 		this.hitY = y - hitHeight/2;
@@ -582,13 +581,9 @@ class Fork extends GameObject{
 		this.hitHeight = hitHeight;
 
 		this.animTimer = 0;
-		this.alpha = 1;
-
 		this.isSpawning = true;
-		this.onGround = false;
-		this.onPlate = false;
-		this.relX = 0;
 
+		this.direction = 0;
 		this.tomatoes = [];
 	}
 
@@ -599,27 +594,6 @@ class Fork extends GameObject{
 
 			if (this.animTimer > BLINK_DUR * NUM_BLINKS)
 				this.isSpawning = false;
-		} 
-		else if (this.onGround || this.onPlate) {
-			if (this.onPlate) {
-				this.x = player.plate.x + this.relX;
-				this.y = player.plate.y + 20;
-			}
-
-			if (this.alpha > 0) {
-				// fades
-				this.alpha -= 0.01 / timeScale;
-			} else {
-				// ends
-				toDelete.push(this);
-			}
-		} 
-		else {
-			this.visible = true;
-				
-			this.y += FORK_SPEED / timeScale;
-			this.hitY = this.y - this.hitWidth/2;
-			this.collision();
 		}
 	}
 	
@@ -642,6 +616,60 @@ class Fork extends GameObject{
 				t.stickTo(this);
 				this.tomatoes.push(t);
 			}
+	}
+
+	drawHitbox() {
+		ctx.beginPath();
+		ctx.rect(this.hitX, this.hitY, this.hitWidth, this.hitHeight);
+		ctx.stroke();
+	}
+}
+
+
+class ForkV extends Fork {
+	constructor(x, y, width, height, hitWidth, hitHeight){
+		super(x, y, width, height, hitWidth, hitHeight);
+
+		this.offsetX = -width/2;
+		this.offsetY = -height + width/2;
+
+		this.alpha = 1;
+		this.onGround = false;
+		this.onPlate = false;
+	
+		this.relX = 0;
+		this.direction = Math.PI / 2;
+	}
+
+	main(){
+		super.main();
+		if (this.isSpawning) return;
+
+		if (this.onGround || this.onPlate) {
+			if (this.onPlate) {
+				this.x = player.plate.x + this.relX;
+				this.y = player.plate.y + 20;
+			}
+
+			if (this.alpha > 0) {
+				// fades
+				this.alpha -= 0.01 / timeScale;
+			} else {
+				// ends
+				toDelete.push(this);
+			}
+		} 
+		else {
+			this.visible = true;
+				
+			this.y += FORK_SPEED / timeScale;
+			this.hitY = this.y - this.hitWidth/2;
+			this.collision();
+		}
+	}
+
+	collision(){
+		super.collision();
 		
 		//Plate
 		let plate = player.plate;
@@ -658,7 +686,7 @@ class Fork extends GameObject{
 
 		//Ground
 		if (this.hitY + this.hitHeight > canvas.height) {
-			this.ground = true;
+			this.onGround = true;
 			this.depth = 1;
 			this.animTimer = 0;
 			this.tomatoes.forEach(t => {t.detach()})
@@ -671,11 +699,5 @@ class Fork extends GameObject{
 			super.draw();
 			ctx.globalAlpha = 1;
 		}
-	}
-
-	drawHitbox() {
-		ctx.beginPath();
-		ctx.rect(this.hitX, this.hitY, this.hitWidth, this.hitHeight);
-		ctx.stroke();
 	}
 }
