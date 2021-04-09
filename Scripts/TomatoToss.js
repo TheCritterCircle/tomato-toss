@@ -62,6 +62,8 @@ function displayFPS(){
 let currentState;
 let currentRuleset = DEFAULT_RULESET;
 
+let forkTimer = setTimeout(function(){}, 1000);
+
 function init_game(){
 	score = 0;
 	combo = 0;
@@ -88,7 +90,8 @@ function init_game(){
 	music.play();
 	music.loop = true;
 
-	setTimeout(function() {addFork(Math.random() * canvas.width * 0.9, NEW_ITEM_Y); }, Math.random() * 4000 + 1000);
+	clearTimeout(forkTimer);
+	forkTimer = setTimeout(function() {addFork(Math.random() * canvas.width * 0.9, NEW_ITEM_Y); }, Math.random() * 4000 + 1000);
 
 	addTomato(canvas.width/2, NEW_ITEM_Y, currentRuleset.first_tomato);
 	if (currentState) currentState.end();
@@ -227,7 +230,7 @@ function addFork(x, y){
 	let fork = new Fork(x, y, 50, 75, 30, 30, Math.PI/3);
 	objects.push(fork);
 
-	setTimeout(function() {addFork(Math.random() * canvas.width * 0.9, NEW_ITEM_Y); }, Math.random() * 4000 + 1000);
+	forkTimer = setTimeout(function() {addFork(Math.random() * canvas.width * 0.9, NEW_ITEM_Y); }, Math.random() * 4000 + 1000);
 }
 
 function addItem(type){
