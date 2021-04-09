@@ -357,7 +357,7 @@ class Tomato extends GameObject{
 
 		this.beenHit = false;
 		this.fork = null;
-		this.relX;
+		this.relX, this.relY;
 		this.timeLeft = -1;
 	}
 
@@ -374,7 +374,7 @@ class Tomato extends GameObject{
 			this.visible = true;
 
 			if (this.fork != null) {
-				this.y = this.fork.y;
+				this.y = this.fork.y + this.relY;
 				this.x = this.fork.x + this.relX;
 			} else {
 				this.velY += GRAVITY / timeScale * timeSpeed;
@@ -419,8 +419,17 @@ class Tomato extends GameObject{
 		this.hp = 1;
 
 		this.fork = fork;
-		this.relX = this.x - fork.x;
 		this.beenHit = true;
+
+		let relX = this.x - fork.x;
+		let relY = this.y - fork.y;
+
+		let rel =
+			relX * Math.sin(fork.direction) +
+			relY * Math.cos(fork.direction);
+		
+		this.relX = rel * Math.sin(fork.direction);
+		this.relY = rel * Math.cos(fork.direction);
 	}
 
 	detach(){
@@ -571,7 +580,7 @@ class PowerUp extends GameObject {
 }
 
 class Fork extends GameObject{
-	constructor(x, y, width, height, hitWidth, hitHeight){
+	constructor(x, y, width, height, hitWidth, hitHeight, direction){
 		super(x, y, width, height, FORK_IMG, -2);
 		this.offsetX = -width/2;
 		this.offsetY = -height + width/2;
@@ -590,6 +599,8 @@ class Fork extends GameObject{
 		this.relX = 0;
 
 		this.tomatoes = [];
+		this.direction = direction;
+		this.angle = direction * 180 / Math.PI - 90;
 	}
 
 	main(){
@@ -616,9 +627,13 @@ class Fork extends GameObject{
 		} 
 		else {
 			this.visible = true;
-				
-			this.y += FORK_SPEED / timeScale;
-			this.hitY = this.y - this.hitWidth/2;
+			
+			let dr = FORK_SPEED / timeScale;
+			this.x += dr * Math.cos(this.direction);
+			this.y += dr * Math.sin(this.direction);
+	
+			this.hitX = this.x - this.hitWidth/2;
+			this.hitY = this.y - this.hitHeight/2;
 			this.collision();
 		}
 	}
