@@ -1,9 +1,9 @@
 const DEFAULT_RULESET = {
     first_tomato: "tomato",
     item_probs: {
-        tomato: 50,
-        powerup: 30,
-        fork: 20,
+        tomato: 65,
+        powerup: 35,
+        fork: 0,
     },
     tomato_probs: {
         tomato: 60,
