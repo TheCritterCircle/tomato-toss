@@ -15,5 +15,6 @@ const DEFAULT_RULESET = {
         magnet: 35,
         slow_time: 30,
     },
-    new_item_combo: 1,
+    new_item_combo: 3,
+    fork_cooldown: 5,
 };

@@ -17,8 +17,6 @@ const CONTROL = 0.05;
 const DECEL = 0.01;
 
 // Duration of each blink and total number of blinks when a tomato spawns.
-const BLINK_DUR = 6500; // Heh, blink ;)
-const NUM_BLINKS = 3;
 
 const TOMATOES = {
     "tomato": {
@@ -52,6 +50,8 @@ const WALK_ANIM_SCALE = 0.03;
 
 // Combo needed to spawn a new tomato and initial y value.
 const NEW_ITEM_Y = 100;
+const BLINK_DUR = 6500; // Heh, blink ;)
+const NUM_BLINKS = 3;
 
 const POWERUP_SPEED = 2.5;
 const FORK_SPEED = 5;

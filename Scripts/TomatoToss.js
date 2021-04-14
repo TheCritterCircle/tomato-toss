@@ -3,7 +3,7 @@ const ctx = canvas.getContext("2d");
 
 let timeScale = 1;
 
-//Functions & Code
+//Gameplay
 let score = 0;
 let combo = 0;
 let xp = 0;
@@ -23,6 +23,7 @@ let tomatoes = [];
 let splattedTomatoes = [];
 
 let timeMultiplier = 1;
+let forkCooldown = 0;
 
 //Music
 let music;
@@ -63,6 +64,7 @@ let currentState;
 let currentRuleset = DEFAULT_RULESET;
 
 function init_game(){
+	currentRuleset = DEFAULT_RULESET;
 	score = 0;
 	combo = 0;
 	xp = 0;
@@ -78,6 +80,7 @@ function init_game(){
 
 	tomatoes = [];
 	splattedTomatoes = [];
+	forkCooldown = currentRuleset.fork_cooldown;
 
 	lastCalledTime = undefined;
 	lastTouchTime = undefined;
@@ -87,8 +90,6 @@ function init_game(){
 	music = findAudio("TonatoToss");
 	music.play();
 	music.loop = true;
-
-	setTimeout(function() {addFork(Math.random() * canvas.width * 0.9, NEW_ITEM_Y); }, Math.random() * 4000 + 1000);
 
 	addTomato(canvas.width/2, NEW_ITEM_Y, currentRuleset.first_tomato);
 	if (currentState) currentState.end();
@@ -226,8 +227,6 @@ function addPowerup(x, y, type){
 function addFork(x, y){	
 	let fork = new Fork(x, y, 50, 75, 30, 30, Math.PI/3);
 	objects.push(fork);
-
-	setTimeout(function() {addFork(Math.random() * canvas.width * 0.9, NEW_ITEM_Y); }, Math.random() * 4000 + 1000);
 }
 
 function addItem(type){
@@ -238,6 +237,9 @@ function addItem(type){
 
 	if (type == "powerup")
 		addPowerup(x, NEW_ITEM_Y, "random");
+
+	if (type == "fork")
+		addFork(x, NEW_ITEM_Y);
 
 	if (type == "random") {
 		let rand = Math.random() * 100;

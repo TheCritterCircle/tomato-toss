@@ -2,7 +2,8 @@ class PlayState{
     constructor(){
         this.main();
         this.draw();
-        this.ended = false;
+        this.mainTimeout;
+        this.drawTimeout;
     }
 
     main(){
@@ -17,7 +18,15 @@ class PlayState{
         cleanUp();
         getFPS();
 
-        if (!this.ended) setTimeout(_ => {this.main()}, 10);
+        if (tomatoes.length > 0) {
+            if (forkCooldown < 0) {
+                addFork(Math.random() * canvas.width * 0.9, NEW_ITEM_Y);
+                forkCooldown += currentRuleset.fork_cooldown;
+            }
+            if (delta) forkCooldown -= delta;
+        }
+
+        this.mainTimeout = setTimeout(_ => {this.main()}, 10);
     }
 
     draw(){
@@ -29,11 +38,12 @@ class PlayState{
     
         drawUI();
     
-        if (!this.ended) setTimeout(_ => {this.draw()}, 10);
+        this.drawTimeout = setTimeout(_ => {this.draw()}, 10);
     }
 
     end(){
-        this.ended = true;
+        if (this.mainTimeout) clearTimeout(this.mainTimeout)
+        if (this.drawTimeout) clearTimeout(this.drawTimeout)
         delete this;
     }
 }
