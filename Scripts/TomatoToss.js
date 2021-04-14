@@ -63,6 +63,8 @@ function displayFPS(){
 let currentState;
 let currentRuleset = DEFAULT_RULESET;
 
+let forkTimer = setTimeout(function(){}, 1000);
+
 function init_game(){
 	currentRuleset = DEFAULT_RULESET;
 	score = 0;
