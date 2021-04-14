@@ -604,6 +604,8 @@ class Fork extends GameObject{
 	}
 
 	main(){
+		let timeSpeed = effects["slow_time"] ? 0.75 : 1;
+
 		if (this.isSpawning) {
 			this.visible = this.animTimer / BLINK_DUR % 1 < 1/2;
 			this.animTimer += 90 / timeScale;
@@ -629,8 +631,8 @@ class Fork extends GameObject{
 			this.visible = true;
 			
 			let dr = FORK_SPEED / timeScale;
-			this.x += dr * Math.cos(this.direction);
-			this.y += dr * Math.sin(this.direction);
+			this.x += dr * Math.cos(this.direction) * timeSpeed;
+			this.y += dr * Math.sin(this.direction) * timeSpeed;
 	
 			this.hitX = this.x - this.hitWidth/2;
 			this.hitY = this.y - this.hitHeight/2;

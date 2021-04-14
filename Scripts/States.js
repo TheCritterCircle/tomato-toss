@@ -6,7 +6,8 @@ class PlayState{
         this.drawTimeout;
     }
 
-    main(){
+    main() {
+        let timeSpeed = effects["slow_time"] ? 0.75 : 1;
         objects.forEach(o => {o.main()});
         Object.keys(effects).forEach(updateEffect);
     
@@ -23,7 +24,7 @@ class PlayState{
                 addFork(Math.random() * canvas.width * 0.9, NEW_ITEM_Y);
                 forkCooldown += currentRuleset.fork_cooldown;
             }
-            if (delta) forkCooldown -= delta;
+            if (delta) forkCooldown -= delta * timeSpeed;
         }
 
         this.mainTimeout = setTimeout(_ => {this.main()}, 10);
