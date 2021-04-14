@@ -48,3 +48,26 @@ class PlayState{
         delete this;
     }
 }
+
+class MenuState{
+    constructor(){
+        this.main();
+        this.draw();
+        this.mainTimeout;
+        this.drawTimeout;
+    }
+
+    main() {
+        
+    }
+
+    draw(){
+        
+    }
+
+    end(){
+        if (this.mainTimeout) clearTimeout(this.mainTimeout)
+        if (this.drawTimeout) clearTimeout(this.drawTimeout)
+        delete this;
+    }
+}

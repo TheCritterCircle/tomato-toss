@@ -59,9 +59,15 @@ const SPIN_ANIM_SPEED = 1 / 500;
 const TOMATO_TYPES = Object.keys(TOMATOES);
 const POWERUP_TYPES = ["speed_up", "magnet", "slow_time"];
 const ITEM_TYPES = ["tomato", "powerup", "fork"];
+const FORK_TYPES = ["middle", "right", "left"];
 
 const MAGNET_STR = 0.007;
 
+const FORK_DIRECTIONS = {
+    "middle": Math.PI/2,
+    "left": (3*Math.PI) / 4,
+    "right": Math.PI/3,
+}
 
 // Images
 let file = "";

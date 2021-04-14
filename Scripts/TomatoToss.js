@@ -61,6 +61,7 @@ function displayFPS(){
 //Functions
 
 let currentState;
+let currentStateName;
 let currentRuleset = DEFAULT_RULESET;
 
 let forkTimer = setTimeout(function(){}, 1000);
@@ -227,6 +228,14 @@ function addPowerup(x, y, type){
 }
 
 function addFork(x, y){	
+	let rand = Math.random() * 100;
+
+	for (type of FORK_TYPES) {
+		let prob = currentRuleset.fork_probs[type];
+		if (rand <= prob) break;
+		rand -= prob;
+	}
+
 	let fork = new Fork(x, y, 50, 75, 30, 30, Math.PI/3);
 	objects.push(fork);
 }
