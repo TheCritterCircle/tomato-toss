@@ -37,9 +37,9 @@ const IMPOSSIBLE_RULESET = {
         egg: 15,
     },
     powerup_probs: {
-        speed_up: 0,
-        magnet: 0,
-        slow_time: 100,
+        speed_up: 35,
+        magnet: 35,
+        slow_time: 30,
     },
     new_item_combo: 3,
     fork_cooldown: 0.2,
