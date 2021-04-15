@@ -24,7 +24,8 @@ class PlayState{
                 addFork(Math.random() * canvas.width * 0.9, NEW_ITEM_Y);
                 forkCooldown += currentRuleset.fork_cooldown;
             }
-            if (delta) forkCooldown -= delta * timeSpeed;
+            if (delta && level != 1)
+                forkCooldown -= delta / Math.log2(level) * timeSpeed;
         }
 
         this.mainTimeout = setTimeout(_ => {this.main()}, 10);
