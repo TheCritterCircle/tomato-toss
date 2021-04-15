@@ -236,7 +236,7 @@ function addFork(x, y){
 		rand -= prob;
 	}
 
-	let fork = new Fork(x, y, 50, 75, 30, 30, Math.PI/3);
+	let fork = new Fork(x, y, 50, 75, 30, 30, FORK_DIRS[type]);
 	objects.push(fork);
 }
 

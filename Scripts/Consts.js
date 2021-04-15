@@ -63,9 +63,9 @@ const FORK_TYPES = ["middle", "right", "left"];
 
 const MAGNET_STR = 0.007;
 
-const FORK_DIRECTIONS = {
+const FORK_DIRS = {
     "middle": Math.PI/2,
-    "left": (3*Math.PI) / 4,
+    "left": Math.PI*2/3,
     "right": Math.PI/3,
 }
 
