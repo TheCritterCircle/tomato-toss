@@ -4,6 +4,8 @@ class PlayState{
         this.draw();
         this.mainTimeout;
         this.drawTimeout;
+
+        this.name = "PlayState";
     }
 
     main() {
@@ -56,6 +58,8 @@ class MenuState{
         this.draw();
         this.mainTimeout;
         this.drawTimeout;
+
+        this.name = "MenuState";
     }
 
     main() {
