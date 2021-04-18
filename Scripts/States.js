@@ -63,11 +63,13 @@ class MenuState{
     }
 
     main() {
-        
+        this.mainTimeout = setTimeout(_ => {this.main()}, 10);
     }
 
     draw(){
-        
+        ctx.drawImage(LOGO, 200, 0);
+
+        this.drawTimeout = setTimeout(_ => {this.draw()}, 10);
     }
 
     end(){
