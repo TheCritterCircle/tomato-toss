@@ -150,7 +150,7 @@ function incCombo(points) {
 
 	if (combo >= currentRuleset.new_item_combo) {
 		combo = 0;
-		addItem("random");
+		addItem();
 	}
 
 	if(xp >= level * 10){
@@ -199,6 +199,11 @@ function cleanUp() {
 }
 
 function addTomato(x, y, type){
+	if (x == undefined) 
+		x = Math.random() * canvas.width * 0.9;
+	if (y == undefined) 
+		y = NEW_ITEM_Y;
+	
 	let rand = Math.random() * 100;
 
 	if (type == "random")
@@ -214,6 +219,11 @@ function addTomato(x, y, type){
 }
 
 function addPowerup(x, y, type){
+	if (x == undefined) 
+		x = Math.random() * canvas.width * 0.9;
+	if (y == undefined) 
+		y = NEW_ITEM_Y;
+
 	let rand = Math.random() * 100;
 
 	if (type == "random")
@@ -228,6 +238,11 @@ function addPowerup(x, y, type){
 }
 
 function addFork(x, y){	
+	if (x == undefined) 
+		x = Math.random() * canvas.width * 0.9;
+	if (y == undefined) 
+		y = NEW_ITEM_Y;
+	
 	let rand = Math.random() * 100;
 
 	for (type of FORK_TYPES) {
@@ -240,38 +255,30 @@ function addFork(x, y){
 	objects.push(fork);
 }
 
-function addItem(type){
-	let x = Math.random() * canvas.width * 0.9;
+function addItem(x, y){
+	console.log("let's add item");
 
+	if (x == undefined) 
+		x = Math.random() * canvas.width * 0.9;
+	if (y == undefined) 
+		y = NEW_ITEM_Y;
+
+	let rand = Math.random() * 100;
+	console.log("rand:", rand);
+
+	for (type of ITEM_TYPES) {
+		let prob = currentRuleset.item_probs[type];
+		if (rand <= prob) break;
+		rand -= prob;
+	}
+	console.log("type:", type);
+	
 	if (type == "tomato")
 		addTomato(x, NEW_ITEM_Y, "random");
-
 	if (type == "powerup")
 		addPowerup(x, NEW_ITEM_Y, "random");
-
 	if (type == "fork")
 		addFork(x, NEW_ITEM_Y);
-
-	if (type == "random") {
-		let rand = Math.random() * 100;
-		console.log(rand);
-
-		if (tomatoes.length > 1)
-			for (type of ITEM_TYPES) {
-				let prob = currentRuleset.item_probs[type];
-				if (rand <= prob) break;
-				rand -= prob;
-			}
-		else
-			type = "tomato";
-		
-		if (type == "tomato")
-			addTomato(x, NEW_ITEM_Y, "random");
-		if (type == "powerup")
-			addPowerup(x, NEW_ITEM_Y, "random");
-		if (type == "fork")
-			addFork(x, NEW_ITEM_Y);
-	}
 }
 
 function deleteTomato(tomato){

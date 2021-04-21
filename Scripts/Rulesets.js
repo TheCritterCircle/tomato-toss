@@ -1,8 +1,8 @@
 const DEFAULT_RULESET = {
     first_tomato: "tomato",
     item_probs: {
-        tomato: 0,
-        powerup: 100,
+        tomato: 50,
+        powerup: 50,
         fork: 0,
     },
     tomato_probs: {
@@ -16,7 +16,7 @@ const DEFAULT_RULESET = {
         slow_time: 30,
     },
     new_item_combo: 3,
-    fork_cooldown: 2,
+    fork_cooldown: 5,
     fork_probs: {
         middle: 60,
         right: 20,
