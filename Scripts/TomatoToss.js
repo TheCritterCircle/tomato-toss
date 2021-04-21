@@ -60,8 +60,7 @@ function displayFPS(){
 
 //Functions
 
-let currentState;
-let currentStateName;
+let currentState = new MenuState();
 let currentRuleset = DEFAULT_RULESET;
 
 let forkTimer = setTimeout(function(){}, 1000);
@@ -340,31 +339,35 @@ canvas.addEventListener("touchstart", touchDown, false);
 canvas.addEventListener("touchend", touchUp, false);
 
 function mouseDown(e){
-	let rect = canvas.getBoundingClientRect();
-	let dir;
-	let now = Date.now();
+	if(currentState.name == "PlayState"){
+		let rect = canvas.getBoundingClientRect();
+		let dir;
+		let now = Date.now();
 
-    if(e.clientX > rect.left + canvas.width / 2){
-		rightPressed = true;
-		dir = "Right";
-		player.face("Right");
-	}
-	else if(e.clientX < rect.left + canvas.width / 2){
-		leftPressed = true;
-		dir = "Left";
-		player.face("Left");
-	}
+		if(e.clientX > rect.left + canvas.width / 2){
+			rightPressed = true;
+			dir = "Right";
+			player.face("Right");
+		}
+		else if(e.clientX < rect.left + canvas.width / 2){
+			leftPressed = true;
+			dir = "Left";
+			player.face("Left");
+		}
 
-	if (!lastTouchTime) {
+		if (!lastTouchTime) {
+			lastTouchTime = now;
+		}
+		else if (now - lastTouchTime < DOUBLE_TAP_MAX && dir == lastTouchDir) {
+			player.startSlide();
+			lastSlideTime = now;
+		}
+
 		lastTouchTime = now;
+		lastTouchDir = dir;
+	}else if(currentState.name == "MenuState"){
+		init_game();
 	}
-	else if (now - lastTouchTime < DOUBLE_TAP_MAX && dir == lastTouchDir) {
-		player.startSlide();
-		lastSlideTime = now;
-	}
-
-	lastTouchTime = now;
-	lastTouchDir = dir;
 }
 function mouseUp(e){
 	rightPressed = false;

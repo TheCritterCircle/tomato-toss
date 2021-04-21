@@ -1,3 +1,6 @@
+//Menu Stuff
+const LOGO = findImage("Menu/logo");
+
 // Input
 
 const INPUT_RIGHT = ["d", "D", "Right", "ArrowRight"];
