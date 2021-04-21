@@ -255,22 +255,17 @@ function addFork(x, y){
 }
 
 function addItem(x, y){
-	console.log("let's add item");
-
 	if (x == undefined) 
 		x = Math.random() * canvas.width * 0.9;
 	if (y == undefined) 
 		y = NEW_ITEM_Y;
 
 	let rand = Math.random() * 100;
-	console.log("rand:", rand);
-
 	for (type of ITEM_TYPES) {
 		let prob = currentRuleset.item_probs[type];
 		if (rand <= prob) break;
 		rand -= prob;
 	}
-	console.log("type:", type);
 	
 	if (type == "tomato")
 		addTomato(x, NEW_ITEM_Y, "random");
