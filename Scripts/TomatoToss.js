@@ -106,8 +106,8 @@ function drawUI(){
 	let levelText = "Level: " + level;
 	let scoreW = Math.max(ctx.measureText(scoreText).width, ctx.measureText(levelText).width);
 	
-	let xpBarTarget = (canvas.width - scoreW - 35) * xp / (level * 10);
-	let comboBarTarget = (canvas.width - scoreW - 35) * combo / currentRuleset.new_item_combo;
+	let xpBarTarget = xp / (level * 10);
+	let comboBarTarget = combo / currentRuleset.new_item_combo;
 	xpBar += (xpBarTarget - xpBar) * 0.5;
 	comboBar += (comboBarTarget - comboBar) * 0.5;
 
@@ -120,7 +120,7 @@ function drawUI(){
 	ctx.fill();
 	ctx.closePath();
 	ctx.beginPath();
-	ctx.rect(25 + scoreW, 10, xpBar, 15);
+	ctx.rect(25 + scoreW, 10, (canvas.width - scoreW - 35) * xpBar, 15);
 	ctx.fillStyle = "#FF0000";
 	ctx.fill();
 	ctx.closePath();
@@ -131,7 +131,7 @@ function drawUI(){
 	ctx.fill();
 	ctx.closePath();
 	ctx.beginPath();
-	ctx.rect(25 + scoreW, 40, comboBar, 15);
+	ctx.rect(25 + scoreW, 40, (canvas.width - scoreW - 35) * comboBar, 15);
 	ctx.fillStyle = "#009900";
 	ctx.fill();
 	ctx.closePath();
@@ -198,13 +198,12 @@ function cleanUp() {
 }
 
 function addTomato(x, y, type){
-	if (x == undefined) 
-		x = Math.random() * canvas.width * 0.9;
-	if (y == undefined) 
+	if (x === undefined)
+		x = 50 + (canvas.width - 100) * Math.random();
+	if (y === undefined)
 		y = NEW_ITEM_Y;
 	
 	let rand = Math.random() * 100;
-
 	if (type == "random")
 		for (type of Object.keys(TOMATOES)) {
 			let prob = currentRuleset.tomato_probs[type];
@@ -218,13 +217,12 @@ function addTomato(x, y, type){
 }
 
 function addPowerup(x, y, type){
-	if (x == undefined) 
-		x = Math.random() * canvas.width * 0.9;
-	if (y == undefined) 
+	if (x === undefined)
+		x = 70 + (canvas.width - 140) * Math.random();
+	if (y === undefined)
 		y = NEW_ITEM_Y;
 
 	let rand = Math.random() * 100;
-
 	if (type == "random")
 		for (type of POWERUP_TYPES) {
 			let prob = currentRuleset.powerup_probs[type];
@@ -237,13 +235,12 @@ function addPowerup(x, y, type){
 }
 
 function addFork(x, y){	
-	if (x == undefined) 
-		x = Math.random() * canvas.width * 0.9;
-	if (y == undefined) 
+	if (x === undefined)
+		x = 50 + (canvas.width - 100) * Math.random();
+	if (y === undefined)
 		y = NEW_ITEM_Y;
 	
 	let rand = Math.random() * 100;
-
 	for (type of FORK_TYPES) {
 		let prob = currentRuleset.fork_probs[type];
 		if (rand <= prob) break;
@@ -255,9 +252,9 @@ function addFork(x, y){
 }
 
 function addItem(x, y){
-	if (x == undefined) 
+	if (x === undefined) 
 		x = Math.random() * canvas.width * 0.9;
-	if (y == undefined) 
+	if (y === undefined) 
 		y = NEW_ITEM_Y;
 
 	let rand = Math.random() * 100;
@@ -267,11 +264,11 @@ function addItem(x, y){
 		rand -= prob;
 	}
 	
-	if (type == "tomato")
+	if (type === "tomato")
 		addTomato(x, NEW_ITEM_Y, "random");
-	if (type == "powerup")
+	if (type === "powerup")
 		addPowerup(x, NEW_ITEM_Y, "random");
-	if (type == "fork")
+	if (type === "fork")
 		addFork(x, NEW_ITEM_Y);
 }
 
