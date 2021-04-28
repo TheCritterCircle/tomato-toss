@@ -14,7 +14,6 @@ let level = 1;
 
 let background = new GameObject(0, 0, canvas.width, canvas.height, BACKGROUND_IMG);
 let player = new Player(canvas.width/2, canvas.height - 4, 120, 200);
-console.log(player);
 
 let objects = [player];
 let toDelete = [];
@@ -37,16 +36,17 @@ let lastTouchDir;
 let lastSlideTime;
 
 //FPS
-let lastCalledTime = Date.now();
+let lastCalledTime;
 let fps = 0;
 let delta;
 
 function getFPS() {
-  delta = (Date.now() - lastCalledTime)/1000;
-  lastCalledTime = Date.now();
-  fps = 1/delta;
-  timeScale = fps / 90;
-  displayFPS();
+	if(!lastCalledTime) lastCalledTime = Date.now();
+	delta = (Date.now() - lastCalledTime)/1000;
+	lastCalledTime = Date.now();
+	fps = 1/delta;
+	timeScale = fps / 90;
+	displayFPS();
 }
 
 function displayFPS(){
@@ -61,7 +61,6 @@ let currentState = new MenuState();
 let forkTimer = setTimeout(function(){}, 1000);
 
 function init_game(){
-	console.log("Init game!");
 	currentRuleset = DEFAULT_RULESET;
 	score = 0;
 	combo = 0;
@@ -71,8 +70,7 @@ function init_game(){
 
 	background.img = BACKGROUND_IMG;
 	player = new Player(canvas.width/2, canvas.height - 4, 120, 200);
-	console.log(player);
-	
+
 	objects = [player];
 	toDelete = [];
 	effects = {};
@@ -91,9 +89,7 @@ function init_game(){
 	music.loop = true;
 
 	addTomato(canvas.width/2, NEW_ITEM_Y, currentRuleset.first_tomato);
-	if (currentState) currentState.end();
-	console.log("let's make a new play state")
-	currentState = new PlayState();
+	currentState.changeState(new PlayState());
 }
 
 function drawUI(){
@@ -297,7 +293,6 @@ function keyDownHandler(e){
 		player.startSlide();
 	}
 	if(INPUT_PAUSE.includes(e.key)){
-		console.log("pressed pause");
 		currentState.handlePause();
 	}
 }

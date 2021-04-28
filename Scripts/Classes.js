@@ -88,7 +88,6 @@ class Plate extends GameObject{
 
 class Player extends GameObject{
 	constructor(x, y, width, height){
-		console.log("x:", x, "y:", y, "PLAYER_SIZE", PLAYER_SIZE)
 		super(
 			x,
 			y - width/2 * PLAYER_SIZE,
@@ -97,7 +96,6 @@ class Player extends GameObject{
 			PLAYER_IMG,
 			0
 		);
-		console.log("x:", this.x, "y:", this.y)
 
 		this.velX = 0;
 		this.velY = 0;

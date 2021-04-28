@@ -4,7 +4,6 @@ class State {
         if (this.draw) this.draw();
         this.mainTimeout;
         this.drawTimeout;
-        console.log("play state made")
     }
 
     end(){
@@ -14,9 +13,8 @@ class State {
     }
 
     changeState(newState) {
-        oldState = currentState;
         currentState = newState;
-        
+        this.end();
     }
     
     mouseDown(e){}
@@ -25,18 +23,9 @@ class State {
 
 class PlayState extends State {
     main() {
-        //console.log("play state's main")
-        //console.log("let's get fps")
         getFPS();
-        //console.log("got fps")
         let timeSpeed = effects["slow_time"] ? 0.75 : 1;
-        console.log(objects);
-        console.log(player);
-        objects.forEach(o => { 
-            console.log(player);o.main();});
-        console.log(objects);
-        console.log(player);
-        return;
+        objects.forEach(o => {o.main();});
         Object.keys(effects).forEach(updateEffect);
     
         splattedTomatoes.forEach(deleteTomato);
@@ -59,7 +48,6 @@ class PlayState extends State {
     }
 
     draw(){
-        //console.log("play state's draw")
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     
         background.draw();
@@ -103,9 +91,7 @@ class PlayState extends State {
     }
 
     handlePause() {
-		console.log("let's try to pause");
-        currentState = new PauseState();
-        this.end();
+        this.changeState(new PauseState());
     }
 }
 
@@ -116,13 +102,14 @@ class MenuState extends State {
     }
 
     mouseDown(e){
+        console.log("test");
         init_game();
     }
 }
 
 class PauseState extends State {
     draw(){
-        console.log("pause state's draw")
+        getFPS();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         background.draw();
         let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);
@@ -133,12 +120,11 @@ class PauseState extends State {
     }
 
     mouseDown(e) {
+        console.log("test2");
         this.handlePause();
     }
 
     handlePause() {
-		console.log("let's try to unpause");
-        currentState = new PlayState();
-        this.end();
+        this.changeState(new PlayState());
     }
 }
