@@ -22,6 +22,11 @@ class State {
 }
 
 class PlayState extends State {
+    constructor() {
+        super();
+        this.name = "play";
+    }
+
     main() {
         getFPS();
         let timeSpeed = effects["slow_time"] ? 0.75 : 1;
@@ -96,6 +101,11 @@ class PlayState extends State {
 }
 
 class MenuState extends State {
+    constructor() {
+        super();
+        this.name = "menu";
+    }
+
     draw(){
         ctx.drawImage(LOGO, 200, 0);
         this.drawTimeout = setTimeout(_ => {this.draw()}, 10);
@@ -108,6 +118,11 @@ class MenuState extends State {
 }
 
 class PauseState extends State {
+    constructor() {
+        super();
+        this.name = "pause";
+    }
+
     draw(){
         getFPS();
         ctx.clearRect(0, 0, canvas.width, canvas.height);

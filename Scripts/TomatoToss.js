@@ -313,11 +313,15 @@ function keyUpHandler(e){
 
 //Touch & Mouse Controls
 
-canvas.addEventListener("mousedown", currentState.mouseDown, false);
+canvas.addEventListener("mousedown", mouseDown, false);
 canvas.addEventListener("mouseup", mouseUp, false);
 
 canvas.addEventListener("touchstart", touchDown, false);
 canvas.addEventListener("touchend", touchUp, false);
+
+function mouseDown(e) {
+	currentState.mouseDown(e);
+}
 
 function mouseUp(e){
 	rightPressed = false;
