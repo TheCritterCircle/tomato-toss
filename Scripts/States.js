@@ -18,6 +18,7 @@ class State {
     }
     
     mouseDown(e){}
+    touchDown(e){}
     handlePause(e){}
 }
 
@@ -95,6 +96,10 @@ class PlayState extends State {
 		lastTouchDir = dir;
     }
 
+    touchDown(e){
+        this.mouseDown(e.touches[0]);
+    }
+
     handlePause() {
         this.changeState(new PauseState());
     }
@@ -112,7 +117,10 @@ class MenuState extends State {
     }
 
     mouseDown(e){
-        console.log("test");
+        init_game();
+    }
+
+    touchDown(e){
         init_game();
     }
 }
@@ -135,7 +143,10 @@ class PauseState extends State {
     }
 
     mouseDown(e) {
-        console.log("test2");
+        this.handlePause();
+    }
+
+    touchDown(e){
         this.handlePause();
     }
 

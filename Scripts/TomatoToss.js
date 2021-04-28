@@ -323,6 +323,10 @@ function mouseDown(e) {
 	currentState.mouseDown(e);
 }
 
+function touchDown(e) {
+	currentState.touchDown(e);
+}
+
 function mouseUp(e){
 	rightPressed = false;
 	leftPressed = false;
@@ -332,34 +336,6 @@ function mouseUp(e){
 	if (player.isSliding)
 		player.endSlide();
 	*/
-}
-
-function touchDown(e){
-	let rect = canvas.getBoundingClientRect();
-	let dir;
-	let now = Date.now();
-
-    if (e.touches[0].clientX > rect.left + canvas.width / 2){
-		rightPressed = true;
-		dir = "Right";
-		player.face("Right");
-	}
-	else if (e.touches[0].clientX < rect.left + canvas.width / 2){
-		leftPressed = true;
-		dir = "Left";
-		player.face("Left");
-	}
-
-	if (!lastTouchTime) {
-		lastTouchTime = now;
-	}
-	else if (now - lastTouchTime < DOUBLE_TAP_MAX && dir == lastTouchDir) {
-		player.startSlide();
-		lastSlideTime = now;
-	}
-
-	lastTouchTime = now;
-	lastTouchDir = dir;
 }
 
 function touchUp(e){
