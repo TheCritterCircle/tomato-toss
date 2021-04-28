@@ -13,7 +13,8 @@ let comboBar = 0;
 let level = 1;
 
 let background = new GameObject(0, 0, canvas.width, canvas.height, BACKGROUND_IMG);
-let player = new Player(canvas.width/2, canvas.height - 4, 120, 200, PLAYER_IMG);
+let player = new Player(canvas.width/2, canvas.height - 4, 120, 200);
+console.log(player);
 
 let objects = [player];
 let toDelete = [];
@@ -36,17 +37,11 @@ let lastTouchDir;
 let lastSlideTime;
 
 //FPS
-let lastCalledTime;
-let fps;
+let lastCalledTime = Date.now();
+let fps = 0;
 let delta;
 
 function getFPS() {
-
-  if(!lastCalledTime) {
-     lastCalledTime = Date.now();
-     fps = 0;
-     return;
-  }
   delta = (Date.now() - lastCalledTime)/1000;
   lastCalledTime = Date.now();
   fps = 1/delta;
@@ -60,12 +55,13 @@ function displayFPS(){
 
 //Functions
 
-let currentState = new MenuState();
 let currentRuleset = DEFAULT_RULESET;
+let currentState = new MenuState();
 
 let forkTimer = setTimeout(function(){}, 1000);
 
 function init_game(){
+	console.log("Init game!");
 	currentRuleset = DEFAULT_RULESET;
 	score = 0;
 	combo = 0;
@@ -74,8 +70,9 @@ function init_game(){
 	level = 1;
 
 	background.img = BACKGROUND_IMG;
-	player = new Player(canvas.width/2, canvas.height - 4, 120, 200, PLAYER_IMG);
-
+	player = new Player(canvas.width/2, canvas.height - 4, 120, 200);
+	console.log(player);
+	
 	objects = [player];
 	toDelete = [];
 	effects = {};
@@ -95,6 +92,7 @@ function init_game(){
 
 	addTomato(canvas.width/2, NEW_ITEM_Y, currentRuleset.first_tomato);
 	if (currentState) currentState.end();
+	console.log("let's make a new play state")
 	currentState = new PlayState();
 }
 
@@ -288,79 +286,44 @@ document.addEventListener("keyup", keyUpHandler, false);
 
 function keyDownHandler(e){
 	if(INPUT_RIGHT.includes(e.key)){
-		//console.log("start right");
 		rightPressed = true;
 		player.face("Right");
     }
     if(INPUT_LEFT.includes(e.key)){
-		//console.log("start left");
 		leftPressed = true;
 		player.face("Left");
 	}
 	if(INPUT_DOWN.includes(e.key)){
-		//console.log("start down");
 		player.startSlide();
+	}
+	if(INPUT_PAUSE.includes(e.key)){
+		console.log("pressed pause");
+		currentState.handlePause();
 	}
 }
 
 function keyUpHandler(e){
 	if(INPUT_RIGHT.includes(e.key)){
-		//console.log("end right");
 		rightPressed = false;
 		if (leftPressed) player.face("Left");
 	}
     if(INPUT_LEFT.includes(e.key)){
-		//console.log("end left");
 		leftPressed = false;
 		if (rightPressed) player.face("Right");
 	}
 	if(INPUT_DOWN.includes(e.key)){
-		//console.log("end down");
-		if(player.isSliding == true){
-			player.endSlide();
-		}
+		player.endSlide();
 	}
 }
 
 //Touch & Mouse Controls
 
-canvas.addEventListener("mousedown", mouseDown, false);
+canvas.addEventListener("mousedown", currentState.mouseDown, false);
 canvas.addEventListener("mouseup", mouseUp, false);
 
 canvas.addEventListener("touchstart", touchDown, false);
 canvas.addEventListener("touchend", touchUp, false);
 
-function mouseDown(e){
-	if(currentState.name == "PlayState"){
-		let rect = canvas.getBoundingClientRect();
-		let dir;
-		let now = Date.now();
-
-		if(e.clientX > rect.left + canvas.width / 2){
-			rightPressed = true;
-			dir = "Right";
-			player.face("Right");
-		}
-		else if(e.clientX < rect.left + canvas.width / 2){
-			leftPressed = true;
-			dir = "Left";
-			player.face("Left");
-		}
-
-		if (!lastTouchTime) {
-			lastTouchTime = now;
-		}
-		else if (now - lastTouchTime < DOUBLE_TAP_MAX && dir == lastTouchDir) {
-			player.startSlide();
-			lastSlideTime = now;
-		}
-
-		lastTouchTime = now;
-		lastTouchDir = dir;
-	}else if(currentState.name == "MenuState"){
-		init_game();
-	}
-}
 function mouseUp(e){
 	rightPressed = false;
 	leftPressed = false;
@@ -399,6 +362,7 @@ function touchDown(e){
 	lastTouchTime = now;
 	lastTouchDir = dir;
 }
+
 function touchUp(e){
 	rightPressed = false;
 	leftPressed = false;

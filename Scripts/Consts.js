@@ -6,6 +6,7 @@ const LOGO = findImage("Menu/logo");
 const INPUT_RIGHT = ["d", "D", "Right", "ArrowRight"];
 const INPUT_LEFT = ["a", "A", "Left", "ArrowLeft"];
 const INPUT_DOWN = ["s", "S", "Down", "ArrowDown", "Shift"];
+const INPUT_PAUSE = ["p", "P"];
 const DOUBLE_TAP_MAX = 300;
 
 
