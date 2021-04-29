@@ -11,23 +11,18 @@ class State {
         if (this.drawTimeout) clearTimeout(this.drawTimeout)
         delete this;
     }
-
-    changeState(newState) {
-        currentState = newState;
-        this.end();
-    }
     
-    mouseDown(e){}
-    touchDown(e){}
-    handlePause(e){}
+    mouseDown(){}
+    touchDown(e){this.mouseDown(e.touches[0])}
+    handlePause(){}
+}
+
+function changeState(newState) {
+    currentState.end();
+    currentState = newState;
 }
 
 class PlayState extends State {
-    constructor() {
-        super();
-        this.name = "play";
-    }
-
     main() {
         getFPS();
         let timeSpeed = effects["slow_time"] ? 0.75 : 1;
@@ -96,41 +91,23 @@ class PlayState extends State {
 		lastTouchDir = dir;
     }
 
-    touchDown(e){
-        this.mouseDown(e.touches[0]);
-    }
-
     handlePause() {
-        this.changeState(new PauseState());
+        changeState(new PauseState());
     }
 }
 
 class MenuState extends State {
-    constructor() {
-        super();
-        this.name = "menu";
-    }
-
     draw(){
         ctx.drawImage(LOGO, 200, 0);
         this.drawTimeout = setTimeout(_ => {this.draw()}, 10);
     }
 
-    mouseDown(e){
-        init_game();
-    }
-
-    touchDown(e){
+    mouseDown(){
         init_game();
     }
 }
 
 class PauseState extends State {
-    constructor() {
-        super();
-        this.name = "pause";
-    }
-
     draw(){
         getFPS();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -142,15 +119,11 @@ class PauseState extends State {
         this.drawTimeout = setTimeout(_ => {this.draw()}, 10);
     }
 
-    mouseDown(e) {
-        this.handlePause();
-    }
-
-    touchDown(e){
+    mouseDown() {
         this.handlePause();
     }
 
     handlePause() {
-        this.changeState(new PlayState());
+        changeState(new PlayState());
     }
 }

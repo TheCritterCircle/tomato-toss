@@ -89,7 +89,7 @@ function init_game(){
 	music.loop = true;
 
 	addTomato(canvas.width/2, NEW_ITEM_Y, currentRuleset.first_tomato);
-	currentState.changeState(new PlayState());
+	changeState(new PlayState());
 }
 
 function drawUI(){
