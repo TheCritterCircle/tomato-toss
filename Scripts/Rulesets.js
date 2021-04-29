@@ -1,5 +1,5 @@
 const DEFAULT_RULESET = {
-    first_tomato: "tomato",
+    first_tomato: "orange",
     item_probs: {
         tomato: 50,
         powerup: 50,

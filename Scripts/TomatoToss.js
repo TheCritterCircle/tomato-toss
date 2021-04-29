@@ -88,7 +88,7 @@ function init_game(){
 	music.play();
 	music.loop = true;
 
-	addTomato(canvas.width/2, NEW_ITEM_Y, currentRuleset.first_tomato);
+	addTomato(currentRuleset.first_tomato, canvas.width/2, NEW_ITEM_Y);
 	changeState(new PlayState());
 }
 
@@ -154,7 +154,7 @@ function incCombo(points) {
 			if (t.isSpawning) deleteTomato(t);
 			else t.timeLeft = 2000 * i;
 		};
-		addTomato(canvas.width/2, NEW_ITEM_Y, currentRuleset.first_tomato);
+		addTomato(currentRuleset.first_tomato, canvas.width/2, NEW_ITEM_Y);
 	}
 }
 
@@ -191,7 +191,7 @@ function cleanUp() {
 	toDelete = [];
 }
 
-function addTomato(x, y, type){
+function addTomato(type, x, y){
 	if (x === undefined)
 		x = 50 + (canvas.width - 100) * Math.random();
 	if (y === undefined)
@@ -210,7 +210,7 @@ function addTomato(x, y, type){
 	objects.push(tomato);
 }
 
-function addPowerup(x, y, type){
+function addPowerup(type, x, y){
 	if (x === undefined)
 		x = 70 + (canvas.width - 140) * Math.random();
 	if (y === undefined)
@@ -258,10 +258,11 @@ function addItem(x, y){
 		rand -= prob;
 	}
 	
+	console.log(type);
 	if (type === "tomato")
-		addTomato(x, NEW_ITEM_Y, "random");
+		addTomato("random", x, NEW_ITEM_Y);
 	if (type === "powerup")
-		addPowerup(x, NEW_ITEM_Y, "random");
+		addPowerup("random", x, NEW_ITEM_Y);
 	if (type === "fork")
 		addFork(x, NEW_ITEM_Y);
 }
