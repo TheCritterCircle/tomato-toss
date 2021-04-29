@@ -1,9 +1,14 @@
 class State {
     constructor(){
-        if (this.main) this.main();
-        if (this.draw) this.draw();
+        if (this.main) this.loop(this.main);
+        if (this.draw) this.loop(this.draw);
         this.mainTimeout;
         this.drawTimeout;
+    }
+
+    loop(step) {
+        step();
+        this.mainTimeout = setTimeout(_ => {this.loop(step)}, 10);
     }
 
     end(){
@@ -44,8 +49,6 @@ class PlayState extends State {
             if (delta && level != 1)
                 forkCooldown -= delta / Math.log2(level) * timeSpeed;
         }
-
-        this.mainTimeout = setTimeout(_ => {this.main()}, 10);
     }
 
     draw(){
@@ -56,11 +59,6 @@ class PlayState extends State {
         toDraw.forEach(o => {o.draw()});
     
         drawUI();
-        this.drawTimeout = setTimeout(_ => {this.draw()}, 10);
-    }
-
-    pause() {
-
     }
 
     mouseDown(e){
@@ -99,7 +97,6 @@ class PlayState extends State {
 class MenuState extends State {
     draw(){
         ctx.drawImage(LOGO, 200, 0);
-        this.drawTimeout = setTimeout(_ => {this.draw()}, 10);
     }
 
     mouseDown(){
@@ -116,7 +113,6 @@ class PauseState extends State {
         toDraw.forEach(o => {o.draw()});
 
         ctx.drawImage(LOGO, 200, 0);
-        this.drawTimeout = setTimeout(_ => {this.draw()}, 10);
     }
 
     mouseDown() {
