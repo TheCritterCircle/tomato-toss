@@ -1,14 +1,19 @@
 class State {
     constructor(){
-        if (this.main) this.loop(this.main);
-        if (this.draw) this.loop(this.draw);
+        if (this.main) this.mainLoop();
+        if (this.draw) this.drawLoop();
         this.mainTimeout;
         this.drawTimeout;
     }
 
-    loop(step) {
-        step();
-        this.mainTimeout = setTimeout(_ => {this.loop(step)}, 10);
+    mainLoop() {
+        this.main();
+        this.mainTimeout = setTimeout(_ => {this.mainLoop()}, 10);
+    }
+
+    drawLoop() {
+        this.draw();
+        this.drawTimeout = setTimeout(_ => {this.drawLoop()}, 10);
     }
 
     end(){
