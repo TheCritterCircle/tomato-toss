@@ -8,12 +8,12 @@ class State {
 
     mainLoop() {
         this.main();
-        this.mainTimeout = setTimeout(_ => {this.mainLoop()}, 10);
+        this.mainTimeout = requestAnimationFrame(_ => {this.mainLoop()}, 10);
     }
 
     drawLoop() {
         this.draw();
-        this.drawTimeout = setTimeout(_ => {this.drawLoop()}, 10);
+        this.drawTimeout = requestAnimationFrame(_ => {this.drawLoop()}, 10);
     }
 
     end(){
