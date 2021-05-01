@@ -2,23 +2,23 @@ class State {
     constructor(){
         if (this.main) this.mainLoop();
         if (this.draw) this.drawLoop();
-        this.mainTimeout;
-        this.drawTimeout;
+        this.mainRequest;
+        this.drawRequest;
     }
 
     mainLoop() {
         this.main();
-        this.mainTimeout = requestAnimationFrame(_ => {this.mainLoop()}, 10);
+        this.mainRequest = requestAnimationFrame(_ => {this.mainLoop()}, 10);
     }
 
     drawLoop() {
         this.draw();
-        this.drawTimeout = requestAnimationFrame(_ => {this.drawLoop()}, 10);
+        this.drawRequest = requestAnimationFrame(_ => {this.drawLoop()}, 10);
     }
 
     end(){
-        if (this.mainTimeout) clearTimeout(this.mainTimeout)
-        if (this.drawTimeout) clearTimeout(this.drawTimeout)
+        if (this.mainRequest) cancelAnimationFrame(this.mainRequest)
+        if (this.drawRequest) cancelAnimationFrame(this.drawRequest)
         delete this;
     }
     
@@ -153,6 +153,12 @@ class PauseState extends State {
 
     mouseDown() {
         this.handlePause();
+    }
+
+    keyDownHandler(e){
+        if(INPUT_PAUSE.includes(e.key)){
+            currentState.handlePause();
+        }
     }
 
     handlePause() {
