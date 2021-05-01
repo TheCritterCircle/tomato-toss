@@ -94,6 +94,37 @@ class PlayState extends State {
 		lastTouchDir = dir;
     }
 
+    keyDownHandler(e){
+        if(INPUT_RIGHT.includes(e.key)){
+            rightPressed = true;
+            player.face("Right");
+        }
+        if(INPUT_LEFT.includes(e.key)){
+            leftPressed = true;
+            player.face("Left");
+        }
+        if(INPUT_DOWN.includes(e.key)){
+            player.startSlide();
+        }
+        if(INPUT_PAUSE.includes(e.key)){
+            currentState.handlePause();
+        }
+    }
+
+    keyUpHandler(e){
+        if(INPUT_RIGHT.includes(e.key)){
+            rightPressed = false;
+            if (leftPressed) player.face("Left");
+        }
+        if(INPUT_LEFT.includes(e.key)){
+            leftPressed = false;
+            if (rightPressed) player.face("Right");
+        }
+        if(INPUT_DOWN.includes(e.key)){
+            player.endSlide();
+        }
+    }
+
     handlePause() {
         changeState(new PauseState());
     }
