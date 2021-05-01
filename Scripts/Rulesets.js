@@ -44,8 +44,8 @@ const IMPOSSIBLE_RULESET = {
     new_item_combo: 3,
     fork_cooldown: 0.2,
     fork_probs: {
-        middle: 60,
-        right: 20,
-        left: 20,
+        middle: 100,
+        right: 0,
+        left: 0,
     }
 };

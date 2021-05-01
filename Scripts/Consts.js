@@ -87,16 +87,16 @@ else if(month == 11 && day <= 25 && day >= 13){
     file = "Christmas/";
 }
 
-const PLAYER_IMG = findImage(file + "critter");
+const PLAYER_IMG = findSpecialImage(file, "critter");
 const PLATE_IMG = findImage("plate");
 for (type of Object.keys(TOMATOES)) {
-    TOMATOES[type].img = findImage(file + type);
-    TOMATOES[type].splatImg = findImage(file + type + "_splat");
+    TOMATOES[type].img = findSpecialImage(file, type);
+    TOMATOES[type].splatImg = findSpecialImage(file, type + "_splat");
 }
 const POWERUP_IMGS = POWERUP_TYPES.map(findImage);
 const FORK_IMG = findImage("fork");
 
-const BACKGROUND_IMG = findImage("background");
+const BACKGROUND_IMG = findSpecialImage(file, "background");
 const GAMEOVER_IMG = findImage("gameover");
 
 // Audio
