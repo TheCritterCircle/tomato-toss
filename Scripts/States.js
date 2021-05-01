@@ -1,5 +1,6 @@
 class State {
     constructor(){
+        this.buttons = [];
         if (this.main) this.mainLoop();
         if (this.draw) this.drawLoop();
         this.mainRequest;
@@ -22,9 +23,19 @@ class State {
         delete this;
     }
     
-    mouseDown(){}
+    mouseDown(e){
+        this.buttons.forEach(btn => {
+            if (e.clientX > btn.x &&
+                e.clientY > btn.y &&
+                e.clientX < btn.x + btn.width &&
+                e.clientY < btn.y + btn.height
+            ) btn.handleClick();
+        })
+    }
     touchDown(e){this.mouseDown(e.touches[0])}
     handlePause(){}
+    keyDownHandler(){}
+    keyUpHandler(){}
 }
 
 function changeState(newState) {
@@ -67,6 +78,8 @@ class PlayState extends State {
     }
 
     mouseDown(e){
+        super.mouseDown(e);
+
 		let rect = canvas.getBoundingClientRect();
 		let dir;
 		let now = Date.now();
@@ -131,16 +144,31 @@ class PlayState extends State {
 }
 
 class MenuState extends State {
-    draw(){
-        ctx.drawImage(LOGO, 200, 0);
+    constructor() {
+        super();
+        this.buttons.push(new Button(
+            canvas.width/2 - 100, canvas.height/2 - 15,
+            200, 50,
+            START_BTN, init_game
+        ));
     }
 
-    mouseDown(){
-        init_game();
+    draw(){
+        ctx.drawImage(LOGO, 200, 0);
+        this.buttons.forEach(btn => {btn.draw()});
     }
 }
 
 class PauseState extends State {
+    constructor() {
+        super();
+        this.buttons.push(new Button(
+            canvas.width/2 - 100, canvas.height/2 - 15,
+            200, 50,
+            UNPAUSE_BTN, this.handlePause
+        ));
+    }
+
     draw(){
         getFPS();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -149,10 +177,7 @@ class PauseState extends State {
         toDraw.forEach(o => {o.draw()});
 
         ctx.drawImage(LOGO, 200, 0);
-    }
-
-    mouseDown() {
-        this.handlePause();
+        this.buttons.forEach(btn => {btn.draw()});
     }
 
     keyDownHandler(e){

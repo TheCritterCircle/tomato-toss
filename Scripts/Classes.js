@@ -1,5 +1,5 @@
 class GameObject {
-	constructor(x, y, width, height, img, depth = 0, sx = 0, sy = 0, sWidth = 0, sHeight = 0){
+	constructor(x, y, width, height, img, depth = 0){
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -12,15 +12,7 @@ class GameObject {
 		this.flipped = false;
 
 		this.img = img;
-		this.sx = sx;
-		this.sy = sy;
-		this.sWidth = sWidth;
-		this.sHeight = sHeight;
 		this.depth = depth;
-
-		this.velX = 0;
-		this.velY = 0;
-		this.velAng = 0;
 	}
 
 	draw(){
@@ -37,20 +29,18 @@ class GameObject {
 			ctx.scale(-1, 1);
 			x *= -1;
 		}
-		ctx.drawImage(this.img, this.sx, this.sy, this.sWidth, this.sHeight, x + this.offsetX, this.y + this.offsetY, this.width, this.height);
+		ctx.drawImage(this.img, x + this.offsetX, this.y + this.offsetY, this.width, this.height);
 		if (this.flipped) {
 			ctx.restore();
 		}
 		ctx.restore();
 	}
+}
 
-	drawMore(img, x, y, width, height, sx, sy, sWidth, sHeight){
-		ctx.save();
-		ctx.translate(this.x, this.y);
-		ctx.rotate(this.angle * Math.PI / 180);
-		ctx.translate(-this.x, -this.y);
-		ctx.drawImage(img, sx, sy, sWidth, sHeight, x + this.offsetX + this.x, y + this.offsetY + this.y, width, height);
-		ctx.restore();
+class Button extends GameObject{
+	constructor(x, y, width, height, img, handleClick){
+		super(x, y, width, height, img)
+		this.handleClick = handleClick;
 	}
 }
 
@@ -341,6 +331,7 @@ class Tomato extends GameObject{
 
 		this.velX = 0;
 		this.velY = 0;
+		this.velAng = 0;
 		this.type = type;
 
 		this.offsetX = -this.width / 2;
