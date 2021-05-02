@@ -46,7 +46,8 @@ function getFPS() {
 	lastCalledTime = Date.now();
 	fps = 1/delta;
 	if (delta > 1/3) console.log("delta is " + delta + " s");
-	timeScale = fps / 90;
+	if(fps > 10)
+		timeScale = fps / 90;
 	displayFPS();
 }
 
