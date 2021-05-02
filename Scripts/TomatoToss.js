@@ -46,7 +46,8 @@ function getFPS() {
 	lastCalledTime = Date.now();
 	fps = 1/delta;
 	if (delta > 1/3) console.log("delta is " + delta + " s");
-	timeScale = fps / 90;
+	if(fps > 10)
+		timeScale = fps / 90;
 	displayFPS();
 }
 
@@ -101,7 +102,7 @@ function drawUI(){
 	let levelText = "Level: " + level;
 	let scoreW = Math.max(ctx.measureText(scoreText).width, ctx.measureText(levelText).width);
 	
-	let xpBarTarget = xp / (level * 10);
+	let xpBarTarget = xp / (level * 5);
 	let comboBarTarget = combo / currentRuleset.new_item_combo;
 	xpBar += (xpBarTarget - xpBar) * 0.5;
 	comboBar += (comboBarTarget - comboBar) * 0.5;
@@ -147,7 +148,7 @@ function incCombo(points) {
 		addItem();
 	}
 
-	if(xp >= level * 10){
+	if(xp >= level * 5){
 		xp = 0;
 		level++;
 		for (let i = 0; i < tomatoes.length; i++) {
