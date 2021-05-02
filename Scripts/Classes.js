@@ -389,7 +389,11 @@ class Tomato extends GameObject{
 
 		if (this.timeLeft >= 0) {
 			this.timeLeft -= 90 / timeScale;
-			if (this.timeLeft < 0) this.kill();
+			if (this.timeLeft < 0) {
+				score += 5*TOMATOES[this.type].bounce_pts || 0;
+				score += TOMATOES[this.type].pinata_pts || 0;
+				this.splat();
+			}
 		}
 	}
 
@@ -496,8 +500,7 @@ class Tomato extends GameObject{
 		}
 	}
 
-	kill() {
-		breakCombo();
+	splat() {
 		findAudio("splat").play();
 		new Splat(this.x, this.y, this.width * 1.5, this.height * 1.5, TOMATOES[this.type].splatImg)
 		splattedTomatoes.push(this);
