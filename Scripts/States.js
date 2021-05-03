@@ -27,8 +27,8 @@ class State {
 
     getEventPos(e){
         return {
-            x: e.x - canvas.getBoundingClientRect().left,
-            y: e.y - canvas.getBoundingClientRect().top,
+            x: e.pageX - canvas.getBoundingClientRect().left,
+            y: e.pageY - canvas.getBoundingClientRect().top,
         };
     }
 
