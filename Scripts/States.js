@@ -23,15 +23,30 @@ class State {
         delete this;
     }
     
-    mouseDown(e){
+    main(){getFPS()}
+
+    getEventPos(e){
+        return {
+            x: e.x - canvas.getBoundingClientRect().left,
+            y: e.y - canvas.getBoundingClientRect().top,
+        };
+    }
+
+    clickButton(x, y){
         this.buttons.forEach(btn => {
-            if (e.clientX > btn.x &&
-                e.clientY > btn.y &&
-                e.clientX < btn.x + btn.width &&
-                e.clientY < btn.y + btn.height
+            if (x > btn.x &&
+                y > btn.y &&
+                x < btn.x + btn.width &&
+                y < btn.y + btn.height
             ) btn.handleClick();
         })
     }
+
+    mouseDown(e){
+        let pos = this.getEventPos(e);
+        this.clickButton(pos.x, pos.y);
+    }
+
     touchDown(e){this.mouseDown(e.touches[0])}
     handlePause(){}
     keyDownHandler(){}
@@ -78,23 +93,26 @@ class PlayState extends State {
     }
 
     mouseDown(e){
-        super.mouseDown(e);
-
-		let rect = canvas.getBoundingClientRect();
-		let dir;
+        let pos = this.getEventPos(e);
 		let now = Date.now();
+		let dir;
 
-		if(e.clientX > rect.left + canvas.width / 2){
+        // clicking buttons
+        this.clickButton(pos.x, pos.y);
+
+        // moving
+		if (pos.x > canvas.width / 2) {
 			rightPressed = true;
 			dir = "Right";
 			player.face("Right");
 		}
-		else if(e.clientX < rect.left + canvas.width / 2){
+		if (pos.x < canvas.width / 2) {
 			leftPressed = true;
 			dir = "Left";
 			player.face("Left");
 		}
 
+        // sliding
 		if (!lastTouchTime) {
 			lastTouchTime = now;
 		}
@@ -102,7 +120,7 @@ class PlayState extends State {
 			player.startSlide();
 			lastSlideTime = now;
 		}
-
+        
 		lastTouchTime = now;
 		lastTouchDir = dir;
     }
@@ -170,7 +188,6 @@ class PauseState extends State {
     }
 
     draw(){
-        getFPS();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         background.draw();
         let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);

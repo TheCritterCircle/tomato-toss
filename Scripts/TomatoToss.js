@@ -37,21 +37,19 @@ let lastSlideTime;
 
 //FPS
 let lastCalledTime;
-let fps = 0;
 let delta;
 
 function getFPS() {
-	if(!lastCalledTime) lastCalledTime = Date.now();
-	delta = (Date.now() - lastCalledTime)/1000;
+	if (lastCalledTime) {
+		delta = (Date.now() - lastCalledTime)/1000;
+		let fps = 1/delta;
+		timeScale = fps > 10 ? fps/90 : 10/90;
+		displayFPS(fps);
+	}
 	lastCalledTime = Date.now();
-	fps = 1/delta;
-	if (delta > 1/3) console.log("delta is " + delta + " s");
-	if(fps > 10)
-		timeScale = fps / 90;
-	displayFPS();
 }
 
-function displayFPS(){
+function displayFPS(fps){
 	document.getElementById("fpscount").innerHTML = "FPS:" + fps.toString();
 }
 
