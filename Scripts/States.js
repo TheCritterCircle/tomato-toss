@@ -120,7 +120,7 @@ class PlayState extends State {
 			player.startSlide();
 			lastSlideTime = now;
 		}
-        
+
 		lastTouchTime = now;
 		lastTouchDir = dir;
     }
@@ -165,7 +165,7 @@ class MenuState extends State {
     constructor() {
         super();
         this.buttons.push(new Button(
-            canvas.width/2 - 100, canvas.height/2 - 15,
+            canvas.width/2 - 100, canvas.height/2 - 25,
             200, 50,
             START_BTN, init_game
         ));
@@ -181,7 +181,7 @@ class PauseState extends State {
     constructor() {
         super();
         this.buttons.push(new Button(
-            canvas.width/2 - 100, canvas.height/2 - 15,
+            canvas.width/2 - 100, canvas.height/2 - 50,
             200, 50,
             UNPAUSE_BTN, this.handlePause
         ));
@@ -193,7 +193,7 @@ class PauseState extends State {
         let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);
         toDraw.forEach(o => {o.draw()});
 
-        ctx.drawImage(LOGO, 200, 0);
+        ctx.drawImage(PAUSE_IMG, 0, 0);
         this.buttons.forEach(btn => {btn.draw()});
     }
 

@@ -98,6 +98,7 @@ const FORK_IMG = findImage("fork");
 
 const BACKGROUND_IMG = findSpecialImage(file, "background");
 const GAMEOVER_IMG = findImage("gameover");
+const PAUSE_IMG = findImage("pause")
 
 const START_BTN = findImage("start");
 const UNPAUSE_BTN = findImage("unpause");
