@@ -60,13 +60,22 @@ let currentState = new MenuState();
 
 let forkTimer = setTimeout(function(){}, 1000);
 
-function init_game(){
-	currentRuleset = DEFAULT_RULESET;
-	score = 0;
-	combo = 0;
-	xp = 0;
+function changeRuleset(r){
+	if (r === DEFAULT_RULESET) {
+		currentRuleset = r;
+	} else {
+		let newRuleset = {};
+		let keys = Object.keys(DEFAULT_RULESET);
+		keys.forEach(key => {
+			newRuleset[key] = r[key] || DEFAULT_RULESET[key];
+		});
+		currentRuleset = newRuleset;
+	}
+}
 
-	level = 1;
+function init_game(){
+	changeRuleset(MIRROR_RULESET);
+	score = 0, xp = 0, level = 1, combo = 0;
 
 	background.img = BACKGROUND_IMG;
 	player = new Player(canvas.width/2, canvas.height - 4, 120, 200);
@@ -83,7 +92,7 @@ function init_game(){
 	lastTouchTime = undefined;
 	lastSlideTime = undefined;
 	
-	if (music) {music.pause(), delete music}
+	if (music) music.pause();
 	music = findAudio("TonatoToss");
 	music.play();
 	music.loop = true;
@@ -258,7 +267,6 @@ function addItem(x, y){
 		rand -= prob;
 	}
 	
-	console.log(type);
 	if (type === "tomato")
 		addTomato("random", x, NEW_ITEM_Y);
 	if (type === "powerup")
@@ -272,8 +280,6 @@ function deleteTomato(tomato){
 	let j = objects.indexOf(tomato);
 	tomatoes.splice(i, 1);
 	objects.splice(j, 1);
-	
-	delete tomato;
 }
 
 //Keyboard Controls

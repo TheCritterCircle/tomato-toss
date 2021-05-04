@@ -202,13 +202,15 @@ class Player extends GameObject{
 	}
 
 	move(){
-		let speedBoost = (effects["speed_up"] ? 1.5 : 1);
+		let speedBoost = (effects.speed_up ? 1.5 : 1);
 
 		if (rightPressed || leftPressed || this.isSliding) {
 			if(this.facing == "Right")
-					this.velX = this.speed * speedBoost;
+				this.velX = this.speed * speedBoost;
 			if(this.facing == "Left")
-					this.velX = -this.speed * speedBoost;
+				this.velX = -this.speed * speedBoost;
+			if(effects.mirror)
+				this.velX *= -1;
 		} else {
 			this.velX = 0;
 		}
@@ -353,7 +355,7 @@ class Tomato extends GameObject{
 	}
 
 	main(){
-		let timeSpeed = effects["slow_time"] ? 0.75 : 1;
+		let timeSpeed = effects.slow_time ? 0.75 : 1;
 
 		if (this.isSpawning) {
 			this.visible = this.animTimer / BLINK_DUR % 1 < 1/2;
@@ -369,7 +371,7 @@ class Tomato extends GameObject{
 				this.x = this.fork.x + this.relX;
 			} else {
 				this.velY += GRAVITY / timeScale * timeSpeed;
-				if (effects["magnet"]) this.beAtracted();
+				if (effects.magnet) this.beAtracted();
 			}
 			
 			this.x += this.velX / timeScale * timeSpeed;
@@ -398,7 +400,7 @@ class Tomato extends GameObject{
 	}
 
 	beAtracted(){
-		let timeSpeed = effects["slow_time"] ? 0.75 : 1;
+		let timeSpeed = effects.slow_time ? 0.75 : 1;
 		let dist = Math.abs(player.x - this.x);
 		let force = MAGNET_STR * Math.log(dist);
 
@@ -556,9 +558,7 @@ class PowerUp extends GameObject {
 			findAudio("powerup").play();
 
 			switch (this.type) {
-				case "speed_up":
-				case "magnet":
-				case "slow_time":
+				default:
 					effects[this.type] = 7;
 					break;
 			}
@@ -598,7 +598,7 @@ class Fork extends GameObject{
 	}
 
 	main(){
-		let timeSpeed = effects["slow_time"] ? 0.75 : 1;
+		let timeSpeed = effects.slow_time ? 0.75 : 1;
 
 		if (this.isSpawning) {
 			this.visible = this.animTimer / BLINK_DUR % 1 < 1/2;

@@ -61,7 +61,7 @@ const POWERUP_SPEED = 2.5;
 const FORK_SPEED = 5;
 const SPIN_ANIM_SPEED = 1 / 500;
 const TOMATO_TYPES = Object.keys(TOMATOES);
-const POWERUP_TYPES = ["speed_up", "magnet", "slow_time"];
+const POWERUP_TYPES = ["speed_up", "magnet", "slow_time", "mirror"];
 const ITEM_TYPES = ["tomato", "powerup", "fork"];
 const FORK_TYPES = ["middle", "right", "left"];
 
