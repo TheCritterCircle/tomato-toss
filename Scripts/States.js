@@ -59,6 +59,15 @@ function changeState(newState) {
 }
 
 class PlayState extends State {
+    constructor() {
+        super();
+        this.buttons.push(new Button(
+            canvas.width - 60, 5,
+            55, 55,
+            PAUSE_BTN, this.handlePause
+        ));
+    }
+
     main() {
         getFPS();
         let timeSpeed = effects["slow_time"] ? 0.75 : 1;
@@ -90,6 +99,7 @@ class PlayState extends State {
         toDraw.forEach(o => {o.draw()});
     
         drawUI();
+        this.buttons.forEach(btn => {btn.draw()});
     }
 
     mouseDown(e){
@@ -184,6 +194,11 @@ class PauseState extends State {
             canvas.width/2 - 100, canvas.height/2 - 50,
             200, 50,
             UNPAUSE_BTN, this.handlePause
+        ))
+        this.buttons.push(new Button(
+            canvas.width/2 - 100, canvas.height/2 + 50,
+            200, 50,
+            START_BTN, init_game
         ));
     }
 

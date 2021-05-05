@@ -118,23 +118,23 @@ function drawUI(){
 	ctx.fillText(levelText, 10, 60);
 
 	ctx.beginPath();
-	ctx.rect(20 + scoreW, 5, canvas.width - scoreW - 25, 25);
+	ctx.rect(20 + scoreW, 5, canvas.width - scoreW - 85, 25);
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fill();
 	ctx.closePath();
 	ctx.beginPath();
-	ctx.rect(25 + scoreW, 10, (canvas.width - scoreW - 35) * xpBar, 15);
+	ctx.rect(25 + scoreW, 10, (canvas.width - scoreW - 95) * xpBar, 15);
 	ctx.fillStyle = "#FF0000";
 	ctx.fill();
 	ctx.closePath();
 
 	ctx.beginPath();
-	ctx.rect(20 + scoreW, 35, canvas.width - scoreW - 25, 25);
+	ctx.rect(20 + scoreW, 35, canvas.width - scoreW - 85, 25);
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fill();
 	ctx.closePath();
 	ctx.beginPath();
-	ctx.rect(25 + scoreW, 40, (canvas.width - scoreW - 35) * comboBar, 15);
+	ctx.rect(25 + scoreW, 40, (canvas.width - scoreW - 95) * comboBar, 15);
 	ctx.fillStyle = "#009900";
 	ctx.fill();
 	ctx.closePath();

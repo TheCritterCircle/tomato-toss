@@ -102,5 +102,6 @@ const PAUSE_IMG = findImage("pause")
 
 const START_BTN = findImage("start");
 const UNPAUSE_BTN = findImage("unpause");
+const PAUSE_BTN = findImage("pause_btn");
 
 // Audio
