@@ -14,6 +14,10 @@ class GameObject {
 		this.img = img;
 		this.depth = depth;
 	}
+	
+	main(){
+
+	}
 
 	draw(){
 		if (!this.visible) return;
@@ -436,19 +440,29 @@ class Tomato extends GameObject{
 	collision(){
 		//Wall & Ceiling
 		if(this.hitX <= 0){
-			this.x = 0 + this.width / 2;
-			this.velX = -this.velX;
-			this.velAng -= this.velX;
-			if(this.velX != 0)
-				findAudio("collision").play();
+			if(spikesLeft){
+				this.splat();
+			}
+			else{
+				this.x = 0 + this.width / 2;
+				this.velX = -this.velX;
+				this.velAng -= this.velX;
+				if(this.velX != 0)
+					findAudio("collision").play();
+			}
 		}
 
 		if(this.hitX + this.hitWidth >= canvas.width) {
-			this.x = canvas.width - this.width / 2;
-			this.velX = -this.velX;
-			this.velAng += this.velY;
-			if(this.velX != 0)
-				findAudio("collision").play();
+			if(spikesRight){
+				this.splat();
+			}
+			else{
+				this.x = canvas.width - this.width / 2;
+				this.velX = -this.velX;
+				this.velAng += this.velY;
+				if(this.velX != 0)
+					findAudio("collision").play();
+			}
 		}
 
 		if(this.hitY <= 0){
@@ -688,5 +702,63 @@ class Fork extends GameObject{
 		ctx.beginPath();
 		ctx.rect(this.hitX, this.hitY, this.hitWidth, this.hitHeight);
 		ctx.stroke();
+	}
+}
+
+class Spikes extends GameObject{
+	constructor(isRight){
+		if(isRight == true){
+			super(canvas.width, 0, 100, 480, BW_SPIKE_IMG, 10);
+			rightSpikes = this;
+			this.warningsign = new GameObject(canvas.width - 200, canvas.height / 2 + 50, 100, 100, WARNING, 50);
+			//objects.push(this.warningsign);
+		}
+		else{
+			super(-100, 0, 100, 480, SPIKE_IMG, 10);
+			leftSpikes = this;
+			this.warningsign = new GameObject(200, canvas.height / 2 + 50, 100, 100, WARNING, 50);
+			//objects.push(this.warningsign);
+		}
+		this.warningflash = setInterval(function(){
+			if(this.warningsign.visible){
+				this.warningsign.visible = false;
+			}
+			else{
+				this.warningsign.visible = true;
+			}
+		}, BLINK_DUR / NUM_BLINKS * timeScale);
+
+		this.stopwarningflash = setTimeout(function(){
+			clearInterval(this.warningflash);
+			this.closingin = true;
+		}, BLINK_DUR * timeScale);
+
+		this.closingin = false;
+		this.isRight = isRight;
+	}
+
+	main(){
+		if(!this.isRight){
+			if(this.closingin){
+				this.x += (5 * timeScale);
+				if(this.x > 100){
+					this.closingin = false;
+					spikesLeft = true;
+				}
+			}
+		}
+		else{
+			if(this.closingin){
+				this.x -= (5 * timeScale);
+				if(this.x < canvas.width - 100){
+					this.closingin = false;
+					spikesRight = true;
+				}
+			}
+		}
+	}
+
+	stop(){
+
 	}
 }

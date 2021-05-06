@@ -25,6 +25,13 @@ let splattedTomatoes = [];
 let timeMultiplier = 1;
 let forkCooldown = 0;
 
+let spikesRight = false;
+let spikesLeft = false;
+let rightSpikes = null;
+let leftSpikes = null;
+let leftSpikesTimer;
+let rightSpikesTimer;
+
 //Music
 let music;
 
@@ -99,6 +106,8 @@ function init_game(){
 
 	addTomato(currentRuleset.first_tomato, canvas.width/2, NEW_ITEM_Y);
 	changeState(new PlayState());
+
+	activateSpikes();
 }
 
 function drawUI(){
@@ -252,6 +261,25 @@ function addFork(x, y){
 
 	let fork = new Fork(x, y, 50, 75, 30, 30, FORK_DIRS[type]);
 	objects.push(fork);
+}
+
+function activateSpikes(){
+	let tempRandom = Math.random() * 2;
+
+	if(tempRandom > 1 && !spikesLeft){
+		leftSpikes = new Spikes(false);
+		objects.push(leftSpikes);
+		leftSpikesTimer = setTimeout(function(){
+			leftSpikes.stop();
+		}, Math.random * 5000 + 1000);
+	}
+	else if(tempRandom < 1 && !spikesRight){
+		rightSpikes = new Spikes(true);
+		objects.push(rightSpikes);
+		rightSpikesTimer = setTimeout(function(){
+			rightSpikes.stop();
+		}, Math.random * 5000 + 1000);
+	}
 }
 
 function addItem(x, y){
