@@ -669,52 +669,55 @@ class Fork extends GameObject{
 
 class Spikes extends GameObject{
 	constructor(isRight){
-		if(isRight == true){
+		if(isRight){
 			super(canvas.width, 0, 100, 480, BW_SPIKE_IMG, 10);
 			rightSpikes = this;
-			this.warningsign = new GameObject(canvas.width - 200, canvas.height / 2 + 50, 100, 100, WARNING, 50);
-			//objects.push(this.warningsign);
+			this.warningsign = new GameObject(canvas.width - 200, canvas.height / 2 - 50, 100, 100, WARNING, 50);
+			objects.push(this.warningsign);
 		}
 		else{
 			super(-100, 0, 100, 480, SPIKE_IMG, 10);
 			leftSpikes = this;
-			this.warningsign = new GameObject(200, canvas.height / 2 + 50, 100, 100, WARNING, 50);
-			//objects.push(this.warningsign);
+			this.warningsign = new GameObject(100, canvas.height / 2 - 50, 100, 100, WARNING, 50);
+			objects.push(this.warningsign);
 		}
-		this.warningflash = setInterval(function(){
-			if(this.warningsign.visible){
-				this.warningsign.visible = false;
-			}
-			else{
-				this.warningsign.visible = true;
-			}
-		}, BLINK_DUR / NUM_BLINKS * timeScale);
-
-		this.stopwarningflash = setTimeout(function(){
-			clearInterval(this.warningflash);
-			this.closingin = true;
-		}, BLINK_DUR * timeScale);
-
-		this.closingin = false;
 		this.isRight = isRight;
+
+		this.animTimer = 0;
+		this.isSpawning = true;
+
+		this.isdeployed = false;;
 	}
 
 	main(){
-		if(!this.isRight){
-			if(this.closingin){
-				this.x += (5 * timeScale);
-				if(this.x > 100){
-					this.closingin = false;
-					spikesLeft = true;
+		if(!this.isdeployed){
+			if (this.isSpawning) {
+				this.warningsign.visible = this.animTimer / BLINK_DUR % 1 < 1/2;
+				this.animTimer += 90 / timeScale;
+
+				if (this.animTimer > BLINK_DUR * NUM_BLINKS)
+					this.isSpawning = false;
+			} 
+			else {
+				delete this.warningsign;
+
+				if(this.isRight){
+					if(this.x > canvas.width - 100){
+						this.x += -10 * timeScale;
+					}
+					else{
+						this.isdeployed = true;
+						spikesRight = true;
+					}
 				}
-			}
-		}
-		else{
-			if(this.closingin){
-				this.x -= (5 * timeScale);
-				if(this.x < canvas.width - 100){
-					this.closingin = false;
-					spikesRight = true;
+				else if(!this.isRight){
+					if(this.x < 0){
+						this.x += 10 * timeScale;
+					}
+					else{
+						this.isdeployed = true;
+						spikesLeft = true;
+					}
 				}
 			}
 		}
