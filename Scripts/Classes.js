@@ -109,6 +109,7 @@ class Player extends GameObject{
 			215 * PLAYER_SIZE,
 			60 * PLAYER_SIZE
 		);
+		this.spdGhosts = [];
 
 		this.hitX;
 		this.hitY;
@@ -128,6 +129,7 @@ class Player extends GameObject{
 
 	main(){
 		this.move();
+		this.speedImages();
 	}
 
 	updatePlate() {
@@ -165,6 +167,7 @@ class Player extends GameObject{
 
 	draw(){
 		this.animate();
+		this.spdGhosts.forEach(o => {o.draw()});
 		super.draw();
 		this.plate.draw();
 	}
@@ -255,6 +258,32 @@ class Player extends GameObject{
 			if (rightPressed && this.facing === -1)
 				this.face(1);
 		}		
+	}
+
+	speedImages(){
+		if (effects.speed_up) {
+			if (this.spdGhosts.length < MAX_GHOSTS) {
+				let newGhost = new GameObject(
+					0, this.y, this.width, this.height, SPD_GHOST_IMG,
+				);
+				newGhost.offsetX = this.offsetX;
+				newGhost.offsetY = this.offsetY;
+				newGhost.alpha = 1 - this.spdGhosts.length/MAX_GHOSTS;
+				this.spdGhosts.unshift(newGhost);
+			}
+
+			let n = this.spdGhosts.length;
+			for (let i=0; i<n-1; i++) {
+				this.spdGhosts[i].x = this.spdGhosts[i+1].x;
+				this.spdGhosts[i].angle = this.spdGhosts[i+1].angle;
+				this.spdGhosts[i].flipped = this.spdGhosts[i+1].flipped;
+			}
+			this.spdGhosts[n-1].x = this.x - this.velX;
+			this.spdGhosts[n-1].angle = this.angle;
+			this.spdGhosts[n-1].flipped = this.flipped;
+		} else {
+			this.spdGhosts = [];
+		}
 	}
 }
 

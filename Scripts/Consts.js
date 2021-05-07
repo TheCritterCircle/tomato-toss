@@ -48,6 +48,7 @@ const PLAYER_SIZE = 0.9;
 
 const WALK_ANIM_SPEED = 1 / 200;
 const WALK_ANIM_SCALE = 0.03;
+const MAX_GHOSTS = 3;
 
 
 // Items
@@ -93,6 +94,7 @@ for (type of Object.keys(TOMATOES)) {
     TOMATOES[type].img = findSpecialImage(file, type);
     TOMATOES[type].splatImg = findSpecialImage(file, type + "_splat");
 }
+const SPD_GHOST_IMG = findImage("speed_ghost");
 const POWERUP_IMGS = POWERUP_TYPES.map(findImage);
 const FORK_IMG = findImage("fork");
 
