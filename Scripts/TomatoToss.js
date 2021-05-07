@@ -95,6 +95,13 @@ function init_game(){
 	splattedTomatoes = [];
 	forkCooldown = currentRuleset.fork_cooldown;
 
+	spikesRight = false;
+	spikesLeft = false;
+	rightSpikes = null;
+	leftSpikes = null;
+	leftSpikesTimer = null;
+	rightSpikesTimer = null;
+
 	lastCalledTime = undefined;
 	lastTouchTime = undefined;
 	lastSlideTime = undefined;
@@ -106,8 +113,6 @@ function init_game(){
 
 	addTomato(currentRuleset.first_tomato, canvas.width/2, NEW_ITEM_Y);
 	changeState(new PlayState());
-
-	activateSpikes();
 }
 
 function drawUI(){
