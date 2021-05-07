@@ -114,12 +114,12 @@ class PlayState extends State {
 		if (pos.x > canvas.width / 2) {
 			rightPressed = true;
 			dir = "Right";
-			player.face("Right");
+			player.face(1);
 		}
 		if (pos.x < canvas.width / 2) {
 			leftPressed = true;
 			dir = "Left";
-			player.face("Left");
+			player.face(-1);
 		}
 
         // sliding
@@ -138,11 +138,11 @@ class PlayState extends State {
     keyDownHandler(e){
         if(INPUT_RIGHT.includes(e.key)){
             rightPressed = true;
-            player.face("Right");
+            player.face(1);
         }
         if(INPUT_LEFT.includes(e.key)){
             leftPressed = true;
-            player.face("Left");
+            player.face(-1);
         }
         if(INPUT_DOWN.includes(e.key)){
             player.startSlide();
@@ -155,11 +155,11 @@ class PlayState extends State {
     keyUpHandler(e){
         if(INPUT_RIGHT.includes(e.key)){
             rightPressed = false;
-            if (leftPressed) player.face("Left");
+            if (leftPressed) player.face(-1);
         }
         if(INPUT_LEFT.includes(e.key)){
             leftPressed = false;
-            if (rightPressed) player.face("Right");
+            if (rightPressed) player.face(1);
         }
         if(INPUT_DOWN.includes(e.key)){
             player.endSlide();
