@@ -5,15 +5,16 @@ class GameObject {
 		this.width = width;
 		this.height = height;
 
+		this.img = img;
+		this.depth = depth;
+
 		this.offsetX = 0;
 		this.offsetY = 0;
 		this.angle = 0;
+
 		this.visible = true;
 		this.flipped = false;
 		this.alpha = 1;
-
-		this.img = img;
-		this.depth = depth;
 	}
 	
 	main(){}
@@ -53,11 +54,10 @@ class Plate extends GameObject{
 	constructor(x, y, width, height, hitWidth, hitHeight){
 		super(x, y, width, height, PLATE_IMG, 0);
 		this.offsetX = -width/2;
-
-		this.hitX = x - hitWidth/2;
-		this.hitY = y + 12;
+		
 		this.hitWidth = hitWidth;
-		this.hitHeight = hitHeight
+		this.hitHeight = hitHeight;
+		this.updatePos(x, y);
 	}
 
 	updatePos(x, y) {
@@ -77,12 +77,9 @@ class Plate extends GameObject{
 class Player extends GameObject{
 	constructor(x, y, width, height){
 		super(
-			x,
-			y - width/2 * PLAYER_SIZE,
-			width * PLAYER_SIZE,
-			height * PLAYER_SIZE,
-			PLAYER_IMG,
-			0
+			x, y - width/2 * PLAYER_SIZE,
+			width * PLAYER_SIZE, height * PLAYER_SIZE,
+			PLAYER_IMG
 		);
 
 		this.velX = 0;
@@ -95,6 +92,11 @@ class Player extends GameObject{
 		this.baseW = width * PLAYER_SIZE;
 		this.baseH = height * PLAYER_SIZE;
 		this.baseY = y;
+		
+		this.hitX;
+		this.hitY;
+		this.hitWidth;
+		this.hitHeight;
 
 		this.facing = 1;
 		this.speed = WALK_SPEED;
@@ -102,19 +104,11 @@ class Player extends GameObject{
 		this.isMoving = false;
 
 		this.plate = new Plate(
-			this.x,
-			this.y - 152,
-			208 * PLAYER_SIZE,
-			60 * PLAYER_SIZE,
-			215 * PLAYER_SIZE,
-			60 * PLAYER_SIZE
+			this.x, this.y - 152,
+			208 * PLAYER_SIZE, 60 * PLAYER_SIZE,
+			215 * PLAYER_SIZE, 60 * PLAYER_SIZE
 		);
 		this.spdGhosts = [];
-
-		this.hitX;
-		this.hitY;
-		this.hitWidth;
-		this.hitHeight;
 
 		this.updateHitbox();
 	}
@@ -396,8 +390,11 @@ class Tomato extends GameObject{
 		if (this.timeLeft >= 0) {
 			this.timeLeft -= 90 / timeScale;
 			if (this.timeLeft < 0) {
-				score += 5*TOMATOES[this.type].bounce_pts || 0;
-				score += TOMATOES[this.type].pinata_pts || 0;
+				let points = 
+					5*TOMATOES[this.type].bounce_pts || 0
+					+ TOMATOES[this.type].pinata_pts || 0;
+				score += points;
+				objects.push(new ScoreNumber(this.x, this.y, points));
 				this.splat();
 			}
 		}
@@ -483,7 +480,9 @@ class Tomato extends GameObject{
 			if (this.hp > 0) {
 				this.hp--;
 				if (this.hp == 0){
-					score += TOMATOES[this.type].pinata_pts || 0;
+					let points = TOMATOES[this.type].pinata_pts || 0;
+					score += points;
+					objects.push(new ScoreNumber(this.x, this.y, points));
 					findAudio("splat").play();
 					new PlateSplat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[this.type].splatImg);
 					if (!this.beenHit) addTomato("random");
@@ -497,7 +496,9 @@ class Tomato extends GameObject{
 			this.velX += CONTROL * (this.x - (plate.hitX + plate.hitWidth / 2));
 			this.velAng -= player.velX - this.velX;
 
-			score += TOMATOES[this.type].bounce_pts || 0;
+			let points = TOMATOES[this.type].bounce_pts || 0
+			score += points;
+			objects.push(new ScoreNumber(this.x, this.y, points));
 			incCombo(1);
 			this.hasScored = true;
 			findAudio("collision").play();
@@ -693,6 +694,32 @@ class Fork extends GameObject{
 		ctx.beginPath();
 		ctx.rect(this.hitX, this.hitY, this.hitWidth, this.hitHeight);
 		ctx.stroke();
+	}
+}
+
+class ScoreNumber {
+	constructor(x, y, value) {
+		this.x = x, this.y = y;
+		this.depth = -5, this.alpha = 255;
+		this.text = value >= 0 ? "+" + value : value;
+		this.color = value > 0 ? "#0080f0" : value < 0 ? "#800000" : "#808080";
+	}
+
+	draw() {
+		let alphaHex = Math.floor(this.alpha).toString(16);
+		while (alphaHex.length < 2) alphaHex = "0" + alphaHex;
+		
+		ctx.fillStyle = this.color + alphaHex;
+		ctx.font = "30px Arial";
+		ctx.textAlign = "center";
+		ctx.fillText(this.text, this.x, this.y);
+		ctx.textAlign = "left";
+	}
+
+	main() {
+		this.alpha -= 2/timeScale;
+		this.y -= 0.2/timeScale;
+		if (this.alpha < 0) toDelete.push(this);
 	}
 }
 
