@@ -25,6 +25,7 @@ const DEFAULT_RULESET = {
 };
 
 const MIRROR_RULESET = {
+    first_tomato: "random",
     powerup_probs: {
         speed_up: 20,
         magnet: 20,
@@ -47,3 +48,10 @@ const IMPOSSIBLE_RULESET = {
         left: 0,
     }
 };
+
+const LEVELS = [
+    DEFAULT_RULESET,
+    DEFAULT_RULESET,
+    DEFAULT_RULESET,
+    MIRROR_RULESET,
+]

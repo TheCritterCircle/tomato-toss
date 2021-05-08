@@ -80,8 +80,12 @@ function changeRuleset(r){
 	}
 }
 
+function getTargetXP(){
+	return 3 + Math.floor(5 * Math.log2(level+1));
+}
+
 function init_game(){
-	changeRuleset(MIRROR_RULESET);
+	changeRuleset(LEVELS[0]);
 	score = 0, xp = 0, level = 1, combo = 0;
 
 	background.img = BACKGROUND_IMG;
@@ -123,7 +127,7 @@ function drawUI(){
 	let levelText = "Level: " + level;
 	let scoreW = Math.max(ctx.measureText(scoreText).width, ctx.measureText(levelText).width);
 	
-	let xpBarTarget = xp / (level * 5);
+	let xpBarTarget = xp / getTargetXP();
 	let comboBarTarget = combo / currentRuleset.new_item_combo;
 	xpBar += (xpBarTarget - xpBar) * 0.5;
 	comboBar += (comboBarTarget - comboBar) * 0.5;
@@ -169,9 +173,10 @@ function incCombo(points) {
 		addItem();
 	}
 
-	if(xp >= level * 5){
+	if(xp >= getTargetXP()){
 		xp = 0;
-		level++;
+		level++
+		if (level <= LEVELS.length) changeRuleset(LEVELS[level-1]);
 		for (let i = 0; i < tomatoes.length; i++) {
 			let t = tomatoes[i];
 			if (t.isSpawning) deleteTomato(t);
@@ -215,6 +220,7 @@ function cleanUp() {
 }
 
 function addTomato(type, x, y){
+	console.log(type)
 	if (x === undefined)
 		x = 50 + (canvas.width - 100) * Math.random();
 	if (y === undefined)
