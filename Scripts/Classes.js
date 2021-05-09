@@ -402,10 +402,10 @@ class Tomato extends GameObject{
 
 	beAtracted(){
 		let timeSpeed = effects.slow_time ? 0.75 : 1;
-		let dist = Math.abs(player.x - this.x);
-		let force = MAGNET_STR * Math.log(dist);
+		let diff = player.x - this.x
 
-		this.velX += force * (player.x - this.x) / timeScale * timeSpeed / dist;
+		let force = Math.sign(diff) * MAGNET_STR * Math.log(1+Math.abs(diff));
+		this.velX += force / timeScale * timeSpeed;
 
 		//this.velX += MAGNET_STR * (player.x - this.x);
 	}

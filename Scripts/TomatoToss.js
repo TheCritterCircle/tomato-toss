@@ -177,6 +177,7 @@ function incCombo(points) {
 		xp = 0;
 		level++
 		if (level <= LEVELS.length) changeRuleset(LEVELS[level-1]);
+		console.log(level, currentRuleset)
 		for (let i = 0; i < tomatoes.length; i++) {
 			let t = tomatoes[i];
 			if (t.isSpawning) deleteTomato(t);
