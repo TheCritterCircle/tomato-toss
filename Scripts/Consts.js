@@ -1,6 +1,3 @@
-//Menu Stuff
-const LOGO = findImage("Menu/logo");
-
 // Input
 
 const INPUT_RIGHT = ["d", "D", "Right", "ArrowRight"];
@@ -106,8 +103,9 @@ const BACKGROUND_IMG = findSpecialImage(file, "background");
 const GAMEOVER_IMG = findImage("gameover");
 const PAUSE_IMG = findImage("pause")
 
-const START_BTN = findImage("start");
-const UNPAUSE_BTN = findImage("unpause");
-const PAUSE_BTN = findImage("pause_btn");
+const LOGO = findImage("Menu/logo");
+const START_BTN = findImage("Menu/start");
+const UNPAUSE_BTN = findImage("Menu/unpause");
+const PAUSE_BTN = findImage("Menu/pause");
 
 // Audio

@@ -13,6 +13,7 @@ class State {
     }
 
     drawLoop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.draw();
         this.drawRequest = requestAnimationFrame(_ => {this.drawLoop()}, 10);
     }
@@ -92,8 +93,6 @@ class PlayState extends State {
     }
 
     draw(){
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
         background.draw();
         let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);
         toDraw.forEach(o => {o.draw()});
@@ -174,15 +173,18 @@ class PlayState extends State {
 class MenuState extends State {
     constructor() {
         super();
+        this.logo = new GameObject(canvas.width/2, 0, 500*3/4, 400*3/4, LOGO);
+        this.logo.offsetX = -this.logo.width/2;
         this.buttons.push(new Button(
-            canvas.width/2 - 100, canvas.height/2 - 25,
+            canvas.width/2 - 100, canvas.height/2 + 25,
             200, 50,
             START_BTN, init_game
         ));
     }
 
     draw(){
-        ctx.drawImage(LOGO, 200, 0);
+        background.draw();
+        if (this.logo) this.logo.draw();
         this.buttons.forEach(btn => {btn.draw()});
     }
 }
@@ -203,7 +205,6 @@ class PauseState extends State {
     }
 
     draw(){
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
         background.draw();
         let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);
         toDraw.forEach(o => {o.draw()});
