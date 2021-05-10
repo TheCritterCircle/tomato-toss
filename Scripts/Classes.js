@@ -572,6 +572,10 @@ class PowerUp extends GameObject {
 
 			switch (this.type) {
 				default:
+					let quality = POWERUPS[this.type].quality;
+					let color = quality > 0 ? "#0080f0" : quality < 0 ? "#800000" : "#808080";
+					let text = POWERUPS[this.type].name + "!";
+					objects.push(new GhostText(this.x, this.y, text, color));
 					effects[this.type] = 7;
 					break;
 			}
@@ -695,12 +699,12 @@ class Fork extends GameObject{
 	}
 }
 
-class ScoreNumber {
-	constructor(x, y, value) {
+class GhostText {
+	constructor(x, y, text, color) {
 		this.x = x, this.y = y;
+		this.text = text;
+		this.color = color;
 		this.depth = -5, this.alpha = 255;
-		this.text = value >= 0 ? "+" + value : value;
-		this.color = value > 0 ? "#0080f0" : value < 0 ? "#800000" : "#808080";
 	}
 
 	draw() {

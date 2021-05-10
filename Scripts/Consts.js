@@ -35,6 +35,29 @@ const TOMATOES = {
         "pinata_pts": 15,
     },
 };
+const TOMATO_TYPES = Object.keys(TOMATOES);
+
+// Power-ups
+
+const POWERUPS = {
+    "speed_up": {
+        "name": "Speed Up",
+        "quality": 1,
+    },
+    "magnet": {
+        "name": "Magnet",
+        "quality": 1,
+    },
+    "slow_time": {
+        "name": "Slow Time",
+        "quality": 1,
+    },
+    "mirror": {
+        "name": "Mirrored",
+        "quality": -1,
+    },
+}
+const POWERUP_TYPES = Object.keys(POWERUPS);
 
 // Player
 
@@ -58,8 +81,6 @@ const NUM_BLINKS = 3;
 const POWERUP_SPEED = 2.5;
 const FORK_SPEED = 5;
 const SPIN_ANIM_SPEED = 1 / 500;
-const TOMATO_TYPES = Object.keys(TOMATOES);
-const POWERUP_TYPES = ["speed_up", "magnet", "slow_time", "mirror"];
 const ITEM_TYPES = ["tomato", "powerup", "fork"];
 const FORK_TYPES = ["middle", "right", "left"];
 

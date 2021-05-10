@@ -121,7 +121,9 @@ function init_game(){
 
 function addPoints(points, x, y) {
 	score += points;
-	objects.push(new ScoreNumber(x, y, points));
+	let text = points >= 0 ? "+" + points : points;
+	let color = points > 0 ? "#0080f0" : points < 0 ? "#800000" : "#808080";
+	objects.push(new GhostText(x, y, text, color));
 }
 
 function drawUI(){
