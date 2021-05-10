@@ -333,6 +333,7 @@ function deleteTomato(tomato){
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("focusout", _ => {currentState.handlePause(true)}, false); 
 
 function keyDownHandler(e){
 	if(currentState.keyDownHandler != null)

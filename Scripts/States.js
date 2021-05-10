@@ -165,8 +165,8 @@ class PlayState extends State {
         }
     }
 
-    handlePause() {
-        changeState(new PauseState());
+    handlePause(pause = true) {
+        if (pause) changeState(new PauseState());
     }
 }
 
@@ -219,7 +219,7 @@ class PauseState extends State {
         }
     }
 
-    handlePause() {
-        changeState(new PlayState());
+    handlePause(pause = false) {
+        if (pause) changeState(new PlayState());
     }
 }
