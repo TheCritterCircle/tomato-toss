@@ -119,6 +119,11 @@ function init_game(){
 	changeState(new PlayState());
 }
 
+function addPoints(points, x, y) {
+	score += points;
+	objects.push(new ScoreNumber(x, y, points));
+}
+
 function drawUI(){
 	ctx.fillStyle = "#000000";
 	ctx.font = "30px Arial";

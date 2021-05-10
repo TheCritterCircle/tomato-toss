@@ -390,11 +390,11 @@ class Tomato extends GameObject{
 		if (this.timeLeft >= 0) {
 			this.timeLeft -= 90 / timeScale;
 			if (this.timeLeft < 0) {
-				let points = 
+				addPoints(
 					5*TOMATOES[this.type].bounce_pts || 0
-					+ TOMATOES[this.type].pinata_pts || 0;
-				score += points;
-				objects.push(new ScoreNumber(this.x, this.y, points));
+					+ TOMATOES[this.type].pinata_pts || 0,
+					this.x, this.y
+				);
 				this.splat();
 			}
 		}
@@ -480,9 +480,9 @@ class Tomato extends GameObject{
 			if (this.hp > 0) {
 				this.hp--;
 				if (this.hp == 0){
-					let points = TOMATOES[this.type].pinata_pts || 0;
-					score += points;
-					objects.push(new ScoreNumber(this.x, this.y, points));
+					addPoints(TOMATOES[
+						this.type].pinata_pts || TOMATOES[this.type].bounce_pts || 0,
+						this.x, this.y)
 					findAudio("splat").play();
 					new PlateSplat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[this.type].splatImg);
 					if (!this.beenHit) addTomato("random");
@@ -496,9 +496,7 @@ class Tomato extends GameObject{
 			this.velX += CONTROL * (this.x - (plate.hitX + plate.hitWidth / 2));
 			this.velAng -= player.velX - this.velX;
 
-			let points = TOMATOES[this.type].bounce_pts || 0
-			score += points;
-			objects.push(new ScoreNumber(this.x, this.y, points));
+			addPoints(TOMATOES[this.type].bounce_pts || 0, this.x, this.y);
 			incCombo(1);
 			this.hasScored = true;
 			findAudio("collision").play();
@@ -624,7 +622,7 @@ class Fork extends GameObject{
 		else if (this.onGround || this.onPlate) {
 			if (this.onPlate) {
 				this.x = player.plate.x + this.relX;
-				this.y = player.plate.y + 20;
+				this.y = player.plate.hitY - this.height - this.offsetY;
 			}
 
 			if (this.alpha > 0) {
