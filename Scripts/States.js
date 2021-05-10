@@ -220,6 +220,6 @@ class PauseState extends State {
     }
 
     handlePause(pause = false) {
-        if (pause) changeState(new PlayState());
+        if (!pause) changeState(new PlayState());
     }
 }
