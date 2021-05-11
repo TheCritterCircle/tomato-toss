@@ -46,7 +46,7 @@ class GameObject {
 class Button extends GameObject{
 	constructor(x, y, width, height, img, handleClick){
 		super(x, y, width, height, img)
-		this.handleClick = handleClick;
+		if (this.visible) this.handleClick = handleClick;
 	}
 }
 

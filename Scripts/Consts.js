@@ -128,5 +128,14 @@ const LOGO = findImage("Menu/logo");
 const START_BTN = findImage("Menu/start");
 const UNPAUSE_BTN = findImage("Menu/unpause");
 const PAUSE_BTN = findImage("Menu/pause");
+const BACK_BTN = findImage("Menu/back");
+const NEXT_BTN = findImage("Menu/next");
+const PREV_BTN = findImage("Menu/prev");
+const HELP_BTN = findImage("Menu/help");
+
+// Help
+
+const HELP_PAGES = []
+for (let i = 0; i < 1; i++) HELP_PAGES.push(findImage("Help/page" + i));
 
 // Audio

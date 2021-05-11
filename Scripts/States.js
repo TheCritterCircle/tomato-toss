@@ -1,8 +1,7 @@
 class State {
     constructor(){
+        this.background = new GameObject(0, 0, canvas.width, canvas.height, BACKGROUND_IMG);
         this.buttons = [];
-        if (this.main) this.mainLoop();
-        if (this.draw) this.drawLoop();
         this.mainRequest;
         this.drawRequest;
     }
@@ -18,13 +17,18 @@ class State {
         this.drawRequest = requestAnimationFrame(_ => {this.drawLoop()}, 10);
     }
 
+    start(){
+        if (this.main) this.mainLoop();
+        if (this.draw) this.drawLoop();
+    }
+
     end(){
-        if (this.mainRequest) cancelAnimationFrame(this.mainRequest)
-        if (this.drawRequest) cancelAnimationFrame(this.drawRequest)
-        delete this;
+        if (this.mainRequest) cancelAnimationFrame(this.mainRequest);
+        if (this.drawRequest) cancelAnimationFrame(this.drawRequest);
     }
     
     main(){getFPS()}
+    draw(){}
 
     getEventPos(e){
         return {
@@ -55,13 +59,15 @@ class State {
 }
 
 function changeState(newState) {
-    currentState.end();
+    if (currentState) currentState.end();
     currentState = newState;
+    currentState.start();
 }
 
 class PlayState extends State {
     constructor() {
         super();
+
         this.buttons.push(new Button(
             canvas.width - 60, 5,
             55, 55,
@@ -77,7 +83,10 @@ class PlayState extends State {
     
         splattedTomatoes.forEach(deleteTomato);
         splattedTomatoes = [];
-        if (tomatoes.length < 1) endGame();
+        if (tomatoes.length < 1) {
+            this.background.img = GAMEOVER_IMG;
+            endGame();
+        }
         //if (lastSlideTime > 0) tryEndSlide();
     
         cleanUp();
@@ -93,7 +102,7 @@ class PlayState extends State {
     }
 
     draw(){
-        background.draw();
+        this.background.draw();
         let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);
         toDraw.forEach(o => {o.draw()});
     
@@ -173,6 +182,7 @@ class PlayState extends State {
 class MenuState extends State {
     constructor() {
         super();
+
         this.logo = new GameObject(canvas.width/2, 0, 500*3/4, 400*3/4, LOGO);
         this.logo.offsetX = -this.logo.width/2;
         this.buttons.push(new Button(
@@ -180,10 +190,15 @@ class MenuState extends State {
             200, 50,
             START_BTN, init_game
         ));
+        this.buttons.push(new Button(
+            canvas.width/2 - 100, canvas.height/2 + 90,
+            200, 50,
+            HELP_BTN, showHelp
+        ));
     }
 
     draw(){
-        background.draw();
+        this.background.draw();
         if (this.logo) this.logo.draw();
         this.buttons.forEach(btn => {btn.draw()});
     }
@@ -192,20 +207,26 @@ class MenuState extends State {
 class PauseState extends State {
     constructor() {
         super();
+
         this.buttons.push(new Button(
             canvas.width/2 - 100, canvas.height/2 - 50,
             200, 50,
             UNPAUSE_BTN, this.handlePause
         ))
         this.buttons.push(new Button(
-            canvas.width/2 - 100, canvas.height/2 + 50,
+            canvas.width/2 - 100, canvas.height/2 + 15,
+            200, 50,
+            HELP_BTN, showHelp
+        ));
+        this.buttons.push(new Button(
+            canvas.width/2 - 100, canvas.height/2 + 80,
             200, 50,
             START_BTN, init_game
         ));
     }
 
     draw(){
-        background.draw();
+        this.background.draw();
         let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);
         toDraw.forEach(o => {o.draw()});
 
@@ -214,12 +235,64 @@ class PauseState extends State {
     }
 
     keyDownHandler(e){
-        if(INPUT_PAUSE.includes(e.key)){
-            currentState.handlePause();
-        }
+        if (INPUT_PAUSE.includes(e.key)) currentState.handlePause();
     }
 
     handlePause(pause = false) {
         if (!pause) changeState(new PlayState());
+    }
+}
+
+class HelpState extends State {
+    constructor(lastState) {
+        super();
+        this.lastState = lastState;
+        this.page = 0;
+        this.background.img = HELP_PAGES[0];
+
+        this.prevBtn = new Button(
+            canvas.width/4 - 100, canvas.height - 75,
+            200, 50,
+            PREV_BTN, _ => {this.prevPage()}
+        );
+        this.nextBtn = new Button(
+            canvas.width*3/4 - 100, canvas.height - 75,
+            200, 50,
+            NEXT_BTN, _ => {this.nextPage()}
+        );
+        this.prevBtn.visible = false;
+        this.nextBtn.visible = false;
+        this.buttons.push(this.prevBtn);
+        this.buttons.push(this.nextBtn);
+
+        this.buttons.push(new Button(
+            canvas.width/2 - 100, canvas.height - 75,
+            200, 50,
+            BACK_BTN, _ => {changeState(lastState)}
+        ));
+    }
+
+    draw(){
+        this.background.draw();
+        this.buttons.forEach(btn => {btn.draw()});
+    }
+
+    prevPage(){
+        if (this.page > 0) {
+            if (this.page === HELP_PAGES.length - 1)
+                this.nextBtn.visible = true;
+            this.page--;
+            if (this.page === 0)
+                this.prevBtn.visible = false;
+        }
+    }
+    nextPage(){
+        if (this.page < HELP_PAGES.length - 1) {
+            if (this.page === 0)
+                this.prevBtn.visible = true;
+            this.page++;
+            if (this.page === HELP_PAGES.length - 1)
+                this.nextBtn.visible = false;
+        }
     }
 }

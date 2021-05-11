@@ -63,7 +63,8 @@ function displayFPS(fps){
 //Functions
 
 let currentRuleset = DEFAULT_RULESET;
-let currentState = new MenuState();
+let currentState;
+changeState(new MenuState());
 
 let forkTimer = setTimeout(function(){}, 1000);
 
@@ -163,6 +164,10 @@ function drawUI(){
 	ctx.fillStyle = "#009900";
 	ctx.fill();
 	ctx.closePath();
+}
+
+function showHelp() {
+	changeState(new HelpState(currentState));
 }
 
 function endGame(){
