@@ -227,13 +227,7 @@ function cleanUp() {
 	toDelete = [];
 }
 
-function addTomato(type, x, y){
-	console.log(type)
-	if (x === undefined)
-		x = 50 + (canvas.width - 100) * Math.random();
-	if (y === undefined)
-		y = NEW_ITEM_Y;
-	
+function addTomato(type, x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y){
 	let rand = Math.random() * 100;
 	if (type == "random")
 		for (type of Object.keys(TOMATOES)) {
@@ -247,12 +241,7 @@ function addTomato(type, x, y){
 	objects.push(tomato);
 }
 
-function addPowerup(type, x, y){
-	if (x === undefined)
-		x = 70 + (canvas.width - 140) * Math.random();
-	if (y === undefined)
-		y = NEW_ITEM_Y;
-
+function addPowerup(type, x = 70 + (canvas.width - 140) * Math.random(), y = NEW_ITEM_Y){
 	let rand = Math.random() * 100;
 	if (type == "random")
 		for (type of POWERUP_TYPES) {
@@ -265,12 +254,7 @@ function addPowerup(type, x, y){
 	objects.push(powerup);
 }
 
-function addFork(x, y){	
-	if (x === undefined)
-		x = 50 + (canvas.width - 100) * Math.random();
-	if (y === undefined)
-		y = NEW_ITEM_Y;
-	
+function addFork(x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y){	
 	let rand = Math.random() * 100;
 	for (type of FORK_TYPES) {
 		let prob = currentRuleset.fork_probs[type];
@@ -302,11 +286,6 @@ function activateSpikes(){
 }
 
 function addItem(x, y){
-	if (x === undefined) 
-		x = Math.random() * canvas.width * 0.9;
-	if (y === undefined) 
-		y = NEW_ITEM_Y;
-
 	let rand = Math.random() * 100;
 	for (type of ITEM_TYPES) {
 		let prob = currentRuleset.item_probs[type];
@@ -315,11 +294,11 @@ function addItem(x, y){
 	}
 	
 	if (type === "tomato")
-		addTomato("random", x, NEW_ITEM_Y);
+		addTomato("random", x, y);
 	if (type === "powerup")
-		addPowerup("random", x, NEW_ITEM_Y);
+		addPowerup("random", x, y);
 	if (type === "fork")
-		addFork(x, NEW_ITEM_Y);
+		addFork(x, y);
 }
 
 function deleteTomato(tomato){
