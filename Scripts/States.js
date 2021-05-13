@@ -261,7 +261,6 @@ class HelpState extends State {
             NEXT_BTN, _ => {this.nextPage()}
         );
         this.prevBtn.visible = false;
-        this.nextBtn.visible = false;
         this.buttons.push(this.prevBtn);
         this.buttons.push(this.nextBtn);
 
@@ -285,6 +284,7 @@ class HelpState extends State {
             if (this.page === 0)
                 this.prevBtn.visible = false;
         }
+        this.background.img = HELP_PAGES[this.page];
     }
     nextPage(){
         if (this.page < HELP_PAGES.length - 1) {
@@ -294,5 +294,6 @@ class HelpState extends State {
             if (this.page === HELP_PAGES.length - 1)
                 this.nextBtn.visible = false;
         }
+        this.background.img = HELP_PAGES[this.page];
     }
 }
