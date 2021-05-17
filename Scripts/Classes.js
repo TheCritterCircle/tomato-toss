@@ -471,12 +471,11 @@ class Tomato extends GameObject{
 
 		//Player
 		let plate = player.plate;
-		if (this.hitX <= plate.hitX + plate.hitWidth
-		&& this.hitY <= plate.hitY + plate.hitHeight
-		&& this.hitX + this.hitWidth >= plate.hitX
-		&& this.hitY + this.hitHeight >= plate.hitY
+		if (this.hitX < plate.hitX + plate.hitWidth
+		&& this.hitY < plate.hitY + plate.hitHeight
+		&& this.hitX + this.hitWidth > plate.hitX
+		&& this.hitY + this.hitHeight > plate.hitY
 		&& this.hasScored == false) {
-
 			if (this.hp > 0) {
 				this.hp--;
 				if (this.hp == 0){
@@ -526,14 +525,18 @@ class PowerUp extends GameObject {
 	constructor(x, y, width, height, type){
 		super(x, y, width, height, POWERUP_IMGS[POWERUP_TYPES.indexOf(type)], -2);
 
+		this.offsetX = -this.width/2;
+		this.offsetY = -this.height/2;
 		this.baseW = width;
+
+		this.hitX = this.x + this.offsetX;
+		this.hitY = this.y + this.offsetY;
+		this.hitWidth = this.width;
+		this.hitHeight = this.height;
+
 		this.velX = 0;
 		this.velY = 0;
 		this.type = type;
-
-		this.offsetX = -this.width / 2;
-		this.offsetY = -this.height / 2;
-
 		this.animTimer = 0;
 	}
 
@@ -545,6 +548,7 @@ class PowerUp extends GameObject {
 			this.animate();
 
 			this.y += POWERUP_SPEED / timeScale;
+			this.hitY = this.y + this.offsetY;
 			this.collision();
 		}
 
@@ -563,10 +567,10 @@ class PowerUp extends GameObject {
 	collision(){
 		//Player
 		let plate = player.plate;
-		if (this.x + this.offsetX <= plate.hitX + plate.hitWidth
-		&& this.x + this.offsetX >= plate.hitX - this.width
-		&& this.y + this.offsetY >= plate.hitY - this.height) {
-
+		if (this.hitX < plate.hitX + plate.hitWidth
+		&& this.hitY < plate.hitY + plate.hitHeight
+		&& this.hitX + this.hitWidth > plate.hitX
+		&& this.hitY + this.hitHeight > plate.hitY) {
 			this.hasScored = true;
 			findAudio("powerup").play();
 
@@ -672,10 +676,10 @@ class Fork extends GameObject{
 		
 		//Plate
 		let plate = player.plate;
-		if (this.hitX <= plate.hitX + plate.hitWidth
-		&& this.hitY <= plate.hitY + plate.hitHeight
-		&& this.hitX + this.hitWidth >= plate.hitX
-		&& this.hitY + this.hitHeight >= plate.hitY) {
+		if (this.hitX < plate.hitX + plate.hitWidth
+		&& this.hitY < plate.hitY + plate.hitHeight
+		&& this.hitX + this.hitWidth > plate.hitX
+		&& this.hitY + this.hitHeight > plate.hitY) {
 			this.onPlate = true;
 			this.relX = this.x - player.plate.x;
 			this.depth = -1;

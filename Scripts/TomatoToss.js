@@ -131,36 +131,36 @@ function drawUI(){
 	ctx.fillStyle = "#000000";
 	ctx.font = "30px Arial";
 
-	let scoreText = "Score: " + score;
 	let levelText = "Level: " + level;
-	let scoreW = Math.max(ctx.measureText(scoreText).width, ctx.measureText(levelText).width);
+	let scoreText = "Score: " + score;
+	let textW = Math.max(ctx.measureText(scoreText).width, ctx.measureText(levelText).width);
 	
 	let xpBarTarget = xp / getTargetXP();
 	let comboBarTarget = combo / currentRuleset.new_item_combo;
 	xpBar += (xpBarTarget - xpBar) * 0.5;
 	comboBar += (comboBarTarget - comboBar) * 0.5;
 
-	ctx.fillText(scoreText, 10, 30);
-	ctx.fillText(levelText, 10, 60);
+	ctx.fillText(levelText, 10, 30);
+	ctx.fillText(scoreText, 10, 60);
 
 	ctx.beginPath();
-	ctx.rect(20 + scoreW, 5, canvas.width - scoreW - 85, 25);
+	ctx.rect(20 + textW, 5, canvas.width - textW - 85, 25);
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fill();
 	ctx.closePath();
 	ctx.beginPath();
-	ctx.rect(25 + scoreW, 10, (canvas.width - scoreW - 95) * xpBar, 15);
+	ctx.rect(25 + textW, 10, (canvas.width - textW - 95) * xpBar, 15);
 	ctx.fillStyle = "#FF0000";
 	ctx.fill();
 	ctx.closePath();
 
 	ctx.beginPath();
-	ctx.rect(20 + scoreW, 35, canvas.width - scoreW - 85, 25);
+	ctx.rect(20 + textW, 35, canvas.width - textW - 85, 25);
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fill();
 	ctx.closePath();
 	ctx.beginPath();
-	ctx.rect(25 + scoreW, 40, (canvas.width - scoreW - 95) * comboBar, 15);
+	ctx.rect(25 + textW, 40, (canvas.width - textW - 95) * comboBar, 15);
 	ctx.fillStyle = "#009900";
 	ctx.fill();
 	ctx.closePath();
