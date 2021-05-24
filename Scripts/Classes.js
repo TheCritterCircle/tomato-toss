@@ -703,6 +703,26 @@ class Fork extends GameObject{
 	}
 }
 
+class BigText {
+	constructor(text) {
+		this.text = text;
+		this.depth = -10, this.timer = 2;
+	}
+
+	draw() {
+		ctx.fillStyle = "#000000";
+		ctx.font = "70px Arial";
+		ctx.textAlign = "center";
+		ctx.fillText(this.text, canvas.width/2, canvas.height/2);
+		ctx.textAlign = "left";
+	}
+
+	main() {
+		this.timer -= 1/(90*timeScale);
+		if (this.timer < 0) toDelete.push(this);
+	}
+}
+
 class GhostText {
 	constructor(x, y, text, color) {
 		this.x = x, this.y = y;

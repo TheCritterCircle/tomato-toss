@@ -195,6 +195,7 @@ function incCombo(points) {
 			if (t.isSpawning) deleteTomato(t);
 			else t.timeLeft = 2000 * i;
 		};
+		objects.push(new BigText("LEVEL " + level));
 		addTomato(currentRuleset.first_tomato, canvas.width/2, NEW_ITEM_Y);
 	}
 }
