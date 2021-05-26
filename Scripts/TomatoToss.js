@@ -85,7 +85,7 @@ function getTargetXP(){
 	return 3 + Math.floor(5 * Math.log2(level+1));
 }
 
-function init_game(){
+function initGame(){
 	changeRuleset(LEVELS[0]);
 	score = 0, xp = 0, level = 1, combo = 0;
 
@@ -168,12 +168,6 @@ function drawUI(){
 
 function showHelp() {
 	changeState(new HelpState(currentState));
-}
-
-function endGame(){
-	background.img = GAMEOVER_IMG;
-	//background.draw();
-	//return;
 }
 
 function incCombo(points) {

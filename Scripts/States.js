@@ -4,25 +4,32 @@ class State {
         this.buttons = [];
         this.mainRequest;
         this.drawRequest;
+        this.isActive = true;
     }
 
     mainLoop() {
-        this.main();
-        this.mainRequest = requestAnimationFrame(_ => {this.mainLoop()}, 10);
+        if (this.isActive) {
+            this.main();
+            this.mainRequest = requestAnimationFrame(_ => {this.mainLoop()}, 10);
+        }
     }
 
     drawLoop() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        this.draw();
-        this.drawRequest = requestAnimationFrame(_ => {this.drawLoop()}, 10);
+        if (this.isActive) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            this.draw();
+            this.drawRequest = requestAnimationFrame(_ => {this.drawLoop()}, 10);
+        }
     }
 
     start(){
+        this.isActive = true;
         if (this.main) this.mainLoop();
         if (this.draw) this.drawLoop();
     }
 
     end(){
+        this.isActive = false;
         if (this.mainRequest) cancelAnimationFrame(this.mainRequest);
         if (this.drawRequest) cancelAnimationFrame(this.drawRequest);
     }
@@ -83,10 +90,7 @@ class PlayState extends State {
     
         splattedTomatoes.forEach(deleteTomato);
         splattedTomatoes = [];
-        if (tomatoes.length < 1) {
-            this.background.img = GAMEOVER_IMG;
-            endGame();
-        }
+        if (tomatoes.length < 1) changeState(new GameoverState());
         //if (lastSlideTime > 0) tryEndSlide();
     
         cleanUp();
@@ -188,7 +192,7 @@ class MenuState extends State {
         this.buttons.push(new Button(
             canvas.width/2 - 100, canvas.height/2 + 25,
             200, 50,
-            START_BTN, init_game
+            START_BTN, initGame
         ));
         this.buttons.push(new Button(
             canvas.width/2 - 100, canvas.height/2 + 90,
@@ -221,7 +225,7 @@ class PauseState extends State {
         this.buttons.push(new Button(
             canvas.width/2 - 100, canvas.height/2 + 80,
             200, 50,
-            START_BTN, init_game
+            START_BTN, initGame
         ));
     }
 
@@ -243,6 +247,34 @@ class PauseState extends State {
     }
 }
 
+class GameoverState extends State {
+    constructor() {
+        super();
+
+        this.buttons.push(new Button(
+            canvas.width/2 - 100, canvas.height/2 - 50,
+            200, 50,
+            START_BTN, initGame
+        ))
+    }
+
+    draw(){
+        this.background.draw();
+        let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);
+        toDraw.forEach(o => {o.draw()});
+
+        ctx.drawImage(GAMEOVER_IMG, 0, 0);
+        this.buttons.forEach(btn => {btn.draw()});
+
+        ctx.fillStyle = "#000000";
+        ctx.font = "30px Arial";
+		ctx.textAlign = "center";
+        ctx.fillText("Level: " + level, canvas.width/2, canvas.height/2 + 50);
+        ctx.fillText("Score: " + score, canvas.width/2, canvas.height/2 + 100);
+		ctx.textAlign = "left";
+    }
+}
+
 class HelpState extends State {
     constructor(lastState) {
         super();
@@ -251,12 +283,12 @@ class HelpState extends State {
         this.background.img = HELP_PAGES[0];
 
         this.prevBtn = new Button(
-            canvas.width/4 - 100, canvas.height - 75,
+            canvas.width/4 - 100, canvas.height - 40,
             200, 50,
             PREV_BTN, _ => {this.prevPage()}
         );
         this.nextBtn = new Button(
-            canvas.width*3/4 - 100, canvas.height - 75,
+            canvas.width*3/4 - 100, canvas.height + 25,
             200, 50,
             NEXT_BTN, _ => {this.nextPage()}
         );
