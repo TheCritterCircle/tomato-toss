@@ -1,70 +1,3 @@
-class State {
-    constructor(){
-        this.background = new GameObject(0, 0, canvas.width, canvas.height, BACKGROUND_IMG);
-        this.buttons = [];
-        this.mainRequest;
-        this.drawRequest;
-        this.isActive = true;
-    }
-
-    mainLoop() {
-        if (this.isActive) {
-            this.main();
-            this.mainRequest = requestAnimationFrame(_ => {this.mainLoop()}, 10);
-        }
-    }
-
-    drawLoop() {
-        if (this.isActive) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            this.draw();
-            this.drawRequest = requestAnimationFrame(_ => {this.drawLoop()}, 10);
-        }
-    }
-
-    start(){
-        this.isActive = true;
-        if (this.main) this.mainLoop();
-        if (this.draw) this.drawLoop();
-    }
-
-    end(){
-        this.isActive = false;
-        if (this.mainRequest) cancelAnimationFrame(this.mainRequest);
-        if (this.drawRequest) cancelAnimationFrame(this.drawRequest);
-    }
-    
-    main(){getFPS()}
-    draw(){}
-
-    getEventPos(e){
-        return {
-            x: e.pageX - canvas.getBoundingClientRect().left,
-            y: e.pageY - canvas.getBoundingClientRect().top,
-        };
-    }
-
-    clickButton(x, y){
-        this.buttons.forEach(btn => {
-            if (x > btn.x &&
-                y > btn.y &&
-                x < btn.x + btn.width &&
-                y < btn.y + btn.height
-            ) btn.handleClick();
-        })
-    }
-
-    mouseDown(e){
-        let pos = this.getEventPos(e);
-        this.clickButton(pos.x, pos.y);
-    }
-
-    touchDown(e){this.mouseDown(e.touches[0])}
-    handlePause(){}
-    keyDownHandler(){}
-    keyUpHandler(){}
-}
-
 function changeState(newState) {
     if (currentState) currentState.end();
     currentState = newState;
@@ -76,8 +9,7 @@ class PlayState extends State {
         super();
 
         this.buttons.push(new Button(
-            canvas.width - 60, 5,
-            55, 55,
+            canvas.width - 60, 5, 55, 55,
             PAUSE_BTN, this.handlePause
         ));
     }
@@ -148,32 +80,32 @@ class PlayState extends State {
     }
 
     keyDownHandler(e){
-        if(INPUT_RIGHT.includes(e.key)){
+        if(INPUT_RIGHT.includes(e.code)){
             rightPressed = true;
             player.face(1);
         }
-        if(INPUT_LEFT.includes(e.key)){
+        if(INPUT_LEFT.includes(e.code)){
             leftPressed = true;
             player.face(-1);
         }
-        if(INPUT_DOWN.includes(e.key)){
+        if(INPUT_DOWN.includes(e.code)){
             player.startSlide();
         }
-        if(INPUT_PAUSE.includes(e.key)){
+        if(INPUT_PAUSE.includes(e.code)){
             currentState.handlePause();
         }
     }
 
     keyUpHandler(e){
-        if(INPUT_RIGHT.includes(e.key)){
+        if(INPUT_RIGHT.includes(e.code)){
             rightPressed = false;
             if (leftPressed) player.face(-1);
         }
-        if(INPUT_LEFT.includes(e.key)){
+        if(INPUT_LEFT.includes(e.code)){
             leftPressed = false;
             if (rightPressed) player.face(1);
         }
-        if(INPUT_DOWN.includes(e.key)){
+        if(INPUT_DOWN.includes(e.code)){
             player.endSlide();
         }
     }
@@ -239,7 +171,7 @@ class PauseState extends State {
     }
 
     keyDownHandler(e){
-        if (INPUT_PAUSE.includes(e.key)) currentState.handlePause();
+        if (INPUT_PAUSE.includes(e.code)) currentState.handlePause();
     }
 
     handlePause(pause = false) {
@@ -305,7 +237,7 @@ class HelpState extends State {
 
     draw(){
         this.background.draw();
-        this.buttons.forEach(btn => {btn.draw()});
+        this.buttons.forEach(btn => {btn.draw();});
     }
 
     prevPage(){
@@ -318,6 +250,7 @@ class HelpState extends State {
         }
         this.background.img = HELP_PAGES[this.page];
     }
+
     nextPage(){
         if (this.page < HELP_PAGES.length - 1) {
             if (this.page === 0)

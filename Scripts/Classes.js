@@ -1,48 +1,3 @@
-class GameObject {
-	constructor(x, y, width, height, img, depth = 0){
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-
-		this.img = img;
-		this.depth = depth;
-
-		this.offsetX = 0;
-		this.offsetY = 0;
-		this.angle = 0;
-
-		this.visible = true;
-		this.flipped = false;
-		this.alpha = 1;
-	}
-	
-	main(){}
-
-	draw(){
-		if (!this.visible || this.alpha <= 0) return;
-		if (this.sWidth == 0) this.sWidth = this.img.width;
-		if (this.sHeight == 0) this.sHeight = this.img.height;
-		ctx.save();
-		ctx.translate(this.x, this.y);
-		ctx.rotate(this.angle * Math.PI / 180);
-		ctx.translate(-this.x, -this.y);
-		let x = this.x;
-		if (this.flipped) {
-			ctx.save();
-			ctx.scale(-1, 1);
-			x *= -1;
-		}
-		ctx.globalAlpha = this.alpha;
-		ctx.drawImage(this.img, x + this.offsetX, this.y + this.offsetY, this.width, this.height);
-		ctx.globalAlpha = 1;
-		if (this.flipped) {
-			ctx.restore();
-		}
-		ctx.restore();
-	}
-}
-
 class Button extends GameObject{
 	constructor(x, y, width, height, img, handleClick){
 		super(x, y, width, height, img)
@@ -82,26 +37,22 @@ class Player extends GameObject{
 			PLAYER_IMG
 		);
 
-		this.velX = 0;
-		this.velY = 0;
+		this.baseX = x;
+		this.baseY = y;
+		this.baseW = width * PLAYER_SIZE;
+		this.baseH = height * PLAYER_SIZE;
+
+		this.velX = 0, this.velY = 0;
 		this.offsetX = -this.width/2;
 		this.offsetY = -this.height + this.width/2;
 		this.targetAng = 0;
 		this.animTimer = 0;
 
-		this.baseW = width * PLAYER_SIZE;
-		this.baseH = height * PLAYER_SIZE;
-		this.baseY = y;
-		
-		this.hitX;
-		this.hitY;
-		this.hitWidth;
-		this.hitHeight;
+		this.updateHitbox();
 
 		this.facing = 1;
 		this.speed = WALK_SPEED;
 		this.isSliding = false;
-		this.isMoving = false;
 
 		this.plate = new Plate(
 			this.x, this.y - 152,
@@ -109,12 +60,10 @@ class Player extends GameObject{
 			215 * PLAYER_SIZE, 60 * PLAYER_SIZE
 		);
 		this.spdGhosts = [];
-
-		this.updateHitbox();
 	}
 
 	face(direction){
-		if (!player.isSliding) {
+		if (!this.isSliding) {
 			this.facing = direction;
 			this.flipped = direction === -1;
 			this.plate.flipped = this.flipped;
@@ -192,7 +141,6 @@ class Player extends GameObject{
 
 	move(){
 		let speedBoost = (effects.speed_up ? 1.5 : 1);
-		let newX = this.x, newY = this.y;
 
 		if (rightPressed || leftPressed || this.isSliding) {
 			this.velX = this.speed * this.facing * speedBoost;
@@ -201,24 +149,25 @@ class Player extends GameObject{
 			this.velX = 0;
 		}
 
-		newX = this.x + this.velX / timeScale;
-		newY = this.y + this.velY / timeScale;
+		this.baseX = this.baseX + this.velX / timeScale;
+		this.baseY = this.baseY + this.velY / timeScale;
 		this.angle += (this.targetAng - this.angle) * 0.4 / timeScale;
 
-		this.updateHitbox(newX, newY);
-		newX = this.collision(newX);
+		this.updateHitbox(this.baseX, this.baseY);
+		this.collision();
 
-		this.x = newX, this.y = newY;
+		this.x = this.baseX;
+		this.y = this.baseY - this.width/2;
 		this.updatePlate();
 	}
 
-	collision(newX){
+	collision(){
 		// Left Wall
 		if(this.hitX < 0){
 			if(this.isSliding && this.facing === -1){
 				this.endSlide();
 			}
-			newX = 0 + newX - this.hitX;
+			this.baseX = 0 + this.baseX - this.hitX;
 		}
 
 		// Right Wall
@@ -226,9 +175,8 @@ class Player extends GameObject{
 			if(this.isSliding && this.facing === 1){
 				this.endSlide();
 			}
-			newX = canvas.width - this.hitWidth + newX - this.hitX;
+			this.baseX = canvas.width - this.hitWidth + this.baseX - this.hitX;
 		}
-		return newX;
 	}
 
 	startSlide(){
@@ -470,12 +418,7 @@ class Tomato extends GameObject{
 		}
 
 		//Player
-		let plate = player.plate;
-		if (this.hitX < plate.hitX + plate.hitWidth
-		&& this.hitY < plate.hitY + plate.hitHeight
-		&& this.hitX + this.hitWidth > plate.hitX
-		&& this.hitY + this.hitHeight > plate.hitY
-		&& this.hasScored == false) {
+		if (this.isTouching(player.plate) && !this.hasScored) {
 			if (this.hp > 0) {
 				this.hp--;
 				if (this.hp == 0){
@@ -492,7 +435,7 @@ class Tomato extends GameObject{
 			}
 
 			this.velY = MIN_BOUNCE + Math.random() * (MAX_BOUNCE - MIN_BOUNCE);
-			this.velX += CONTROL * (this.x - (plate.hitX + plate.hitWidth / 2));
+			this.velX += CONTROL * (this.x - (player.plate.hitX + player.plate.hitWidth / 2));
 			this.velAng -= player.velX - this.velX;
 
 			addPoints(TOMATOES[this.type].bounce_pts || 0, this.x, this.y);
@@ -566,11 +509,7 @@ class PowerUp extends GameObject {
 
 	collision(){
 		//Player
-		let plate = player.plate;
-		if (this.hitX < plate.hitX + plate.hitWidth
-		&& this.hitY < plate.hitY + plate.hitHeight
-		&& this.hitX + this.hitWidth > plate.hitX
-		&& this.hitY + this.hitHeight > plate.hitY) {
+		if (this.isTouching(player.plate)) {
 			this.hasScored = true;
 			findAudio("powerup").play();
 
@@ -588,22 +527,21 @@ class PowerUp extends GameObject {
 		}
 
 		//Exited screen
-		if (this.y + this.offsetY > canvas.height) {
+		if (this.y + this.offsetY > canvas.height)
 			toDelete.push(this);
-		}
 	}
 }
 
 class Fork extends GameObject{
-	constructor(x, y, width, height, hitWidth, hitHeight, direction){
-		super(x, y, width, height, FORK_IMG, -2);
-		this.offsetX = -width/2;
-		this.offsetY = -height + width/2;
+	constructor(x, y, size, direction){
+		super(x, y, 50, 75, FORK_IMG, -2);
+		this.offsetX = -25*size;
+		this.offsetY = -50*size;
 
-		this.hitX = x - hitWidth/2;
-		this.hitY = y - hitHeight/2;
-		this.hitWidth = hitWidth;
-		this.hitHeight = hitHeight;
+		this.hitX = x - 15*size;
+		this.hitY = y - 15*size;
+		this.hitWidth = 30*size;
+		this.hitHeight = 30*size;
 
 		this.animTimer = 0;
 
@@ -675,11 +613,7 @@ class Fork extends GameObject{
 			}
 		
 		//Plate
-		let plate = player.plate;
-		if (this.hitX < plate.hitX + plate.hitWidth
-		&& this.hitY < plate.hitY + plate.hitHeight
-		&& this.hitX + this.hitWidth > plate.hitX
-		&& this.hitY + this.hitHeight > plate.hitY) {
+		if (this.isTouching(player.plate)) {
 			this.onPlate = true;
 			this.relX = this.x - player.plate.x;
 			this.depth = -1;

@@ -196,18 +196,15 @@ function incCombo(points) {
 
 function breakCombo() {
 	combo = 0;
-
-	if(xp - 10 >= 0)
-		xp -= 10;
-	else
-		xp = 0;
+	xp = Math.max(xp - 10, 0);
 }
 
 function updateEffect(e){
-	if (effects[e] <= 0) return;
-
-	effects[e] -= delta;
-	if (effects[e] < 0) delete effects[e];
+	if (effects[e] > 0)
+		if (effects[e] > delta)
+			effects[e] -= delta;
+		else
+			delete effects[e];
 }
 
 function tryEndSlide() {
@@ -262,7 +259,7 @@ function addFork(x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y){
 		rand -= prob;
 	}
 
-	let fork = new Fork(x, y, 50, 75, 30, 30, FORK_DIRS[type]);
+	let fork = new Fork(x, y, 1, FORK_DIRS[type]);
 	objects.push(fork);
 }
 

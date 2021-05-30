@@ -1,9 +1,9 @@
 // Input
 
-const INPUT_RIGHT = ["d", "D", "Right", "ArrowRight"];
-const INPUT_LEFT = ["a", "A", "Left", "ArrowLeft"];
-const INPUT_DOWN = ["s", "S", "Down", "ArrowDown", "Shift"];
-const INPUT_PAUSE = ["p", "P"];
+const INPUT_RIGHT = ["KeyD", "ArrowRight"];
+const INPUT_LEFT = ["KeyA", "ArrowLeft"];
+const INPUT_DOWN = ["KeyS", "ArrowDown", "ShiftLeft"];
+const INPUT_PAUSE = ["KeyP"];
 const DOUBLE_TAP_MAX = 300;
 
 
