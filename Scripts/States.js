@@ -215,12 +215,12 @@ class HelpState extends State {
         this.background.img = HELP_PAGES[0];
 
         this.prevBtn = new Button(
-            canvas.width/4 - 100, canvas.height - 40,
+            canvas.width/4 - 100, canvas.height - 75,
             200, 50,
             PREV_BTN, _ => {this.prevPage()}
         );
         this.nextBtn = new Button(
-            canvas.width*3/4 - 100, canvas.height + 25,
+            canvas.width*3/4 - 100, canvas.height - 75,
             200, 50,
             NEXT_BTN, _ => {this.nextPage()}
         );
