@@ -33,7 +33,8 @@ let leftSpikesTimer;
 let rightSpikesTimer;
 
 //Music
-let music;
+let music = new Audio();
+music.loop = true;
 
 //Input
 let rightPressed = false;
@@ -110,11 +111,6 @@ function initGame(){
 	lastCalledTime = undefined;
 	lastTouchTime = undefined;
 	lastSlideTime = undefined;
-	
-	if (music) music.pause();
-	music = findAudio("TonatoToss");
-	music.play();
-	music.loop = true;
 
 	addTomato(currentRuleset.first_tomato, canvas.width/2, NEW_ITEM_Y);
 	changeState(new PlayState());

@@ -4,6 +4,14 @@ function changeState(newState) {
     currentState.start();
 }
 
+function changeMusic(name) {
+    src = "Sounds/" + name + ".wav"
+    if (!music.src.endsWith(src)) {
+        music.src = src;
+        music.play();
+    }
+}
+
 class PlayState extends State {
     constructor() {
         super();
@@ -12,6 +20,9 @@ class PlayState extends State {
             canvas.width - 60, 5, 55, 55,
             PAUSE_BTN, this.handlePause
         ));
+        
+        music.pause();
+        changeMusic("TomatoToss");
     }
 
     main() {
@@ -233,6 +244,10 @@ class HelpState extends State {
             200, 50,
             BACK_BTN, _ => {changeState(lastState)}
         ));
+        
+        this.lastState = lastState;
+        this.oldVolume = music.volume;
+        music.volume = 0.5*this.oldVolume;
     }
 
     draw(){
@@ -260,5 +275,10 @@ class HelpState extends State {
                 this.nextBtn.visible = false;
         }
         this.background.img = HELP_PAGES[this.page];
+    }
+
+    end(){
+        music.volume = this.oldVolume;
+        super.end();
     }
 }
