@@ -161,12 +161,11 @@ class MenuState extends State {
 class PauseState extends State {
     constructor(lastState) {
         super();
-        this.lastState = lastState;
 
         this.buttons.push(new Button(
             canvas.width/2 - 100, canvas.height/2 - 50,
             200, 50,
-            UNPAUSE_BTN, this.handlePause
+            UNPAUSE_BTN, _ => {changeState(this.lastState)}
         ))
         this.buttons.push(new Button(
             canvas.width/2 - 100, canvas.height/2 + 15,
@@ -178,6 +177,9 @@ class PauseState extends State {
             200, 50,
             START_BTN, initGame
         ));
+
+        this.lastState = lastState;
+        console.log(this.lastState);
     }
 
     draw(){
@@ -190,10 +192,13 @@ class PauseState extends State {
     }
 
     keyDown(e){
-        if (INPUT_PAUSE.includes(e.code)) currentState.handlePause();
+        console.log(this.lastState);
+        if (INPUT_PAUSE.includes(e.code)) this.handlePause();
     }
 
     handlePause(pause = false) {
+        console.log(pause);
+        console.log(this.lastState);
         if (!pause) changeState(this.lastState);
     }
 }

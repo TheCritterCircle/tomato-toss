@@ -145,5 +145,6 @@ class State {
     handlePause(){}
     keyDown(){}
     keyUp(){}
+    mouseUp(){}
     draw(){}
 }
