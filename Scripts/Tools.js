@@ -108,8 +108,9 @@ class State {
         if (this.drawRequest) cancelAnimationFrame(this.drawRequest);
     }
     
-    main(){getFPS()}
-    draw(){}
+    main(){
+		getFPS();
+	}
 
     getEventPos(e){
         return {
@@ -133,8 +134,16 @@ class State {
         this.clickButton(pos.x, pos.y);
     }
 
-    touchDown(e){this.mouseDown(e.touches[0])}
+    touchDown(e){
+		this.mouseDown(e.touches[0])
+	}
+
+    touchUp(e){
+		this.mouseUp(e.touches[0])
+	}
+
     handlePause(){}
-    keyDownHandler(){}
-    keyUpHandler(){}
+    keyDown(){}
+    keyUp(){}
+    draw(){}
 }

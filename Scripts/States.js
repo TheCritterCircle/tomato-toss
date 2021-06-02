@@ -21,7 +21,7 @@ class PlayState extends State {
             PAUSE_BTN, this.handlePause
         ));
         
-        music.pause();
+        changeMusic("");
         changeMusic("TomatoToss");
     }
 
@@ -43,8 +43,9 @@ class PlayState extends State {
                 addFork(Math.random() * canvas.width * 0.9, NEW_ITEM_Y);
                 forkCooldown += currentRuleset.fork_cooldown;
             }
-            if (delta && level != 1)
+            if (delta && level != 1) {
                 forkCooldown -= delta / Math.log2(level) * timeSpeed;
+            }
         }
     }
 
@@ -90,7 +91,13 @@ class PlayState extends State {
 		lastTouchDir = dir;
     }
 
-    keyDownHandler(e){
+    mouseUp(e){
+        rightPressed = false;
+        leftPressed = false;
+        player.endSlide();
+    }
+
+    keyDown(e){
         if(INPUT_RIGHT.includes(e.code)){
             rightPressed = true;
             player.face(1);
@@ -107,7 +114,7 @@ class PlayState extends State {
         }
     }
 
-    keyUpHandler(e){
+    keyUp(e){
         if(INPUT_RIGHT.includes(e.code)){
             rightPressed = false;
             if (leftPressed) player.face(-1);
@@ -122,7 +129,7 @@ class PlayState extends State {
     }
 
     handlePause(pause = true) {
-        if (pause) changeState(new PauseState());
+        if (pause) changeState(new PauseState(this));
     }
 }
 
@@ -152,8 +159,9 @@ class MenuState extends State {
 }
 
 class PauseState extends State {
-    constructor() {
+    constructor(lastState) {
         super();
+        this.lastState = lastState;
 
         this.buttons.push(new Button(
             canvas.width/2 - 100, canvas.height/2 - 50,
@@ -181,12 +189,12 @@ class PauseState extends State {
         this.buttons.forEach(btn => {btn.draw()});
     }
 
-    keyDownHandler(e){
+    keyDown(e){
         if (INPUT_PAUSE.includes(e.code)) currentState.handlePause();
     }
 
     handlePause(pause = false) {
-        if (!pause) changeState(new PlayState());
+        if (!pause) changeState(this.lastState);
     }
 }
 
@@ -221,7 +229,6 @@ class GameoverState extends State {
 class HelpState extends State {
     constructor(lastState) {
         super();
-        this.lastState = lastState;
         this.page = 0;
         this.background.img = HELP_PAGES[0];
 
@@ -242,7 +249,7 @@ class HelpState extends State {
         this.buttons.push(new Button(
             canvas.width/2 - 100, canvas.height - 75,
             200, 50,
-            BACK_BTN, _ => {changeState(lastState)}
+            BACK_BTN, _ => {changeState(this.lastState)}
         ));
         
         this.lastState = lastState;

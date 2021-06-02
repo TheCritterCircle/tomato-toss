@@ -301,52 +301,16 @@ function deleteTomato(tomato){
 	objects.splice(j, 1);
 }
 
-//Keyboard Controls
+//Controls
 
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("keydown", e => {currentState.keyDown(e)}, false);
+document.addEventListener("keyup", e => {currentState.keyUp(e)}, false);
+
+canvas.addEventListener("mousedown", e => {currentState.mouseDown(e)}, false);
+canvas.addEventListener("mouseup", e => {currentState.mouseUp(e)}, false);
+
+canvas.addEventListener("touchstart", e => {currentState.touchDown(e)}, false);
+canvas.addEventListener("touchend", e => {currentState.touchUp(e)}, false);
+
+
 document.addEventListener("focusout", _ => {currentState.handlePause(true)}, false); 
-
-function keyDownHandler(e){
-	if(currentState.keyDownHandler != null)
-		currentState.keyDownHandler(e);
-}
-
-function keyUpHandler(e){
-	if(currentState.keyDownHandler != null)
-		currentState.keyUpHandler(e);
-}
-
-//Touch & Mouse Controls
-
-canvas.addEventListener("mousedown", mouseDown, false);
-canvas.addEventListener("mouseup", mouseUp, false);
-
-canvas.addEventListener("touchstart", touchDown, false);
-canvas.addEventListener("touchend", touchUp, false);
-
-function mouseDown(e) {
-	currentState.mouseDown(e);
-}
-
-function touchDown(e) {
-	currentState.touchDown(e);
-}
-
-function mouseUp(e){
-	rightPressed = false;
-	leftPressed = false;
-
-	player.endSlide();
-	/*
-	if (player.isSliding)
-		player.endSlide();
-	*/
-}
-
-function touchUp(e){
-	rightPressed = false;
-	leftPressed = false;
-
-	player.endSlide();
-}
