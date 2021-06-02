@@ -18,7 +18,7 @@ class PlayState extends State {
 
         this.buttons.push(new Button(
             canvas.width - 60, 5, 55, 55,
-            PAUSE_BTN, this.handlePause
+            PAUSE_BTN, _ => {this.handlePause()}
         ));
         
         changeMusic("");
@@ -165,7 +165,7 @@ class PauseState extends State {
         this.buttons.push(new Button(
             canvas.width/2 - 100, canvas.height/2 - 50,
             200, 50,
-            UNPAUSE_BTN, _ => {changeState(this.lastState)}
+            UNPAUSE_BTN, _ => {this.handlePause()}
         ))
         this.buttons.push(new Button(
             canvas.width/2 - 100, canvas.height/2 + 15,
@@ -197,8 +197,6 @@ class PauseState extends State {
     }
 
     handlePause(pause = false) {
-        console.log(pause);
-        console.log(this.lastState);
         if (!pause) changeState(this.lastState);
     }
 }
