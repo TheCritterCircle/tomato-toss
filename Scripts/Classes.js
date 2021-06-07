@@ -2,6 +2,30 @@ class Button extends GameObject{
 	constructor(x, y, width, height, img, handleClick){
 		super(x, y, width, height, img)
 		if (this.visible) this.handleClick = handleClick;
+		this.baseX = x, this.baseY = y;
+		this.baseW = width, this.baseH = height;
+		this.hovering = false;
+	}
+
+	main() {
+		if (mouseX !== null && mouseY !== null
+		&& mouseX > this.baseX
+		&& mouseY > this.baseY
+		&& mouseX < this.baseX + this.baseW
+		&& mouseY < this.baseY + this.baseH) {
+			if (!this.hovering) {
+				this.width *= 1.1, this.height *= 1.1;
+				this.x -= (this.width - this.baseW) / 2
+				this.y -= (this.height - this.baseH) / 2
+				this.hovering = true;
+			}
+		} else {
+			if (this.hovering) {
+				this.x = this.baseX, this.y = this.baseY;
+				this.width = this.baseW, this.height = this.baseH;
+				this.hovering = false;
+			}
+		}
 	}
 }
 

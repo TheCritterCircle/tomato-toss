@@ -28,6 +28,7 @@ class PlayState extends State {
     main() {
         let timeSpeed = effects["slow_time"] ? 0.75 : 1;
         objects.forEach(o => {o.main();});
+        this.buttons.forEach(btn => {btn.main()});
         Object.keys(effects).forEach(updateEffect);
     
         splattedTomatoes.forEach(deleteTomato);
@@ -213,6 +214,7 @@ class GameoverState extends State {
 
     main(){
         objects.forEach(o => {o.main();});
+        this.buttons.forEach(btn => {btn.main()});
         cleanUp();
     }
 

@@ -134,6 +134,8 @@ class State {
     keyDown(){}
     keyUp(){}
     mouseUp(){}
-    main(){}
+    main(){
+        this.buttons.forEach(btn => {btn.main()});
+	}
     draw(){}
 }

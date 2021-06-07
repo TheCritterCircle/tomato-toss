@@ -42,6 +42,7 @@ let leftPressed = false;
 let lastMoveTime;
 let lastMoveDir;
 let lastSlideTime;
+let mouseX = null, mouseY = null;
 
 //FPS
 let lastCalledTime;
@@ -309,6 +310,10 @@ document.addEventListener("keyup", e => {currentState.keyUp(e)}, false);
 
 canvas.addEventListener("mousedown", e => {currentState.mouseDown(e)}, false);
 canvas.addEventListener("mouseup", e => {currentState.mouseUp(e)}, false);
+canvas.addEventListener("mousemove", e => {
+	let pos = getEventPos(e);
+	mouseX = pos.x, mouseY = pos.y;
+}, false);
 
 canvas.addEventListener("touchstart", e => {currentState.touchDown(e)}, false);
 canvas.addEventListener("touchend", e => {currentState.touchUp(e)}, false);
