@@ -20,6 +20,13 @@ function findAudio(name) {
 	return new Audio("Sounds/" + name + ".wav");
 }
 
+function getEventPos(e){
+	return {
+		x: e.pageX - canvas.getBoundingClientRect().left,
+		y: e.pageY - canvas.getBoundingClientRect().top,
+	};
+}
+
 class GameObject {
 	constructor(x, y, width, height, img, depth = 0){
 		this.x = x;
@@ -76,47 +83,28 @@ class State {
     constructor(){
         this.background = new GameObject(0, 0, canvas.width, canvas.height, BACKGROUND_IMG);
         this.buttons = [];
-        this.mainRequest;
-        this.drawRequest;
+        this.loopRequest;
         this.isActive = true;
-    }
-
-    mainLoop() {
-        if (this.isActive) {
-            this.main();
-            this.mainRequest = requestAnimationFrame(_ => {this.mainLoop()}, 10);
-        }
-    }
-
-    drawLoop() {
-        if (this.isActive) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            this.draw();
-            this.drawRequest = requestAnimationFrame(_ => {this.drawLoop()}, 10);
-        }
     }
 
     start(){
         this.isActive = true;
-        if (this.main) this.mainLoop();
-        if (this.draw) this.drawLoop();
+        this.loop();
+    }
+
+    loop() {
+        if (this.isActive) {
+			getFPS();
+            if (this.main) this.main();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (this.draw) this.draw();
+            this.loopRequest = requestAnimationFrame(_ => {this.loop()}, 10);
+        }
     }
 
     end(){
         this.isActive = false;
-        if (this.mainRequest) cancelAnimationFrame(this.mainRequest);
-        if (this.drawRequest) cancelAnimationFrame(this.drawRequest);
-    }
-    
-    main(){
-		getFPS();
-	}
-
-    getEventPos(e){
-        return {
-            x: e.pageX - canvas.getBoundingClientRect().left,
-            y: e.pageY - canvas.getBoundingClientRect().top,
-        };
+        if (this.loopRequest) cancelAnimationFrame(this.loopRequest);
     }
 
     clickButton(x, y){
@@ -130,7 +118,7 @@ class State {
     }
 
     mouseDown(e){
-        let pos = this.getEventPos(e);
+        let pos = getEventPos(e);
         this.clickButton(pos.x, pos.y);
     }
 
@@ -146,5 +134,6 @@ class State {
     keyDown(){}
     keyUp(){}
     mouseUp(){}
+    main(){}
     draw(){}
 }

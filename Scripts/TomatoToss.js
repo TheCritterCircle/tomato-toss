@@ -39,8 +39,8 @@ music.loop = true;
 //Input
 let rightPressed = false;
 let leftPressed = false;
-let lastTouchTime;
-let lastTouchDir;
+let lastMoveTime;
+let lastMoveDir;
 let lastSlideTime;
 
 //FPS
@@ -109,7 +109,7 @@ function initGame(){
 	rightSpikesTimer = null;
 
 	lastCalledTime = undefined;
-	lastTouchTime = undefined;
+	lastMoveTime = undefined;
 	lastSlideTime = undefined;
 
 	addTomato(currentRuleset.first_tomato, canvas.width/2, NEW_ITEM_Y);

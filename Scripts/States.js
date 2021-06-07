@@ -26,7 +26,6 @@ class PlayState extends State {
     }
 
     main() {
-        getFPS();
         let timeSpeed = effects["slow_time"] ? 0.75 : 1;
         objects.forEach(o => {o.main();});
         Object.keys(effects).forEach(updateEffect);
@@ -59,9 +58,8 @@ class PlayState extends State {
     }
 
     mouseDown(e){
-        let pos = this.getEventPos(e);
+        let pos = getEventPos(e);
 		let now = Date.now();
-		let dir;
 
         // clicking buttons
         this.clickButton(pos.x, pos.y);
@@ -69,26 +67,24 @@ class PlayState extends State {
         // moving
 		if (pos.x > canvas.width / 2) {
 			rightPressed = true;
-			dir = "Right";
 			player.face(1);
 		}
 		if (pos.x < canvas.width / 2) {
 			leftPressed = true;
-			dir = "Left";
 			player.face(-1);
 		}
 
         // sliding
-		if (!lastTouchTime) {
-			lastTouchTime = now;
+		if (!lastMoveTime) {
+			lastMoveTime = now;
 		}
-		else if (now - lastTouchTime < DOUBLE_TAP_MAX && dir == lastTouchDir) {
+		else if (now - lastMoveTime < DOUBLE_TAP_MAX && player.facing == lastMoveDir) {
 			player.startSlide();
 			lastSlideTime = now;
 		}
 
-		lastTouchTime = now;
-		lastTouchDir = dir;
+		lastMoveTime = now;
+		lastMoveDir = player.facing;
     }
 
     mouseUp(e){
@@ -210,6 +206,14 @@ class GameoverState extends State {
             200, 50,
             START_BTN, initGame
         ))
+        
+        leftPressed = false;
+        rightPressed = false;
+    }
+
+    main(){
+        objects.forEach(o => {o.main();});
+        cleanUp();
     }
 
     draw(){
