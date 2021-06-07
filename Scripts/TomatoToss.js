@@ -58,7 +58,8 @@ function getFPS() {
 }
 
 function displayFPS(fps){
-	document.getElementById("fpscount").innerHTML = "FPS:" + fps.toString();
+	let fpsCount = document.getElementById("fpscount");
+	if (fpsCount) fpsCount.innerHTML = "FPS:" + Math.round(fps);
 }
 
 //Functions
