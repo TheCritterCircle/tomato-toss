@@ -1,36 +1,45 @@
 class Button extends GameObject{
-	constructor(x, y, width, height, img, handleClick){
+	constructor(x, y, width, height, img, handleClick) {
 		super(x, y, width, height, img)
 		if (this.visible) this.handleClick = handleClick;
 		this.baseX = x, this.baseY = y;
 		this.baseW = width, this.baseH = height;
-		this.hovering = false;
+		this.hovered = false;
+		this.pressed = false;
 	}
 
-	main() {
-		if (mouseX !== null && mouseY !== null
-		&& mouseX > this.baseX
-		&& mouseY > this.baseY
-		&& mouseX < this.baseX + this.baseW
-		&& mouseY < this.baseY + this.baseH) {
-			if (!this.hovering) {
-				this.width *= 1.1, this.height *= 1.1;
-				this.x -= (this.width - this.baseW) / 2
-				this.y -= (this.height - this.baseH) / 2
-				this.hovering = true;
-			}
-		} else {
-			if (this.hovering) {
-				this.x = this.baseX, this.y = this.baseY;
-				this.width = this.baseW, this.height = this.baseH;
-				this.hovering = false;
-			}
+	press() {
+		if (!this.pressed) {
+			this.width = 0.9 * this.baseW;
+			this.height = 0.9 * this.baseH;
+			this.x = this.baseX - (this.width - this.baseW) / 2
+			this.y = this.baseY - (this.height - this.baseH) / 2
+			this.pressed = true;
+		}
+	}
+
+	hover() {
+		if (!this.hovered) {
+			this.width = 1.1 * this.baseW;
+			this.height = 1.1 * this.baseH;
+			this.x = this.baseX - (this.width - this.baseW) / 2
+			this.y = this.baseY - (this.height - this.baseH) / 2
+			this.hovered = true;
+		}
+	}
+
+	reset() {
+		if (this.pressed || this.hovered) {
+			this.x = this.baseX, this.y = this.baseY;
+			this.width = this.baseW, this.height = this.baseH;
+			this.hovered = false;
+			this.pressed = false;
 		}
 	}
 }
 
 class Plate extends GameObject{
-	constructor(x, y, width, height, hitWidth, hitHeight){
+	constructor(x, y, width, height, hitWidth, hitHeight) {
 		super(x, y, width, height, PLATE_IMG, 0);
 		this.offsetX = -width/2;
 		
@@ -54,7 +63,7 @@ class Plate extends GameObject{
 }
 
 class Player extends GameObject{
-	constructor(x, y, width, height){
+	constructor(x, y, width, height) {
 		super(
 			x, y - width/2 * PLAYER_SIZE,
 			width * PLAYER_SIZE, height * PLAYER_SIZE,
@@ -86,7 +95,7 @@ class Player extends GameObject{
 		this.spdGhosts = [];
 	}
 
-	face(direction){
+	face(direction) {
 		if (!this.isSliding) {
 			this.facing = direction;
 			this.flipped = direction === -1;
@@ -94,7 +103,7 @@ class Player extends GameObject{
 		}
 	}
 
-	main(){
+	main() {
 		this.move();
 		this.speedImages();
 	}
@@ -132,7 +141,7 @@ class Player extends GameObject{
 		this.animTimer += 90 / timeScale;
 	}
 
-	draw(){
+	draw() {
 		this.animate();
 		this.spdGhosts.forEach(o => {o.draw()});
 		super.draw();
@@ -145,7 +154,7 @@ class Player extends GameObject{
 		ctx.stroke();
 	}
 
-	updateHitbox(x, y){
+	updateHitbox(x, y) {
 		if (!this.isSliding) {
 			this.hitX = x + this.offsetX;
 			this.hitY = y + this.offsetY;
@@ -163,7 +172,7 @@ class Player extends GameObject{
 		}
 	}
 
-	move(){
+	move() {
 		let speedBoost = (effects.speed_up ? 1.5 : 1);
 
 		if (rightPressed || leftPressed || this.isSliding) {
@@ -185,25 +194,25 @@ class Player extends GameObject{
 		this.updatePlate();
 	}
 
-	collision(){
+	collision() {
 		// Left Wall
-		if(this.hitX < 0){
-			if(this.isSliding && this.facing === -1){
+		if(this.hitX < 0) {
+			if(this.isSliding && this.facing === -1) {
 				this.endSlide();
 			}
 			this.baseX = 0 + this.baseX - this.hitX;
 		}
 
 		// Right Wall
-		if(this.hitX + this.hitWidth > canvas.width){
-			if(this.isSliding && this.facing === 1){
+		if(this.hitX + this.hitWidth > canvas.width) {
+			if(this.isSliding && this.facing === 1) {
 				this.endSlide();
 			}
 			this.baseX = canvas.width - this.hitWidth + this.baseX - this.hitX;
 		}
 	}
 
-	startSlide(){
+	startSlide() {
 		if (!this.isSliding) {
 			if (this.hitX > 0 && this.hitX + this.hitWidth < canvas.width) {
 				this.isSliding = true;
@@ -213,7 +222,7 @@ class Player extends GameObject{
 		}
 	}
 	
-	endSlide(){
+	endSlide() {
 		if (this.isSliding) {
 			this.isSliding = false;
 			this.speed = WALK_SPEED;
@@ -226,7 +235,7 @@ class Player extends GameObject{
 		}		
 	}
 
-	speedImages(){
+	speedImages() {
 		if (effects.speed_up) {
 			if (this.spdGhosts.length < MAX_GHOSTS) {
 				let newGhost = new GameObject(
@@ -254,7 +263,7 @@ class Player extends GameObject{
 }
 
 class Splat extends GameObject{
-	constructor(x, y, targetW, targetH, img){
+	constructor(x, y, targetW, targetH, img) {
 		super(x, y, 0, 0, img, 5);
 
 		this.targetW = targetW;
@@ -263,7 +272,7 @@ class Splat extends GameObject{
 		objects.push(this);
 	}
 
-	main(){
+	main() {
 		if (this.width < this.targetW * 0.995) {
 			// appears
 			this.width += (this.targetW - this.width) * 0.2 / timeScale;
@@ -296,7 +305,7 @@ class PlateSplat extends Splat {
 }
 
 class Tomato extends GameObject{
-	constructor(x, y, width, height, type){
+	constructor(x, y, width, height, type) {
 		super(x, y, width, height, TOMATOES[type].img, -2 + 0.5 * Math.random());
 
 		this.hp = TOMATOES[type].hp || -1;
@@ -324,7 +333,7 @@ class Tomato extends GameObject{
 		this.timeLeft = -1;
 	}
 
-	main(){
+	main() {
 		let timeSpeed = effects.slow_time ? 0.75 : 1;
 
 		if (this.isSpawning) {
@@ -372,7 +381,7 @@ class Tomato extends GameObject{
 		}
 	}
 
-	beAtracted(){
+	beAtracted() {
 		let timeSpeed = effects.slow_time ? 0.75 : 1;
 		let diff = player.x - this.x
 
@@ -382,7 +391,7 @@ class Tomato extends GameObject{
 		//this.velX += MAGNET_STR * (player.x - this.x);
 	}
 
-	stickTo(fork){
+	stickTo(fork) {
 		this.velX = 0;
 		this.velY = 0;
 		this.velAng = 0;
@@ -402,14 +411,14 @@ class Tomato extends GameObject{
 		this.relY = rel * Math.cos(fork.direction);
 	}
 
-	detach(){
+	detach() {
 		this.fork = null;
 	}
 
-	collision(){
+	collision() {
 		//Wall & Ceiling
-		if(this.hitX <= 0){
-			if(spikesLeft){
+		if(this.hitX <= 0) {
+			if(spikesLeft) {
 				this.splat();
 			}
 			else{
@@ -422,7 +431,7 @@ class Tomato extends GameObject{
 		}
 
 		if(this.hitX + this.hitWidth >= canvas.width) {
-			if(spikesRight){
+			if(spikesRight) {
 				this.splat();
 			}
 			else{
@@ -434,7 +443,7 @@ class Tomato extends GameObject{
 			}
 		}
 
-		if(this.hitY <= 0){
+		if(this.hitY <= 0) {
 			this.y = 0 + this.height / 2;
 			this.velY = -this.velY;
 			this.velAng -= this.velY;
@@ -445,7 +454,7 @@ class Tomato extends GameObject{
 		if (this.isTouching(player.plate) && !this.hasScored) {
 			if (this.hp > 0) {
 				this.hp--;
-				if (this.hp == 0){
+				if (this.hp == 0) {
 					addPoints(TOMATOES[
 						this.type].pinata_pts || TOMATOES[this.type].bounce_pts || 0,
 						this.x, this.y)
@@ -489,7 +498,7 @@ class Tomato extends GameObject{
 }
 
 class PowerUp extends GameObject {
-	constructor(x, y, width, height, type){
+	constructor(x, y, width, height, type) {
 		super(x, y, width, height, POWERUP_IMGS[POWERUP_TYPES.indexOf(type)], -2);
 
 		this.offsetX = -this.width/2;
@@ -507,7 +516,7 @@ class PowerUp extends GameObject {
 		this.animTimer = 0;
 	}
 
-	main(){
+	main() {
 		if (this.animTimer < BLINK_DUR * NUM_BLINKS) {
 			this.visible = this.animTimer / BLINK_DUR % 1 < 1/2;
 		} else {
@@ -531,7 +540,7 @@ class PowerUp extends GameObject {
 		this.offsetX = -this.width/2;
 	}
 
-	collision(){
+	collision() {
 		//Player
 		if (this.isTouching(player.plate)) {
 			this.hasScored = true;
@@ -557,7 +566,7 @@ class PowerUp extends GameObject {
 }
 
 class Fork extends GameObject{
-	constructor(x, y, size, direction){
+	constructor(x, y, size, direction) {
 		super(x, y, 50, 75, FORK_IMG, -2);
 		this.offsetX = -25*size;
 		this.offsetY = -50*size;
@@ -579,7 +588,7 @@ class Fork extends GameObject{
 		this.angle = direction * 180 / Math.PI - 90;
 	}
 
-	main(){
+	main() {
 		let timeSpeed = effects.slow_time ? 0.75 : 1;
 
 		if (this.isSpawning) {
@@ -617,13 +626,13 @@ class Fork extends GameObject{
 	}
 	
 	/*
-	draw(){
+	draw() {
 		super.draw();
 		this.drawHitbox();
 	}
 	*/
 
-	collision(){
+	collision() {
 		//Tomatoes
 		for (let t of tomatoes)
 			if (!t.isSpawning
@@ -708,8 +717,8 @@ class GhostText {
 }
 
 class Spikes extends GameObject{
-	constructor(isRight){
-		if(isRight){
+	constructor(isRight) {
+		if(isRight) {
 			super(canvas.width, 0, 100, 480, BW_SPIKE_IMG, 10);
 			rightSpikes = this;
 			this.warningsign = new GameObject(canvas.width - 200, canvas.height / 2 - 50, 100, 100, WARNING, 50);
@@ -729,8 +738,8 @@ class Spikes extends GameObject{
 		this.isdeployed = false;;
 	}
 
-	main(){
-		if(!this.isdeployed){
+	main() {
+		if(!this.isdeployed) {
 			if (this.isSpawning) {
 				this.warningsign.visible = this.animTimer / BLINK_DUR % 1 < 1/2;
 				this.animTimer += 90 / timeScale;
@@ -741,8 +750,8 @@ class Spikes extends GameObject{
 			else {
 				delete this.warningsign;
 
-				if(this.isRight){
-					if(this.x > canvas.width - 100){
+				if(this.isRight) {
+					if(this.x > canvas.width - 100) {
 						this.x += -10 * timeScale;
 					}
 					else{
@@ -750,8 +759,8 @@ class Spikes extends GameObject{
 						spikesRight = true;
 					}
 				}
-				else if(!this.isRight){
-					if(this.x < 0){
+				else if(!this.isRight) {
+					if(this.x < 0) {
 						this.x += 10 * timeScale;
 					}
 					else{
@@ -763,7 +772,7 @@ class Spikes extends GameObject{
 		}
 	}
 
-	stop(){
+	stop() {
 
 	}
 }

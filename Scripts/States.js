@@ -28,7 +28,6 @@ class PlayState extends State {
     main() {
         let timeSpeed = effects["slow_time"] ? 0.75 : 1;
         objects.forEach(o => {o.main();});
-        this.buttons.forEach(btn => {btn.main()});
         Object.keys(effects).forEach(updateEffect);
     
         splattedTomatoes.forEach(deleteTomato);
@@ -49,7 +48,7 @@ class PlayState extends State {
         }
     }
 
-    draw(){
+    draw() {
         this.background.draw();
         let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);
         toDraw.forEach(o => {o.draw()});
@@ -58,12 +57,19 @@ class PlayState extends State {
         this.buttons.forEach(btn => {btn.draw()});
     }
 
-    mouseDown(e){
+    mouseDown(e) {
         let pos = getEventPos(e);
 		let now = Date.now();
+        let pressedButton = false;
 
-        // clicking buttons
-        this.clickButton(pos.x, pos.y);
+        this.buttons.forEach(btn => {
+            if (btn.hovered) {
+                pressedButton = true
+                btn.press();
+            }
+        });
+
+        if (pressedButton) return;
 
         // moving
 		if (pos.x > canvas.width / 2) {
@@ -88,39 +94,40 @@ class PlayState extends State {
 		lastMoveDir = player.facing;
     }
 
-    mouseUp(e){
+    mouseUp(e) {
+        super.mouseUp(e);
         rightPressed = false;
         leftPressed = false;
         player.endSlide();
     }
 
-    keyDown(e){
-        if(INPUT_RIGHT.includes(e.code)){
+    keyDown(e) {
+        if(INPUT_RIGHT.includes(e.code)) {
             rightPressed = true;
             player.face(1);
         }
-        if(INPUT_LEFT.includes(e.code)){
+        if(INPUT_LEFT.includes(e.code)) {
             leftPressed = true;
             player.face(-1);
         }
-        if(INPUT_DOWN.includes(e.code)){
+        if(INPUT_DOWN.includes(e.code)) {
             player.startSlide();
         }
-        if(INPUT_PAUSE.includes(e.code)){
+        if(INPUT_PAUSE.includes(e.code)) {
             currentState.handlePause();
         }
     }
 
-    keyUp(e){
-        if(INPUT_RIGHT.includes(e.code)){
+    keyUp(e) {
+        if(INPUT_RIGHT.includes(e.code)) {
             rightPressed = false;
             if (leftPressed) player.face(-1);
         }
-        if(INPUT_LEFT.includes(e.code)){
+        if(INPUT_LEFT.includes(e.code)) {
             leftPressed = false;
             if (rightPressed) player.face(1);
         }
-        if(INPUT_DOWN.includes(e.code)){
+        if(INPUT_DOWN.includes(e.code)) {
             player.endSlide();
         }
     }
@@ -148,7 +155,7 @@ class MenuState extends State {
         ));
     }
 
-    draw(){
+    draw() {
         this.background.draw();
         if (this.logo) this.logo.draw();
         this.buttons.forEach(btn => {btn.draw()});
@@ -179,7 +186,7 @@ class PauseState extends State {
         console.log(this.lastState);
     }
 
-    draw(){
+    draw() {
         this.background.draw();
         let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);
         toDraw.forEach(o => {o.draw()});
@@ -188,7 +195,7 @@ class PauseState extends State {
         this.buttons.forEach(btn => {btn.draw()});
     }
 
-    keyDown(e){
+    keyDown(e) {
         console.log(this.lastState);
         if (INPUT_PAUSE.includes(e.code)) this.handlePause();
     }
@@ -212,13 +219,12 @@ class GameoverState extends State {
         rightPressed = false;
     }
 
-    main(){
+    main() {
         objects.forEach(o => {o.main();});
-        this.buttons.forEach(btn => {btn.main()});
         cleanUp();
     }
 
-    draw(){
+    draw() {
         this.background.draw();
         let toDraw = objects.sort((o1, o2) => o1.depth < o2.depth);
         toDraw.forEach(o => {o.draw()});
@@ -266,12 +272,12 @@ class HelpState extends State {
         music.volume = 0.5*this.oldVolume;
     }
 
-    draw(){
+    draw() {
         this.background.draw();
         this.buttons.forEach(btn => {btn.draw();});
     }
 
-    prevPage(){
+    prevPage() {
         if (this.page > 0) {
             if (this.page === HELP_PAGES.length - 1)
                 this.nextBtn.visible = true;
@@ -282,7 +288,7 @@ class HelpState extends State {
         this.background.img = HELP_PAGES[this.page];
     }
 
-    nextPage(){
+    nextPage() {
         if (this.page < HELP_PAGES.length - 1) {
             if (this.page === 0)
                 this.prevBtn.visible = true;
@@ -293,7 +299,7 @@ class HelpState extends State {
         this.background.img = HELP_PAGES[this.page];
     }
 
-    end(){
+    end() {
         music.volume = this.oldVolume;
         super.end();
     }

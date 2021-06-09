@@ -42,7 +42,6 @@ let leftPressed = false;
 let lastMoveTime;
 let lastMoveDir;
 let lastSlideTime;
-let mouseX = null, mouseY = null;
 
 //FPS
 let lastCalledTime;
@@ -58,7 +57,7 @@ function getFPS() {
 	lastCalledTime = Date.now();
 }
 
-function displayFPS(fps){
+function displayFPS(fps) {
 	let fpsCount = document.getElementById("fpscount");
 	if (fpsCount) fpsCount.innerHTML = "FPS:" + Math.round(fps);
 }
@@ -69,9 +68,9 @@ let currentRuleset = DEFAULT_RULESET;
 let currentState;
 changeState(new MenuState());
 
-let forkTimer = setTimeout(function(){}, 1000);
+let forkTimer = setTimeout(function() {}, 1000);
 
-function changeRuleset(r){
+function changeRuleset(r) {
 	if (r === DEFAULT_RULESET) {
 		currentRuleset = r;
 	} else {
@@ -84,11 +83,11 @@ function changeRuleset(r){
 	}
 }
 
-function getTargetXP(){
+function getTargetXP() {
 	return 3 + Math.floor(5 * Math.log2(level+1));
 }
 
-function initGame(){
+function initGame() {
 	changeRuleset(LEVELS[0]);
 	score = 0, xp = 0, level = 1, combo = 0;
 
@@ -125,7 +124,7 @@ function addPoints(points, x, y) {
 	objects.push(new GhostText(x, y, text, color));
 }
 
-function drawUI(){
+function drawUI() {
 	ctx.fillStyle = "#000000";
 	ctx.font = "30px Arial";
 
@@ -177,7 +176,7 @@ function incCombo(points) {
 		addItem();
 	}
 
-	if(xp >= getTargetXP()){
+	if(xp >= getTargetXP()) {
 		xp = 0;
 		level++
 		if (level <= LEVELS.length) changeRuleset(LEVELS[level-1]);
@@ -197,7 +196,7 @@ function breakCombo() {
 	xp = Math.max(xp - 10, 0);
 }
 
-function updateEffect(e){
+function updateEffect(e) {
 	if (effects[e] > 0)
 		if (effects[e] > delta)
 			effects[e] -= delta;
@@ -222,7 +221,7 @@ function cleanUp() {
 	toDelete = [];
 }
 
-function addTomato(type, x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y){
+function addTomato(type, x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y) {
 	let rand = Math.random() * 100;
 	if (type == "random")
 		for (type of Object.keys(TOMATOES)) {
@@ -236,7 +235,7 @@ function addTomato(type, x = 50 + (canvas.width - 100) * Math.random(), y = NEW_
 	objects.push(tomato);
 }
 
-function addPowerup(type, x = 70 + (canvas.width - 140) * Math.random(), y = NEW_ITEM_Y){
+function addPowerup(type, x = 70 + (canvas.width - 140) * Math.random(), y = NEW_ITEM_Y) {
 	let rand = Math.random() * 100;
 	if (type == "random")
 		for (type of POWERUP_TYPES) {
@@ -249,7 +248,7 @@ function addPowerup(type, x = 70 + (canvas.width - 140) * Math.random(), y = NEW
 	objects.push(powerup);
 }
 
-function addFork(x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y){	
+function addFork(x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y) {	
 	let rand = Math.random() * 100;
 	for (type of FORK_TYPES) {
 		let prob = currentRuleset.fork_probs[type];
@@ -261,26 +260,26 @@ function addFork(x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y){
 	objects.push(fork);
 }
 
-function activateSpikes(){
+function activateSpikes() {
 	let tempRandom = Math.random() * 2;
 
-	if(tempRandom > 1 && !spikesLeft){
+	if(tempRandom > 1 && !spikesLeft) {
 		leftSpikes = new Spikes(false);
 		objects.push(leftSpikes);
-		leftSpikesTimer = setTimeout(function(){
+		leftSpikesTimer = setTimeout(function() {
 			leftSpikes.stop();
 		}, Math.random * 5000 + 1000);
 	}
-	else if(tempRandom < 1 && !spikesRight){
+	else if(tempRandom < 1 && !spikesRight) {
 		rightSpikes = new Spikes(true);
 		objects.push(rightSpikes);
-		rightSpikesTimer = setTimeout(function(){
+		rightSpikesTimer = setTimeout(function() {
 			rightSpikes.stop();
 		}, Math.random * 5000 + 1000);
 	}
 }
 
-function addItem(x, y){
+function addItem(x, y) {
 	let rand = Math.random() * 100;
 	for (type of ITEM_TYPES) {
 		let prob = currentRuleset.item_probs[type];
@@ -296,7 +295,7 @@ function addItem(x, y){
 		addFork(x, y);
 }
 
-function deleteTomato(tomato){
+function deleteTomato(tomato) {
 	let i = tomatoes.indexOf(tomato);
 	let j = objects.indexOf(tomato);
 	tomatoes.splice(i, 1);
@@ -310,10 +309,7 @@ document.addEventListener("keyup", e => {currentState.keyUp(e)}, false);
 
 canvas.addEventListener("mousedown", e => {currentState.mouseDown(e)}, false);
 canvas.addEventListener("mouseup", e => {currentState.mouseUp(e)}, false);
-canvas.addEventListener("mousemove", e => {
-	let pos = getEventPos(e);
-	mouseX = pos.x, mouseY = pos.y;
-}, false);
+canvas.addEventListener("mousemove", e => {currentState.mouseMove(e)}, false);
 
 canvas.addEventListener("touchstart", e => {currentState.touchDown(e)}, false);
 canvas.addEventListener("touchend", e => {currentState.touchUp(e)}, false);

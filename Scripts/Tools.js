@@ -4,14 +4,14 @@ function findImage(name) {
 	return img;
 }
 
-function findSpecialImage(file, name){
+function findSpecialImage(file, name) {
 	try{
 		let img = new Image();
 		img.src = "Sprites/" + file + name + ".png";
 		ctx.draw(img);
 		return img;
 	}
-	catch(err){
+	catch(err) {
 		return findImage(name);
 	}
 }
@@ -20,7 +20,7 @@ function findAudio(name) {
 	return new Audio("Sounds/" + name + ".wav");
 }
 
-function getEventPos(e){
+function getEventPos(e) {
 	return {
 		x: e.pageX - canvas.getBoundingClientRect().left,
 		y: e.pageY - canvas.getBoundingClientRect().top,
@@ -28,7 +28,7 @@ function getEventPos(e){
 }
 
 class GameObject {
-	constructor(x, y, width, height, img, depth = 0){
+	constructor(x, y, width, height, img, depth = 0) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -46,9 +46,9 @@ class GameObject {
 		this.alpha = 1;
 	}
 	
-	main(){}
+	main() {}
 
-	draw(){
+	draw() {
 		if (!this.visible || this.alpha <= 0) return;
 		if (this.sWidth == 0) this.sWidth = this.img.width;
 		if (this.sHeight == 0) this.sHeight = this.img.height;
@@ -80,14 +80,14 @@ class GameObject {
 }
 
 class State {
-    constructor(){
+    constructor() {
         this.background = new GameObject(0, 0, canvas.width, canvas.height, BACKGROUND_IMG);
         this.buttons = [];
         this.loopRequest;
         this.isActive = true;
     }
 
-    start(){
+    start() {
         this.isActive = true;
         this.loop();
     }
@@ -102,12 +102,12 @@ class State {
         }
     }
 
-    end(){
+    end() {
         this.isActive = false;
         if (this.loopRequest) cancelAnimationFrame(this.loopRequest);
     }
 
-    clickButton(x, y){
+    clickButton(x, y) {
         this.buttons.forEach(btn => {
             if (x > btn.x &&
                 y > btn.y &&
@@ -117,25 +117,43 @@ class State {
         })
     }
 
-    mouseDown(e){
+    mouseDown(e) {
+        this.buttons.forEach(btn => {
+			if (btn.hovered) btn.press();
+        });
+	}
+
+    mouseUp(e) {
         let pos = getEventPos(e);
         this.clickButton(pos.x, pos.y);
+		this.buttons.forEach(btn => {btn.reset()});
     }
 
-    touchDown(e){
+    mouseMove(e) {
+        let pos = getEventPos(e);
+		this.buttons.forEach(btn => {
+			if (pos.x > btn.baseX
+			&& pos.y > btn.baseY
+			&& pos.x < btn.baseX + btn.baseW
+			&& pos.y < btn.baseY + btn.baseH)
+				btn.hover();
+			else
+				btn.reset();
+		});
+    }
+
+    touchDown(e) {
 		this.mouseDown(e.touches[0])
 	}
 
-    touchUp(e){
+    touchUp(e) {
 		this.mouseUp(e.touches[0])
 	}
 
-    handlePause(){}
-    keyDown(){}
-    keyUp(){}
-    mouseUp(){}
-    main(){
-        this.buttons.forEach(btn => {btn.main()});
-	}
-    draw(){}
+    handlePause() {}
+    keyDown() {}
+    keyUp() {}
+
+    main() {}
+    draw() {}
 }
