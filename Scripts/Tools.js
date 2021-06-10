@@ -121,25 +121,20 @@ class State {
 
     checkClick(x, y) {
         this.buttons.forEach(btn => {
-            if (x > btn.x &&
-                y > btn.y &&
-                x < btn.x + btn.width &&
-                y < btn.y + btn.height
-            ) btn.handleClick();
+            if (pressed) btn.handleClick();
         })
     }
 
     mouseDown(e) {
         let pos = getEventPos(e);
+		this.checkHover(pos.x, pos.y);
         this.buttons.forEach(btn => {
 			if (btn.hovered) btn.press();
         });
-		this.checkHover(pos.x, pos.y);
 	}
 
-    mouseUp(e) {
-        let pos = getEventPos(e);
-        this.checkClick(pos.x, pos.y);
+    mouseUp() {
+        this.buttons.forEach(btn => {if (btn.pressed) btn.handleClick()})
 		this.buttons.forEach(btn => {btn.reset()});
     }
 
