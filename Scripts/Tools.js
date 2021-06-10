@@ -119,7 +119,7 @@ class State {
 		});
 	}
 
-    checkPress(x, y) {
+    checkClick(x, y) {
         this.buttons.forEach(btn => {
             if (x > btn.x &&
                 y > btn.y &&
@@ -139,7 +139,7 @@ class State {
 
     mouseUp(e) {
         let pos = getEventPos(e);
-        this.checkPress(pos.x, pos.y);
+        this.checkClick(pos.x, pos.y);
 		this.buttons.forEach(btn => {btn.reset()});
     }
 
@@ -148,12 +148,12 @@ class State {
 		this.checkHover(pos.x, pos.y);
     }
 
-    touchDown(e) {
-		this.mouseDown(e.touches[0])
+    touchStart(e) {
+		this.mouseDown(e.changedTouches[0])
 	}
 
-    touchUp(e) {
-		this.mouseUp(e.touches[0])
+    touchEnd(e) {
+		this.mouseUp(e.changedTouches[0])
 	}
 
     handlePause() {}

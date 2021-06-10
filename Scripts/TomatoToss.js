@@ -311,8 +311,8 @@ canvas.addEventListener("mousedown", e => {currentState.mouseDown(e)}, false);
 canvas.addEventListener("mouseup", e => {currentState.mouseUp(e)}, false);
 canvas.addEventListener("mousemove", e => {currentState.mouseMove(e)}, false);
 
-canvas.addEventListener("touchstart", e => {currentState.touchDown(e)}, false);
-canvas.addEventListener("touchend", e => {currentState.touchUp(e)}, false);
+canvas.addEventListener("touchstart", e => {currentState.touchStart(e)}, false);
+canvas.addEventListener("touchend", e => {currentState.touchEnd(e)}, false);
 
 
 document.addEventListener("focusout", _ => {currentState.handlePause(true)}, false); 
