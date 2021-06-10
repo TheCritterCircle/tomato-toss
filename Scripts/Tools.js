@@ -107,7 +107,19 @@ class State {
         if (this.loopRequest) cancelAnimationFrame(this.loopRequest);
     }
 
-    clickButton(x, y) {
+	checkHover(x, y){
+		this.buttons.forEach(btn => {
+			if (x > btn.baseX
+			&& y > btn.baseY
+			&& x < btn.baseX + btn.baseW
+			&& y < btn.baseY + btn.baseH)
+				btn.hover();
+			else
+				btn.reset();
+		});
+	}
+
+    checkPress(x, y) {
         this.buttons.forEach(btn => {
             if (x > btn.x &&
                 y > btn.y &&
@@ -118,28 +130,22 @@ class State {
     }
 
     mouseDown(e) {
+        let pos = getEventPos(e);
         this.buttons.forEach(btn => {
 			if (btn.hovered) btn.press();
         });
+		this.checkHover(pos.x, pos.y);
 	}
 
     mouseUp(e) {
         let pos = getEventPos(e);
-        this.clickButton(pos.x, pos.y);
+        this.checkPress(pos.x, pos.y);
 		this.buttons.forEach(btn => {btn.reset()});
     }
 
     mouseMove(e) {
         let pos = getEventPos(e);
-		this.buttons.forEach(btn => {
-			if (pos.x > btn.baseX
-			&& pos.y > btn.baseY
-			&& pos.x < btn.baseX + btn.baseW
-			&& pos.y < btn.baseY + btn.baseH)
-				btn.hover();
-			else
-				btn.reset();
-		});
+		this.checkHover(pos.x, pos.y);
     }
 
     touchDown(e) {

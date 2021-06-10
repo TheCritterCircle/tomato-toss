@@ -60,8 +60,9 @@ class PlayState extends State {
     mouseDown(e) {
         let pos = getEventPos(e);
 		let now = Date.now();
-        let pressedButton = false;
+		this.checkHover(pos.x, pos.y);
 
+        let pressedButton = false;
         this.buttons.forEach(btn => {
             if (btn.hovered) {
                 pressedButton = true
