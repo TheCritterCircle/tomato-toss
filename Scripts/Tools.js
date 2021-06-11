@@ -119,18 +119,21 @@ class State {
 		});
 	}
 
-    checkClick(x, y) {
-        this.buttons.forEach(btn => {
-            if (pressed) btn.handleClick();
-        })
-    }
+	checkPress(x, y){
+		this.buttons.forEach(btn => {
+			if (x > btn.baseX
+			&& y > btn.baseY
+			&& x < btn.baseX + btn.baseW
+			&& y < btn.baseY + btn.baseH)
+				btn.press();
+			else
+				btn.reset();
+		});
+	}
 
     mouseDown(e) {
         let pos = getEventPos(e);
-		this.checkHover(pos.x, pos.y);
-        this.buttons.forEach(btn => {
-			if (btn.hovered) btn.press();
-        });
+		this.checkPress(pos.x, pos.y);
 	}
 
     mouseUp() {
@@ -139,16 +142,16 @@ class State {
     }
 
     mouseMove(e) {
-        let pos = getEventPos(e);
-		this.checkHover(pos.x, pos.y);
+        //let pos = getEventPos(e);
+		//this.checkHover(pos.x, pos.y);
     }
 
     touchStart(e) {
-		this.mouseDown(e.changedTouches[0])
+		this.mouseDown(e.changedTouches[0]);
 	}
 
     touchEnd(e) {
-		this.mouseUp(e.changedTouches[0])
+		this.mouseUp(e.changedTouches[0]);
 	}
 
     handlePause() {}

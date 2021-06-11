@@ -32,7 +32,12 @@ class PlayState extends State {
     
         splattedTomatoes.forEach(deleteTomato);
         splattedTomatoes = [];
-        if (tomatoes.length < 1) changeState(new GameoverState());
+        if (tomatoes.length < 1) {
+            leftPressed = false;
+            rightPressed = false;
+            player.endSlide();
+            changeState(new GameoverState());
+        }
         //if (lastSlideTime > 0) tryEndSlide();
     
         cleanUp();
@@ -65,7 +70,7 @@ class PlayState extends State {
         let pressedButton = false;
         this.buttons.forEach(btn => {
             if (btn.hovered) {
-                pressedButton = true
+                pressedButton = true;
                 btn.press();
             }
         });
@@ -215,9 +220,6 @@ class GameoverState extends State {
             200, 50,
             START_BTN, initGame
         ))
-        
-        leftPressed = false;
-        rightPressed = false;
     }
 
     main() {
