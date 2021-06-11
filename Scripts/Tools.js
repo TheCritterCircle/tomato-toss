@@ -142,8 +142,8 @@ class State {
     }
 
     mouseMove(e) {
-        //let pos = getEventPos(e);
-		//this.checkHover(pos.x, pos.y);
+        let pos = getEventPos(e);
+		this.checkHover(pos.x, pos.y);
     }
 
     touchStart(e) {
