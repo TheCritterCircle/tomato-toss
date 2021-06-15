@@ -10,8 +10,7 @@ function findSpecialImage(file, name) {
 		img.src = "Sprites/" + file + name + ".png";
 		ctx.draw(img);
 		return img;
-	}
-	catch(err) {
+	} catch(err) {
 		return findImage(name);
 	}
 }
