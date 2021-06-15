@@ -108,27 +108,35 @@ class State {
     }
 
 	checkHover(x, y){
+		let hit = false;
 		this.buttons.forEach(btn => {
 			if (x > btn.baseX
 			&& y > btn.baseY
 			&& x < btn.baseX + btn.baseW
-			&& y < btn.baseY + btn.baseH)
+			&& y < btn.baseY + btn.baseH) {
 				btn.hover();
-			else
+				hit = true;
+			} else {
 				btn.reset();
+			}
 		});
+		return hit;
 	}
 
 	checkPress(x, y){
+		let hit = false;
 		this.buttons.forEach(btn => {
 			if (x > btn.baseX
 			&& y > btn.baseY
 			&& x < btn.baseX + btn.baseW
-			&& y < btn.baseY + btn.baseH)
+			&& y < btn.baseY + btn.baseH) {
 				btn.press();
-			else
+				hit = true;
+			} else {
 				btn.reset();
+			}
 		});
+		return hit;
 	}
 
     mouseDown(e) {

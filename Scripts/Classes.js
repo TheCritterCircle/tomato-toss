@@ -9,8 +9,6 @@ class Button extends GameObject{
 	}
 
 	press() {
-		console.log("pressing");
-		console.log("pressed?", this.pressed);
 		if (!this.pressed) {
 			this.width = 0.95 * this.baseW;
 			this.height = 0.95 * this.baseH;

@@ -65,17 +65,8 @@ class PlayState extends State {
     mouseDown(e) {
         let pos = getEventPos(e);
 		let now = Date.now();
-		this.checkHover(pos.x, pos.y);
 
-        let pressedButton = false;
-        this.buttons.forEach(btn => {
-            if (btn.hovered) {
-                pressedButton = true;
-                btn.press();
-            }
-        });
-
-        if (pressedButton) return;
+		if (this.checkPress(pos.x, pos.y)) return;
 
         // moving
 		if (pos.x > canvas.width / 2) {
@@ -189,7 +180,6 @@ class PauseState extends State {
         ));
 
         this.lastState = lastState;
-        console.log(this.lastState);
     }
 
     draw() {
@@ -202,7 +192,6 @@ class PauseState extends State {
     }
 
     keyDown(e) {
-        console.log(this.lastState);
         if (INPUT_PAUSE.includes(e.code)) this.handlePause();
     }
 
