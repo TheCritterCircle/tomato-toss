@@ -169,18 +169,16 @@ function showHelp() {
 
 function incCombo(points) {
 	combo += points / tomatoes.length;
-	xp += points;
-
 	if (combo >= currentRuleset.new_item_combo) {
 		combo = 0;
 		addItem();
 	}
 
+	xp ++;
 	if(xp >= getTargetXP()) {
 		xp = 0;
-		level++
+		level++;
 		if (level <= LEVELS.length) changeRuleset(LEVELS[level-1]);
-		console.log(level, currentRuleset)
 		for (let i = 0; i < tomatoes.length; i++) {
 			let t = tomatoes[i];
 			if (t.isSpawning) deleteTomato(t);
@@ -193,7 +191,7 @@ function incCombo(points) {
 
 function breakCombo() {
 	combo = 0;
-	xp = Math.max(xp - 10, 0);
+	//xp = Math.max(xp - 10, 0);
 }
 
 function updateEffect(e) {
