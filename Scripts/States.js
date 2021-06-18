@@ -4,7 +4,7 @@ function changeState(newState) {
     currentState.start();
 }
 
-function changeMusic(name) {
+function setMusic(name = "") {
     src = "Sounds/" + name + ".wav"
     if (!music.src.endsWith(src)) {
         music.src = src;
@@ -21,8 +21,8 @@ class PlayState extends State {
             PAUSE_BTN, _ => {this.handlePause()}
         ));
         
-        changeMusic("");
-        changeMusic("TomatoToss");
+        setMusic();
+        setMusic("TomatoToss");
     }
 
     main() {

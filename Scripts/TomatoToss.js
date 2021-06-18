@@ -32,9 +32,8 @@ let leftSpikes = null;
 let leftSpikesTimer;
 let rightSpikesTimer;
 
-//Music
-let music = new Audio();
-music.loop = true;
+//Sound
+let music;
 
 //Input
 let rightPressed = false;
@@ -66,9 +65,16 @@ function displayFPS(fps) {
 
 let currentRuleset = DEFAULT_RULESET;
 let currentState;
-changeState(new MenuState());
 
 let forkTimer = setTimeout(function() {}, 1000);
+
+function init() {
+	if (!currentState) {
+		music = new Audio();
+		music.loop = true;
+		changeState(new MenuState());
+	}
+}
 
 function changeRuleset(r) {
 	if (r === DEFAULT_RULESET) {
@@ -302,15 +308,14 @@ function deleteTomato(tomato) {
 
 //Controls
 
-document.addEventListener("keydown", e => {currentState.keyDown(e)}, false);
-document.addEventListener("keyup", e => {currentState.keyUp(e)}, false);
+document.addEventListener("keydown", e => {init(); currentState.keyDown(e)}, false);
+document.addEventListener("keyup", e => {init(); currentState.keyUp(e)}, false);
 
-canvas.addEventListener("mousedown", e => {currentState.mouseDown(e)}, false);
-canvas.addEventListener("mouseup", e => {currentState.mouseUp(e)}, false);
-canvas.addEventListener("mousemove", e => {currentState.mouseMove(e)}, false);
+canvas.addEventListener("mousedown", e => {init(); currentState.mouseDown(e)}, false);
+canvas.addEventListener("mouseup", e => {init(); currentState.mouseUp(e)}, false);
+canvas.addEventListener("mousemove", e => {init(); currentState.mouseMove(e)}, false);
 
-canvas.addEventListener("touchstart", e => {currentState.touchStart(e)}, false);
-canvas.addEventListener("touchend", e => {currentState.touchEnd(e)}, false);
+canvas.addEventListener("touchstart", e => {init(); currentState.touchStart(e)}, false);
+canvas.addEventListener("touchend", e => {init(); currentState.touchEnd(e)}, false);
 
-
-document.addEventListener("focusout", _ => {currentState.handlePause(true)}, false); 
+document.addEventListener("focusout", _ => {init(); currentState.handlePause(true)}, false); 
