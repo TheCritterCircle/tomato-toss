@@ -33,6 +33,7 @@ let leftSpikesTimer;
 let rightSpikesTimer;
 
 //Sound
+let sounds = [];
 let music;
 
 //Input
@@ -66,14 +67,28 @@ function displayFPS(fps) {
 let currentRuleset = DEFAULT_RULESET;
 let currentState;
 
-let forkTimer = setTimeout(function() {}, 1000);
-
 function init() {
-	if (!currentState) {
-		music = new Audio();
-		music.loop = true;
-		changeState(new MenuState());
+	canvas.removeEventListener("mousedown", init, false);
+	canvas.removeEventListener("touchstart", init, false);
+
+	music = new Audio();
+	music.loop = true;
+	music.play();
+	for (let i=0; i<10; i++) {
+		sounds.push(new Audio());
+		sounds[i].play();
 	}
+
+	changeState(new MenuState());
+	
+	document.addEventListener("keydown", e => {currentState.keyDown(e)}, false);
+	document.addEventListener("keyup", e => {currentState.keyUp(e)}, false);
+	canvas.addEventListener("mousedown", e => {currentState.mouseDown(e)}, false);
+	canvas.addEventListener("mouseup", e => {currentState.mouseUp(e)}, false);
+	canvas.addEventListener("mousemove", e => {currentState.mouseMove(e)}, false);
+	canvas.addEventListener("touchstart", e => {currentState.touchStart(e)}, false);
+	canvas.addEventListener("touchend", e => {currentState.touchEnd(e)}, false);
+	document.addEventListener("focusout", _ => {currentState.handlePause(true)}, false); 
 }
 
 function changeRuleset(r) {
@@ -306,16 +321,5 @@ function deleteTomato(tomato) {
 	objects.splice(j, 1);
 }
 
-//Controls
-
-document.addEventListener("keydown", e => {init(); currentState.keyDown(e)}, false);
-document.addEventListener("keyup", e => {init(); currentState.keyUp(e)}, false);
-
-canvas.addEventListener("mousedown", e => {init(); currentState.mouseDown(e)}, false);
-canvas.addEventListener("mouseup", e => {init(); currentState.mouseUp(e)}, false);
-canvas.addEventListener("mousemove", e => {init(); currentState.mouseMove(e)}, false);
-
-canvas.addEventListener("touchstart", e => {init(); currentState.touchStart(e)}, false);
-canvas.addEventListener("touchend", e => {init(); currentState.touchEnd(e)}, false);
-
-document.addEventListener("focusout", _ => {init(); currentState.handlePause(true)}, false); 
+canvas.addEventListener("mousedown", init, false);
+canvas.addEventListener("touchstart", init, false);
