@@ -73,10 +73,14 @@ function init() {
 
 	music = new Audio();
 	music.loop = true;
+	music.muted = true;
 	music.play();
+	music.muted = false;
 	for (let i=0; i<10; i++) {
 		sounds.push(new Audio());
+		sounds[i].muted = true;
 		sounds[i].play();
+		sounds[i].muted = false;
 	}
 
 	changeState(new MenuState());
@@ -237,7 +241,19 @@ function cleanUp() {
 		let i = objects.indexOf(e);
 		objects.splice(i, 1);
 	});
-	toDelete = [];
+	toDelete = [];}
+
+function playSound(name) {
+	let i;
+	for (i = 0; i < sounds.length; i++)
+		if (sounds[i].ended) break;
+	if (i >= sounds.length) i = 0;
+	let s = sounds[i];
+
+	s.src = "Sounds/" + name + ".wav";
+	s.play();
+	sounds.splice(i, 1);
+	sounds.push(s);
 }
 
 function addTomato(type, x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y) {

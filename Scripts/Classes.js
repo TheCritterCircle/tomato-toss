@@ -426,7 +426,8 @@ class Tomato extends GameObject{
 				this.velX = -this.velX;
 				this.velAng -= this.velX;
 				if(this.velX != 0)
-					findAudio("collision").play();
+					//findAudio("collision").play();
+					playSound("collision");
 			}
 		}
 
@@ -439,7 +440,8 @@ class Tomato extends GameObject{
 				this.velX = -this.velX;
 				this.velAng += this.velY;
 				if(this.velX != 0)
-					findAudio("collision").play();
+					//findAudio("collision").play();
+					playSound("collision");
 			}
 		}
 
@@ -447,7 +449,8 @@ class Tomato extends GameObject{
 			this.y = 0 + this.height / 2;
 			this.velY = -this.velY;
 			this.velAng -= this.velY;
-			findAudio("collision").play();
+			//findAudio("collision").play();
+			playSound("collision");
 		}
 
 		//Player
@@ -458,7 +461,8 @@ class Tomato extends GameObject{
 					addPoints(TOMATOES[
 						this.type].pinata_pts || TOMATOES[this.type].bounce_pts || 0,
 						this.x, this.y)
-					findAudio("splat").play();
+					//findAudio("splat").play();
+					playSound("splat");
 					new PlateSplat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[this.type].splatImg);
 					if (!this.beenHit) addTomato("random");
 					combo = 0;
@@ -474,7 +478,8 @@ class Tomato extends GameObject{
 			addPoints(TOMATOES[this.type].bounce_pts || 0, this.x, this.y);
 			incCombo(1);
 			this.hasScored = true;
-			findAudio("collision").play();
+			//findAudio("collision").play();
+			playSound("collision");
 		}
 
 		if (this.velY > 0) {
@@ -484,14 +489,16 @@ class Tomato extends GameObject{
 		//Ground
 		if (this.hitY + this.hitHeight > canvas.height) {
 			breakCombo();
-			findAudio("splat").play();
+			//findAudio("splat").play();
+			playSound("splat");
 			new Splat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[this.type].splatImg)
 			splattedTomatoes.push(this);
 		}
 	}
 
 	splat() {
-		findAudio("splat").play();
+		//findAudio("splat").play();
+		playSound("splat");
 		new Splat(this.x, this.y, this.width * 1.5, this.height * 1.5, TOMATOES[this.type].splatImg)
 		splattedTomatoes.push(this);
 	}
@@ -544,7 +551,8 @@ class PowerUp extends GameObject {
 		//Player
 		if (this.isTouching(player.plate)) {
 			this.hasScored = true;
-			findAudio("powerup").play();
+			//findAudio("powerup").play();
+			playSound("powerup");
 
 			switch (this.type) {
 				default:

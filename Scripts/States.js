@@ -5,7 +5,7 @@ function changeState(newState) {
 }
 
 function setMusic(name = "") {
-    src = "Sounds/" + name + ".wav"
+    let src = "Sounds/" + name + ".wav"
     if (!music.src.endsWith(src)) {
         music.src = src;
         music.play();
