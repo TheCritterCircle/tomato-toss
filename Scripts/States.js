@@ -5,11 +5,18 @@ function changeState(newState) {
 }
 
 function setMusic(name = "") {
-    let src = "Sounds/" + name + ".wav"
-    if (!music.src.endsWith(src)) {
-        music.src = src;
-        music.play();
+    if (music) {
+        let src = "Sounds/" + name + ".wav"
+        if (!music.src.endsWith(src)) {
+            music.src = src;
+            music.play();
+        }
+    } 
+    /*
+    else {
+        musicName = name;
     }
+    */
 }
 
 class PlayState extends State {
