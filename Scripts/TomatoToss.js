@@ -300,22 +300,19 @@ function addFork(x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y) 
 	objects.push(fork);
 }
 
-function activateSpikes() {
+function activateSpikes(forkOutcome) {
 	let tempRandom = Math.random() * 2;
 
-	if(tempRandom > 1 && !spikesLeft) {
+	if(tempRandom > 1 && !spikesLeft && level > 5) {
 		leftSpikes = new Spikes(false);
 		objects.push(leftSpikes);
-		leftSpikesTimer = setTimeout(function() {
-			leftSpikes.stop();
-		}, Math.random * 5000 + 1000);
 	}
-	else if(tempRandom < 1 && !spikesRight) {
+	else if(tempRandom < 1 && !spikesRight && level > 5) {
 		rightSpikes = new Spikes(true);
 		objects.push(rightSpikes);
-		rightSpikesTimer = setTimeout(function() {
-			rightSpikes.stop();
-		}, Math.random * 5000 + 1000);
+	}
+	else{
+		addFork(forkOutcome, NEW_ITEM_Y);
 	}
 }
 

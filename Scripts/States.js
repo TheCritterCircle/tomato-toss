@@ -51,7 +51,12 @@ class PlayState extends State {
 
         if (tomatoes.length > 0) {
             if (forkCooldown < 0) {
-                addFork(Math.random() * canvas.width * 0.9, NEW_ITEM_Y);
+                if(Math.random > 0.8){
+                    addFork(Math.random() * canvas.width * 0.9, NEW_ITEM_Y);
+                }
+                else{
+                    activateSpikes(Math.random() * canvas.width * 0.9);
+                }
                 forkCooldown += currentRuleset.fork_cooldown;
             }
             if (delta && level != 1) {
