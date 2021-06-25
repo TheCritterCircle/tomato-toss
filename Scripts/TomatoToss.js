@@ -76,7 +76,7 @@ function initSound() {
 	music.muted = true;
 	music.play();
 	music.muted = false;
-	music.loop = true;
+	music.addEventListener('ended', _ => {music.play()});
 	for (let i=0; i<10; i++) {
 		sounds.push(new Audio());
 		sounds[i].muted = true;
