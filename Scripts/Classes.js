@@ -632,13 +632,6 @@ class Fork extends GameObject{
 			this.collision();
 		}
 	}
-	
-	/*
-	draw() {
-		super.draw();
-		this.drawHitbox();
-	}
-	*/
 
 	collision() {
 		//Tomatoes
@@ -727,18 +720,17 @@ class GhostText {
 class Spikes extends GameObject{
 	constructor(isRight) {
 		if(isRight) {
-			super(canvas.width, 0, 100, 480, BW_SPIKE_IMG, 10);
+			super(canvas.width + 100, 0, 100, 480, SPIKE_IMG, 10);
+			this.flipped = true;
 			rightSpikes = this;
-			this.warningsign = new GameObject(canvas.width - 200, canvas.height / 2 - 50, 100, 100, WARNING, 50);
+			this.warningsign = new GameObject(canvas.width - 150, canvas.height / 2 - 50, 100, 100, WARNING, 50);
 			objects.push(this.warningsign);
-			rightSpikesTimer = setTimeout(function(){rightSpikes.stop();}, 2000 * (level));
 		}
 		else{
 			super(-100, 0, 100, 480, SPIKE_IMG, 10);
 			leftSpikes = this;
-			this.warningsign = new GameObject(100, canvas.height / 2 - 50, 100, 100, WARNING, 50);
+			this.warningsign = new GameObject(50, canvas.height / 2 - 50, 100, 100, WARNING, 50);
 			objects.push(this.warningsign);
-			leftSpikesTimer = setTimeout(function(){leftSpikes.stop();}, 2000 * (level));
 		}
 		this.isRight = isRight;
 
@@ -747,65 +739,61 @@ class Spikes extends GameObject{
 
 		this.isdeployed = false;
 		this.retracting = false;
+		this.timer = 2 * level;
 	}
 
 	main() {
-		if(!this.isdeployed) {
+		if(this.isdeployed) {
+			this.timer -= delta;
+			if (this.timer < 0)
+				this.retracting = true;
+		}
+		else {
 			if (this.isSpawning) {
 				this.warningsign.visible = this.animTimer / BLINK_DUR % 1 < 1/2;
 				this.animTimer += 90 / timeScale;
 
-				if (this.animTimer > BLINK_DUR * NUM_BLINKS)
+				if (this.animTimer > BLINK_DUR * NUM_BLINKS) {
+					delete this.warningsign;
 					this.isSpawning = false;
+				}
 			} 
 			else {
-				delete this.warningsign;
-
-				if(this.isRight) {
-					if(this.x > canvas.width - 100) {
-						this.x += -10 * timeScale;
-					}
-					else{
+				if (this.isRight) {
+					this.x -= 10 * timeScale;
+					if (this.x < canvas.width) {
+						this.x = canvas.width;
 						this.isdeployed = true;
 						spikesRight = true;
 					}
 				}
-				else if(!this.isRight) {
-					if(this.x < 0) {
-						this.x += 10 * timeScale;
-					}
-					else{
+				else {
+					this.x += 10 * timeScale;
+					if (this.x > 0) {
+						this.x = 0;
 						this.isdeployed = true;
 						spikesLeft = true;
 					}
 				}
+
 			}
 		}
-		else if(this.retracting){
-			if(this.isRight) {
-				if(this.x < canvas.width + 100) {
-					this.x += 10 * timeScale;
-				}
-				else{
-					delete this;
+
+		if (this.retracting) {
+			if (this.isRight) {
+				this.x += 10 * timeScale;
+				if (this.x > canvas.width + 100) {
+					toDelete.push(this);
 					spikesRight = false;
 				}
-			}
-			else if(!this.isRight) {
-				if(this.x > -200) {
-					this.x -= 10 * timeScale;
-				}
-				else{
-					delete this;
+			} 
+			else {
+				this.x -= 10 * timeScale;
+				if (this.x < -100) {
+					toDelete.push(this);
 					spikesLeft = false;
 				}
 			}
 		}
-	}
-
-	stop() {
-		console.log("Retracting");
-		this.retracting = true;
-		this.isdeployed = true;
 	}
 }

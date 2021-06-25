@@ -219,7 +219,6 @@ function incCombo(points) {
 
 function breakCombo() {
 	combo = 0;
-	//xp = Math.max(xp - 10, 0);
 }
 
 function updateEffect(e) {

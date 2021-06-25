@@ -135,7 +135,6 @@ const POWERUP_IMGS = POWERUP_TYPES.map(findImage);
 const FORK_IMG = findImage("fork");
 
 const SPIKE_IMG = findImage("spikes");
-const BW_SPIKE_IMG = findImage("bwspikes");
 const WARNING = findImage("warning");
 
 const BACKGROUND_IMG = findSpecialImage(file, "background");
