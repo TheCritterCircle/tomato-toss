@@ -731,19 +731,22 @@ class Spikes extends GameObject{
 			rightSpikes = this;
 			this.warningsign = new GameObject(canvas.width - 200, canvas.height / 2 - 50, 100, 100, WARNING, 50);
 			objects.push(this.warningsign);
+			rightSpikesTimer = setTimeout(function(){rightSpikes.stop();}, 2000 * (level));
 		}
 		else{
 			super(-100, 0, 100, 480, SPIKE_IMG, 10);
 			leftSpikes = this;
 			this.warningsign = new GameObject(100, canvas.height / 2 - 50, 100, 100, WARNING, 50);
 			objects.push(this.warningsign);
+			leftSpikesTimer = setTimeout(function(){leftSpikes.stop();}, 2000 * (level));
 		}
 		this.isRight = isRight;
 
 		this.animTimer = 0;
 		this.isSpawning = true;
 
-		this.isdeployed = false;;
+		this.isdeployed = false;
+		this.retracting = false;
 	}
 
 	main() {
@@ -778,9 +781,31 @@ class Spikes extends GameObject{
 				}
 			}
 		}
+		else if(this.retracting){
+			if(this.isRight) {
+				if(this.x < canvas.width + 100) {
+					this.x += 10 * timeScale;
+				}
+				else{
+					delete this;
+					spikesRight = false;
+				}
+			}
+			else if(!this.isRight) {
+				if(this.x > -200) {
+					this.x -= 10 * timeScale;
+				}
+				else{
+					delete this;
+					spikesLeft = false;
+				}
+			}
+		}
 	}
 
 	stop() {
-
+		console.log("Retracting");
+		this.retracting = true;
+		this.isdeployed = true;
 	}
 }
