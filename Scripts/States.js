@@ -5,7 +5,7 @@ function changeState(newState) {
 }
 
 function setMusic(name = "") {
-    if (music) {
+    if (music && !muted) {
         let src = "Sounds/" + name + ".wav"
         if (!music.src.endsWith(src)) {
             music.src = src;
@@ -106,33 +106,46 @@ class PlayState extends State {
     }
 
     keyDown(e) {
-        if(INPUT_RIGHT.includes(e.code)) {
-            rightPressed = true;
-            player.face(1);
-        }
-        if(INPUT_LEFT.includes(e.code)) {
-            leftPressed = true;
-            player.face(-1);
-        }
-        if(INPUT_DOWN.includes(e.code)) {
-            player.startSlide();
-        }
-        if(INPUT_PAUSE.includes(e.code)) {
-            currentState.handlePause();
+        switch (CONTROLS[e.code]) {
+            case "left":
+                leftPressed = true;
+                player.face(-1);
+                break;
+
+            case "right":
+                rightPressed = true;
+                player.face(1);
+                break;
+
+            case "down":
+                player.startSlide();
+                break;
+
+            case "pause":
+                this.handlePause();
+                break;
+
+            case "mute":
+                handleMute();
+                break;
         }
     }
 
-    keyUp(e) {
-        if(INPUT_RIGHT.includes(e.code)) {
-            rightPressed = false;
-            if (leftPressed) player.face(-1);
-        }
-        if(INPUT_LEFT.includes(e.code)) {
-            leftPressed = false;
-            if (rightPressed) player.face(1);
-        }
-        if(INPUT_DOWN.includes(e.code)) {
-            player.endSlide();
+    keyUp(e) {        
+        switch (CONTROLS[e.code]) {
+            case "left":
+                leftPressed = false;
+                if (rightPressed) player.face(1);
+                break;
+
+            case "right":
+                rightPressed = false;
+                if (leftPressed) player.face(-1);
+                break;
+
+            case "down":
+                player.endSlide();
+                break;
         }
     }
 
@@ -185,6 +198,11 @@ class PauseState extends State {
             200, 50,
             START_BTN, initGame
         ));
+        this.buttons.push(new Button(
+            canvas.width/2 - 25, canvas.height - 65,
+            50, 50,
+            MUTE_BTN, handleMute
+        ));
 
         this.lastState = lastState;
     }
@@ -199,7 +217,15 @@ class PauseState extends State {
     }
 
     keyDown(e) {
-        if (INPUT_PAUSE.includes(e.code)) this.handlePause();
+        switch (CONTROLS[e.code]) {
+            case "pause":
+                this.handlePause();
+                break;
+
+            case "mute":
+                handleMute();
+                break;
+        }
     }
 
     handlePause(pause = false) {

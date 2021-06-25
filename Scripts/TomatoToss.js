@@ -36,6 +36,7 @@ let rightSpikesTimer;
 let sounds = [];
 let music;
 let musicName;
+let muted = false;
 
 //Input
 let rightPressed = false;
@@ -85,6 +86,16 @@ function initSound() {
 	} 
 
 	//if (musicName) setMusic(musicName);
+}
+
+function handleMute() {
+	if (muted) {
+		music.play();
+		muted = false
+	} else {
+		music.pause();
+		muted = true;
+	}
 }
 
 function changeRuleset(r) {

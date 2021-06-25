@@ -138,6 +138,14 @@ class State {
 		return hit;
 	}
 
+    keyDown(e) {
+        switch (CONTROLS[e.code]) {
+            case "mute":
+                handleMute();
+                break;
+        }
+	}
+
     mouseDown(e) {
         let pos = getEventPos(e);
 		this.checkPress(pos.x, pos.y);
@@ -162,7 +170,6 @@ class State {
 	}
 
     handlePause() {}
-    keyDown() {}
     keyUp() {}
 
     main() {}
