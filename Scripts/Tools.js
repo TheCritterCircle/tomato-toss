@@ -175,3 +175,13 @@ class State {
     main() {}
     draw() {}
 }
+
+function chooseRandom(probs) {
+	let rand = Math.random() * 100;
+	for (item in probs) {
+		let prob = probs[item];
+		if (rand <= prob) break;
+		rand -= prob;
+	}
+	return item;
+}

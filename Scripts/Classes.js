@@ -719,72 +719,67 @@ class GhostText {
 
 class Spikes extends GameObject{
 	constructor(isRight) {
-		if(isRight) {
-			super(canvas.width + 100, 0, 100, 480, SPIKE_IMG, 10);
+		super(isRight ? canvas.width + 100 : -100, 0, 100, 480, SPIKE_IMG, 10);
+		this.warningsign = new GameObject(isRight ? canvas.width - 150 : 50, canvas.height / 2 - 50, 100, 100, WARNING, 50);
+		objects.push(this.warningsign);
+		
+		if (isRight) {
 			this.flipped = true;
 			rightSpikes = this;
-			this.warningsign = new GameObject(canvas.width - 150, canvas.height / 2 - 50, 100, 100, WARNING, 50);
-			objects.push(this.warningsign);
-		}
-		else{
-			super(-100, 0, 100, 480, SPIKE_IMG, 10);
+		} else {
 			leftSpikes = this;
-			this.warningsign = new GameObject(50, canvas.height / 2 - 50, 100, 100, WARNING, 50);
-			objects.push(this.warningsign);
 		}
+
 		this.isRight = isRight;
-
-		this.animTimer = 0;
-		this.isSpawning = true;
-
-		this.isdeployed = false;
-		this.retracting = false;
-		this.timer = 2 * level;
+		this.state = "spawning";
+		this.timer = 0;
 	}
 
 	main() {
-		if(this.isdeployed) {
-			this.timer -= delta;
-			if (this.timer < 0)
-				this.retracting = true;
-		}
-		else {
-			if (this.isSpawning) {
-				this.warningsign.visible = this.animTimer / BLINK_DUR % 1 < 1/2;
-				this.animTimer += 90 / timeScale;
+		if (this.state === "spawning") {
+			this.warningsign.visible = this.timer / BLINK_DUR % 1 < 1/2;
+			this.timer += 90 / timeScale;
 
-				if (this.animTimer > BLINK_DUR * NUM_BLINKS) {
-					delete this.warningsign;
-					this.isSpawning = false;
-				}
-			} 
-			else {
-				if (this.isRight) {
-					this.x -= 10 * timeScale;
-					if (this.x < canvas.width) {
-						this.x = canvas.width;
-						this.isdeployed = true;
-						spikesRight = true;
-					}
-				}
-				else {
-					this.x += 10 * timeScale;
-					if (this.x > 0) {
-						this.x = 0;
-						this.isdeployed = true;
-						spikesLeft = true;
-					}
-				}
-
+			if (this.timer > BLINK_DUR * NUM_BLINKS) {
+				delete this.warningsign;
+				this.state = "extending";
 			}
 		}
 
-		if (this.retracting) {
+		if (this.state === "extending") {
+			if (this.isRight) {
+				this.x -= 10 * timeScale;
+				if (this.x < canvas.width) {
+					this.x = canvas.width;
+					this.state = "active";
+					this.timer = 2 * level;
+					spikesRight = true;
+				}
+			}
+			else {
+				this.x += 10 * timeScale;
+				if (this.x > 0) {
+					this.x = 0;
+					this.state = "active";
+					this.timer = 2 * level;
+					spikesLeft = true;
+				}
+			}
+		}
+
+		if (this.state === "active") {
+			this.timer -= delta;
+			if (this.timer < 0)
+				this.state = "retracting";
+		}
+
+		if (this.state == "retracting") {
 			if (this.isRight) {
 				this.x += 10 * timeScale;
 				if (this.x > canvas.width + 100) {
 					toDelete.push(this);
 					spikesRight = false;
+					rightSpikes = null;
 				}
 			} 
 			else {
@@ -792,6 +787,7 @@ class Spikes extends GameObject{
 				if (this.x < -100) {
 					toDelete.push(this);
 					spikesLeft = false;
+					leftSpikes = null;
 				}
 			}
 		}

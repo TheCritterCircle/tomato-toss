@@ -39,30 +39,23 @@ class PlayState extends State {
     
         splattedTomatoes.forEach(deleteTomato);
         splattedTomatoes = [];
+        cleanUp();
+
+        if (hazardCooldown < 0) {
+            addHazard();
+            hazardCooldown += currentRuleset.hazard_cooldown;
+        }
+
+        if (delta && level != 1) {
+            hazardCooldown -= delta / Math.log2(level) * timeSpeed;
+        }
+        
         if (tomatoes.length < 1) {
             leftPressed = false;
             rightPressed = false;
             player.endSlide();
             changeState(new GameoverState());
-        }
-        //if (lastSlideTime > 0) tryEndSlide();
-    
-        cleanUp();
-
-        if (tomatoes.length > 0) {
-            if (forkCooldown < 0) {
-                if(Math.random > 0.8){
-                    addFork(Math.random() * canvas.width * 0.9, NEW_ITEM_Y);
-                }
-                else{
-                    activateSpikes(Math.random() * canvas.width * 0.9);
-                }
-                forkCooldown += currentRuleset.fork_cooldown;
-            }
-            if (delta && level != 1) {
-                forkCooldown -= delta / Math.log2(level) * timeSpeed;
-            }
-        }
+        }    
     }
 
     draw() {

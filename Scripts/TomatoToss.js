@@ -29,8 +29,6 @@ let spikesRight = false;
 let spikesLeft = false;
 let rightSpikes = null;
 let leftSpikes = null;
-let leftSpikesTimer;
-let rightSpikesTimer;
 
 //Sound
 let sounds = [];
@@ -128,14 +126,12 @@ function initGame() {
 
 	tomatoes = [];
 	splattedTomatoes = [];
-	forkCooldown = currentRuleset.fork_cooldown;
+	hazardCooldown = currentRuleset.hazard_cooldown;
 
 	spikesRight = false;
 	spikesLeft = false;
 	rightSpikes = null;
 	leftSpikes = null;
-	leftSpikesTimer = null;
-	rightSpikesTimer = null;
 
 	lastCalledTime = undefined;
 	lastMoveTime = undefined;
@@ -153,9 +149,7 @@ function addPoints(points, x, y) {
 }
 
 function drawUI() {
-	ctx.fillStyle = "#000000";
 	ctx.font = "30px Arial";
-
 	let levelText = "Level: " + level;
 	let scoreText = "Score: " + score;
 	let textW = Math.max(ctx.measureText(scoreText).width, ctx.measureText(levelText).width);
@@ -165,6 +159,13 @@ function drawUI() {
 	xpBar += (xpBarTarget - xpBar) * 0.5;
 	comboBar += (comboBarTarget - comboBar) * 0.5;
 
+	ctx.beginPath();
+	ctx.rect(0, 0, canvas.width, 65);
+	ctx.fillStyle = "#FFFFFF88";
+	ctx.fill();
+	ctx.closePath();
+
+	ctx.fillStyle = "#000000";
 	ctx.fillText(levelText, 10, 30);
 	ctx.fillText(scoreText, 10, 60);
 
@@ -261,74 +262,54 @@ function playSound(name) {
 }
 
 function addTomato(type, x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y) {
-	let rand = Math.random() * 100;
-	if (type == "random")
-		for (type of Object.keys(TOMATOES)) {
-			let prob = currentRuleset.tomato_probs[type];
-			if (rand <= prob) break;
-			rand -= prob;
-		}
-
+	if (type == "random") {
+		type = chooseRandom(currentRuleset.tomato_probs);
+	}
 	let tomato = new Tomato(x, y, 50, 50, type);
 	tomatoes.push(tomato);
 	objects.push(tomato);
 }
 
 function addPowerup(type, x = 70 + (canvas.width - 140) * Math.random(), y = NEW_ITEM_Y) {
-	let rand = Math.random() * 100;
-	if (type == "random")
-		for (type of POWERUP_TYPES) {
-			let prob = currentRuleset.powerup_probs[type];
-			if (rand <= prob) break;
-			rand -= prob;
-		}
-	
+	if (type == "random") {
+		type = chooseRandom(currentRuleset.powerup_probs);
+	}
 	let powerup = new PowerUp(x, y, 70, 70, type);
 	objects.push(powerup);
 }
 
-function addFork(x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y) {	
-	let rand = Math.random() * 100;
-	for (type of FORK_TYPES) {
-		let prob = currentRuleset.fork_probs[type];
-		if (rand <= prob) break;
-		rand -= prob;
-	}
-
-	let fork = new Fork(x, y, 1, FORK_DIRS[type]);
-	objects.push(fork);
-}
-
-function activateSpikes(forkOutcome) {
-	let tempRandom = Math.random() * 2;
-
-	if(tempRandom > 1 && !spikesLeft && level > 5) {
-		leftSpikes = new Spikes(false);
-		objects.push(leftSpikes);
-	}
-	else if(tempRandom < 1 && !spikesRight && level > 5) {
-		rightSpikes = new Spikes(true);
-		objects.push(rightSpikes);
-	}
-	else{
-		addFork(forkOutcome, NEW_ITEM_Y);
-	}
-}
-
-function addItem(x, y) {
-	let rand = Math.random() * 100;
-	for (type of ITEM_TYPES) {
-		let prob = currentRuleset.item_probs[type];
-		if (rand <= prob) break;
-		rand -= prob;
-	}
-	
-	if (type === "tomato")
-		addTomato("random", x, y);
-	if (type === "powerup")
-		addPowerup("random", x, y);
+function addHazard() {
+	let type = chooseRandom(currentRuleset.hazard_probs);
 	if (type === "fork")
-		addFork(x, y);
+		addFork();
+	if (type === "spikes")
+		activateSpikes();
+}
+
+function addFork(x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y) {	
+	let type = chooseRandom(currentRuleset.fork_probs);
+	objects.push(new Fork(x, y, 1, FORK_DIRS[type]));
+}
+
+function activateSpikes() {
+	let rand = Math.random() * 2;
+	
+	if (rand > 1 && !spikesLeft)
+		objects.push(new Spikes(false));
+	else if (rand < 1 && !spikesRight)
+		objects.push(new Spikes(true));
+	else
+		addFork();
+}
+
+function addItem() {
+	let type = chooseRandom(currentRuleset.item_probs);
+	if (type === "tomato")
+		addTomato("random");
+	if (type === "powerup")
+		addPowerup("random");
+	if (type === "fork")
+		addFork();
 }
 
 function deleteTomato(tomato) {

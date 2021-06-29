@@ -1,9 +1,9 @@
 const DEFAULT_RULESET = {
     first_tomato: "tomato",
+    new_item_combo: 3,
     item_probs: {
         tomato: 50,
         powerup: 50,
-        fork: 0,
     },
     tomato_probs: {
         tomato: 60,
@@ -15,8 +15,10 @@ const DEFAULT_RULESET = {
         magnet: 35,
         slow_time: 30,
     },
-    new_item_combo: 3,
-    fork_cooldown: 5,
+    hazard_cooldown: 5,
+    hazard_probs: {
+        fork: 100,
+    },
     fork_probs: {
         middle: 60,
         right: 20,
@@ -25,28 +27,36 @@ const DEFAULT_RULESET = {
 };
 
 const MIRROR_RULESET = {
-    first_tomato: "random",
     powerup_probs: {
         speed_up: 20,
         magnet: 20,
         slow_time: 20,
         mirror: 40,
     },
-    fork_cooldown: 6,
+    hazard_cooldown: 6,
+};
+
+const SPIKES_RULESET = {
+    powerup_probs: {
+        speed_up: 30,
+        magnet: 30,
+        slow_time: 20,
+        mirror: 20,
+    },
+    hazard_probs: {
+        fork: 60,
+        spikes: 40,
+    },
 };
 
 const IMPOSSIBLE_RULESET = {
     item_probs: {
-        tomato: 0,
         powerup: 100,
-        fork: 0,
     },
-    fork_cooldown: 0.2,
+    hazard_cooldown: 0.2,
     fork_probs: {
         middle: 100,
-        right: 0,
-        left: 0,
-    }
+    },
 };
 
 const LEVELS = [
@@ -54,4 +64,6 @@ const LEVELS = [
     DEFAULT_RULESET,
     DEFAULT_RULESET,
     MIRROR_RULESET,
+    MIRROR_RULESET,
+    SPIKES_RULESET,
 ]
