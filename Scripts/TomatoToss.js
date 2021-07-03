@@ -168,6 +168,8 @@ function drawUI() {
 	ctx.fillStyle = "#000000";
 	ctx.fillText(levelText, 10, 30);
 	ctx.fillText(scoreText, 10, 60);
+	ctx.font = "10px Arial";
+	//ctx.fillText("TCC EVENT BUILD", 10, canvas.height - 10);
 
 	ctx.beginPath();
 	ctx.rect(20 + textW, 5, canvas.width - textW - 85, 25);
@@ -287,8 +289,22 @@ function addHazard() {
 }
 
 function addFork(x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y) {	
-	let type = chooseRandom(currentRuleset.fork_probs);
-	objects.push(new Fork(x, y, 1, FORK_DIRS[type]));
+	let isOverlapping = false;
+	tomatoes.forEach(tomat => {
+		if(tomat.isSpawning){
+			if(x < tomat.x + tomat.width * 2 && x > tomat.x - tomat.width){
+				isOverlapping = true;
+			}
+		}
+	});
+
+	if(!isOverlapping){
+		let type = chooseRandom(currentRuleset.fork_probs);
+		objects.push(new Fork(x, y, 1, FORK_DIRS[type]));
+	}
+	else{
+		addFork();
+	}
 }
 
 function activateSpikes() {
