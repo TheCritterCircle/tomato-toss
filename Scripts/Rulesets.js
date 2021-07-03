@@ -15,7 +15,7 @@ const DEFAULT_RULESET = {
         magnet: 35,
         slow_time: 30,
     },
-    hazard_cooldown: 5,
+    hazard_cooldown: 10,
     hazard_probs: {
         fork: 100,
     },
@@ -33,7 +33,7 @@ const MIRROR_RULESET = {
         slow_time: 20,
         mirror: 40,
     },
-    hazard_cooldown: 6,
+    hazard_cooldown: 12,
 };
 
 const SPIKES_RULESET = {
@@ -43,9 +43,10 @@ const SPIKES_RULESET = {
         slow_time: 20,
         mirror: 20,
     },
+    hazard_cooldown: 10,
     hazard_probs: {
-        fork: 60,
-        spikes: 40,
+        fork: 70,
+        spikes: 30,
     },
 };
 
@@ -53,7 +54,7 @@ const IMPOSSIBLE_RULESET = {
     item_probs: {
         powerup: 100,
     },
-    hazard_cooldown: 0.2,
+    hazard_cooldown: 0.5,
     fork_probs: {
         middle: 100,
     },

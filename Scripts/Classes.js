@@ -721,7 +721,6 @@ class Spikes extends GameObject{
 	constructor(isRight) {
 		super(isRight ? canvas.width + 100 : -100, 0, 100, 480, SPIKE_IMG, 10);
 		this.warningsign = new GameObject(isRight ? canvas.width - 150 : 50, canvas.height / 2 - 50, 100, 100, WARNING, 50);
-		objects.push(this.warningsign);
 		
 		if (isRight) {
 			this.flipped = true;
@@ -733,6 +732,13 @@ class Spikes extends GameObject{
 		this.isRight = isRight;
 		this.state = "spawning";
 		this.timer = 0;
+	}
+
+	draw() {
+		if (this.state === "spawning")
+			this.warningsign.draw();
+		else
+			super.draw();
 	}
 
 	main() {

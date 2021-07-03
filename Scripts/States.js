@@ -47,7 +47,7 @@ class PlayState extends State {
         }
 
         if (delta && level != 1) {
-            hazardCooldown -= delta / Math.log2(level) * timeSpeed;
+            hazardCooldown -= delta * Math.log(level) * timeSpeed;
         }
         
         if (tomatoes.length < 1) {
