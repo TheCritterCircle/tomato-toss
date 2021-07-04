@@ -156,6 +156,6 @@ const HELP_BTN = findImage("Menu/help");
 // Help
 
 const HELP_PAGES = []
-for (let i = 0; i < 2; i++) HELP_PAGES.push(findImage("Help/page" + i));
+for (let i = 0; i < 3; i++) HELP_PAGES.push(findImage("Help/page" + i));
 
 // Audio
