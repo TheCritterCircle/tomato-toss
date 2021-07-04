@@ -172,8 +172,16 @@ class MenuState extends State {
 
     draw() {
         this.background.draw();
-        if (this.logo) this.logo.draw();
+        this.logo.draw();
         this.buttons.forEach(btn => {btn.draw()});
+
+        if (VERSION) {
+            ctx.fillStyle = "#000000";
+            ctx.textAlign = "center";
+            ctx.font = "25px Arial";
+            ctx.fillText(VERSION + " version", canvas.width/2, canvas.height - 25);
+            ctx.textAlign = "left";
+        }
     }
 }
 
@@ -260,7 +268,11 @@ class GameoverState extends State {
 		ctx.textAlign = "center";
         ctx.fillText("Level: " + level, canvas.width/2, canvas.height/2 + 50);
         ctx.fillText("Score: " + score, canvas.width/2, canvas.height/2 + 100);
-		ctx.textAlign = "left";
+        if (VERSION) {
+            ctx.font = "25px Arial";
+            ctx.fillText(VERSION + " version", canvas.width/2, canvas.height - 25);
+        }
+        ctx.textAlign = "left";
     }
 }
 

@@ -1,3 +1,5 @@
+const VERSION = "";
+
 // Input
 
 const CONTROLS = {
@@ -93,12 +95,12 @@ const MAX_GHOSTS = 3;
 
 // Combo needed to spawn a new tomato and initial y value.
 const NEW_ITEM_Y = 100;
-const BLINK_DUR = 6500; // Heh, blink ;)
+const BLINK_DUR = 0.8; // Heh, blink ;)
 const NUM_BLINKS = 3;
 
 const POWERUP_SPEED = 2.5;
 const FORK_SPEED = 5;
-const SPIN_ANIM_SPEED = 1 / 500;
+const SPIN_ANIM_SPEED = 16.2;
 const ITEM_TYPES = ["tomato", "powerup", "fork"];
 const FORK_TYPES = ["middle", "right", "left"];
 

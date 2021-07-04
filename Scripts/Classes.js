@@ -338,7 +338,7 @@ class Tomato extends GameObject{
 
 		if (this.isSpawning) {
 			this.visible = this.animTimer / BLINK_DUR % 1 < 1/2;
-			this.animTimer += 90 / timeScale;
+			this.animTimer += delta;
 
 			if (this.animTimer > BLINK_DUR * NUM_BLINKS)
 				this.isSpawning = false;
@@ -535,7 +535,7 @@ class PowerUp extends GameObject {
 			this.collision();
 		}
 
-		this.animTimer += 90 / timeScale;
+		this.animTimer += delta;
 	}
 	
 	animate() {
@@ -601,7 +601,7 @@ class Fork extends GameObject{
 
 		if (this.isSpawning) {
 			this.visible = this.animTimer / BLINK_DUR % 1 < 1/2;
-			this.animTimer += 90 / timeScale;
+			this.animTimer += delta;
 
 			if (this.animTimer > BLINK_DUR * NUM_BLINKS)
 				this.isSpawning = false;
@@ -686,7 +686,7 @@ class BigText {
 	}
 
 	main() {
-		this.timer -= 1/(90*timeScale);
+		this.timer -= delta;
 		if (this.timer < 0) toDelete.push(this);
 	}
 }
@@ -744,7 +744,7 @@ class Spikes extends GameObject{
 	main() {
 		if (this.state === "spawning") {
 			this.warningsign.visible = this.timer / BLINK_DUR % 1 < 1/2;
-			this.timer += 90 / timeScale;
+			this.timer += delta;
 
 			if (this.timer > BLINK_DUR * NUM_BLINKS) {
 				delete this.warningsign;

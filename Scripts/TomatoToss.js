@@ -169,7 +169,6 @@ function drawUI() {
 	ctx.fillText(levelText, 10, 30);
 	ctx.fillText(scoreText, 10, 60);
 	ctx.font = "10px Arial";
-	//ctx.fillText("TCC EVENT BUILD", 10, canvas.height - 10);
 
 	ctx.beginPath();
 	ctx.rect(20 + textW, 5, canvas.width - textW - 85, 25);
@@ -217,6 +216,7 @@ function incCombo(points) {
 		};
 		objects.push(new BigText("LEVEL " + level));
 		addTomato(currentRuleset.first_tomato, canvas.width/2, NEW_ITEM_Y);
+		hazardCooldown += BLINK_DUR * NUM_BLINKS;
 	}
 }
 
