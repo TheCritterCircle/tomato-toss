@@ -93,6 +93,10 @@ class Player extends GameObject{
 			215 * PLAYER_SIZE, 60 * PLAYER_SIZE
 		);
 		this.spdGhosts = [];
+		this.effectIcon = new GameObject(0, 0, 50, 50, FORK_IMG);
+		this.effectIcon.alpha = 0.75;
+		this.effectIcon.offsetX = -this.effectIcon.width/2;
+		this.effectIcon.offsetY = -this.effectIcon.height/2;
 	}
 
 	face(direction) {
@@ -146,6 +150,15 @@ class Player extends GameObject{
 		this.spdGhosts.forEach(o => {o.draw()});
 		super.draw();
 		this.plate.draw();
+
+		this.effectIcon.x = this.plate.x - 30 * (Object.keys(effects).length - 1);
+		this.effectIcon.y = this.plate.y - 40;
+		Object.keys(effects).forEach(e => {
+			console.log(e);
+			this.effectIcon.img = POWERUP_IMGS[POWERUP_TYPES.indexOf(e)];
+			this.effectIcon.draw();
+			this.effectIcon.x += 60;
+		})
 	}
 
 	drawHitbox() {
