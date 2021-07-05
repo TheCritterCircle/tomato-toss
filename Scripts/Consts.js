@@ -1,4 +1,4 @@
-const VERSION = "Eventful";
+const VERSION = "";
 
 // Input
 
