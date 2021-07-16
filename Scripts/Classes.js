@@ -156,7 +156,9 @@ class Player extends GameObject{
 		Object.keys(effects).forEach(e => {
 			console.log(e);
 			this.effectIcon.img = POWERUP_IMGS[POWERUP_TYPES.indexOf(e)];
-			this.effectIcon.draw();
+			if (effects[e] < 0 || effects[e] > 1 || effects[e] % 0.2 < 0.1) {
+				this.effectIcon.draw();
+			}
 			this.effectIcon.x += 60;
 		})
 	}
@@ -477,7 +479,7 @@ class Tomato extends GameObject{
 					//findAudio("splat").play();
 					playSound("splat");
 					new PlateSplat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[this.type].splatImg);
-					if (!this.beenHit) addTomato("random");
+					if (!this.beenHit) addTomato();
 					combo = 0;
 					splattedTomatoes.push(this);
 					return;
