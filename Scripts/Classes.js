@@ -153,7 +153,11 @@ class Player extends GameObject{
 
 		this.effectIcon.x = this.plate.x - 30 * (Object.keys(effects).length - 1);
 		this.effectIcon.y = this.plate.y - 40;
-		Object.keys(effects).forEach(e => {
+		this.drawEffects(Object.keys(effects));
+	}
+
+	drawEffects(toDraw) {
+		toDraw.forEach(e => {
 			console.log(e);
 			this.effectIcon.img = POWERUP_IMGS[POWERUP_TYPES.indexOf(e)];
 			if (effects[e] < 0 || effects[e] > 1 || effects[e] % 0.2 < 0.1) {
@@ -520,7 +524,7 @@ class Tomato extends GameObject{
 }
 
 class PowerUp extends GameObject {
-	constructor(x, y, width, height, type) {
+	constructor(x, y, width, height, type, isMystery) {
 		super(x, y, width, height, POWERUP_IMGS[POWERUP_TYPES.indexOf(type)], -2);
 
 		this.offsetX = -this.width/2;
@@ -534,8 +538,10 @@ class PowerUp extends GameObject {
 
 		this.velX = 0;
 		this.velY = 0;
-		this.type = type;
 		this.animTimer = 0;
+
+		this.type = type;
+		if (isMystery) this.img = POWERUP_IMGS[POWERUP_TYPES.indexOf("mystery")];
 	}
 
 	main() {
@@ -565,10 +571,6 @@ class PowerUp extends GameObject {
 	collision() {
 		//Player
 		if (this.isTouching(player.plate)) {
-			this.hasScored = true;
-			//findAudio("powerup").play();
-			playSound("powerup");
-
 			switch (this.type) {
 				default:
 					let quality = POWERUPS[this.type].quality;
@@ -579,10 +581,12 @@ class PowerUp extends GameObject {
 					break;
 			}
 
+			//findAudio("powerup").play();
+			playSound("powerup");
 			toDelete.push(this);
 		}
 
-		//Exited screen
+		//Fell off screen
 		if (this.y + this.offsetY > canvas.height)
 			toDelete.push(this);
 	}

@@ -15,6 +15,7 @@ const DEFAULT_RULESET = {
         magnet: 35,
         slow_time: 30,
     },
+    mystery_prob: 0,
     hazard_cooldown: 10,
     hazard_probs: {
         fork: 100,
@@ -48,6 +49,7 @@ const SPIKES_RULESET = {
         fork: 70,
         spikes: 30,
     },
+    mystery_prob: 20,
 };
 
 const IMPOSSIBLE_RULESET = {

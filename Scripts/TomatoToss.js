@@ -272,7 +272,8 @@ function addTomato(x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y
 
 function addPowerup(x = 70 + (canvas.width - 140) * Math.random(), y = NEW_ITEM_Y, type) {
 	if (!type) type = chooseRandom(currentRuleset.powerup_probs);
-	let powerup = new PowerUp(x, y, 70, 70, type);
+	let isMystery = Math.random()*100 < currentRuleset.mystery_prob;
+	let powerup = new PowerUp(x, y, 70, 70, type, isMystery);
 	objects.push(powerup);
 }
 

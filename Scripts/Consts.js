@@ -76,6 +76,10 @@ const POWERUPS = {
         "name": "Mirrored",
         "quality": -1,
     },
+    "mystery": {
+        "name": "Mystery?",
+        "quality": 0,
+    },
 }
 const POWERUP_TYPES = Object.keys(POWERUPS);
 

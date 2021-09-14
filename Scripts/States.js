@@ -28,7 +28,7 @@ class PlayState extends State {
             PAUSE_BTN, _ => {this.handlePause()}
         ));
         
-        setMusic();
+        setMusic(); // resets music
         setMusic("TomatoToss");
     }
 
