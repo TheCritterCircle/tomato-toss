@@ -137,7 +137,7 @@ function initGame() {
 	lastMoveTime = undefined;
 	lastSlideTime = undefined;
 
-	addTomato(canvas.width/2, NEW_ITEM_Y, currentRuleset.first_tomato);
+	addTomato(currentRuleset.first_tomato, canvas.width/2, NEW_ITEM_Y);
 	changeState(new PlayState());
 }
 
@@ -215,7 +215,7 @@ function incCombo(points) {
 			else t.timeLeft = 2000 * i;
 		};
 		objects.push(new BigText("LEVEL " + level));
-		addTomato(canvas.width/2, NEW_ITEM_Y, currentRuleset.first_tomato);
+		addTomato(currentRuleset.first_tomato);
 		hazardCooldown += BLINK_DUR * NUM_BLINKS;
 	}
 }
@@ -263,14 +263,14 @@ function playSound(name) {
 	sounds.push(s);
 }
 
-function addTomato(x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y, type) {
+function addTomato(type, x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y) {
 	if (!type) type = chooseRandom(currentRuleset.tomato_probs);
 	let tomato = new Tomato(x, y, 50, 50, type);
 	tomatoes.push(tomato);
 	objects.push(tomato);
 }
 
-function addPowerup(x = 70 + (canvas.width - 140) * Math.random(), y = NEW_ITEM_Y, type) {
+function addPowerup(type, x = 70 + (canvas.width - 140) * Math.random(), y = NEW_ITEM_Y) {
 	if (!type) type = chooseRandom(currentRuleset.powerup_probs);
 	let isMystery = Math.random()*100 < currentRuleset.mystery_prob;
 	let powerup = new PowerUp(x, y, 70, 70, type, isMystery);
