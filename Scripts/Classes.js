@@ -327,12 +327,12 @@ class Tomato extends GameObject{
 	constructor(x, y, width, height, type) {
 		super(x, y, width, height, TOMATOES[type].img, -2 + 0.5 * Math.random());
 
-		this.hp = TOMATOES[type].hp || -1;
+		this.type = type;
+		this.hp = this.get("hp") || -1;
 
 		this.velX = 0;
 		this.velY = 0;
 		this.velAng = 0;
-		this.type = type;
 
 		this.offsetX = -this.width / 2;
 		this.offsetY = -this.height / 2;
@@ -381,23 +381,37 @@ class Tomato extends GameObject{
 			this.hitWidth = this.width;
 			this.hitHeight = this.height;
 
-			this.velX *= (1 - DECEL) ** (1 / timeScale * timeSpeed);
-			this.velAng *= (1 - DECEL) ** (1 / timeScale * timeSpeed);
+			if (this.type == "banana") {
+				let speed = Math.sqrt(this.velX**2 + this.velY**2);
+				let dir;
+				dir = Math.atan2(this.velY, this.velX);
+				dir += this.get("spin") * this.velAng / speed / timeScale * timeSpeed;
+				this.velX = speed * Math.cos(dir);
+				this.velY = speed * Math.sin(dir);
+			}
+
+			this.velAng *= 0.99 ** (1 / timeScale * timeSpeed);
+			this.velX *= 0.99 ** (1 / timeScale * timeSpeed);				
 
 			this.collision();
+
+			console.log("velX", this.velX, "velY", this.velY, "x", this.x, "y", this.y);
 		}
 
 		if (this.timeLeft >= 0) {
 			this.timeLeft -= 90 / timeScale;
 			if (this.timeLeft < 0) {
 				addPoints(
-					5*TOMATOES[this.type].bounce_pts || 0
-					+ TOMATOES[this.type].pinata_pts || 0,
+					5 * this.get("bounce_pts") || 0 + this.get("pinata_pts") || 0,
 					this.x, this.y
 				);
 				this.splat();
 			}
 		}
+	}
+	
+	get(property) {
+		return TOMATOES[this.type][property];
 	}
 
 	beAtracted() {
@@ -477,12 +491,11 @@ class Tomato extends GameObject{
 			if (this.hp > 0) {
 				this.hp--;
 				if (this.hp == 0) {
-					addPoints(TOMATOES[
-						this.type].pinata_pts || TOMATOES[this.type].bounce_pts || 0,
+					addPoints(this.get("pinata_pts") || this.get("bounce_pts") || 0,
 						this.x, this.y)
 					//findAudio("splat").play();
 					playSound("splat");
-					new PlateSplat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[this.type].splatImg);
+					new PlateSplat(this.x, this.y, this.width * 2, this.height * 0.75, this.get("splatImg"));
 					if (!this.beenHit) addTomato();
 					combo = 0;
 					splattedTomatoes.push(this);
@@ -492,9 +505,9 @@ class Tomato extends GameObject{
 
 			this.velY = MIN_BOUNCE + Math.random() * (MAX_BOUNCE - MIN_BOUNCE);
 			this.velX += CONTROL * (this.x - (player.plate.hitX + player.plate.hitWidth / 2));
-			this.velAng -= player.velX - this.velX;
+			this.velAng -= 2 * player.velX - this.velX;
 
-			addPoints(TOMATOES[this.type].bounce_pts || 0, this.x, this.y);
+			addPoints(this.get("bounce_pts") || 0, this.x, this.y);
 			incCombo(1);
 			this.hasScored = true;
 			//findAudio("collision").play();
@@ -510,7 +523,7 @@ class Tomato extends GameObject{
 			breakCombo();
 			//findAudio("splat").play();
 			playSound("splat");
-			new Splat(this.x, this.y, this.width * 2, this.height * 0.75, TOMATOES[this.type].splatImg)
+			new Splat(this.x, this.y, this.width * 2, this.height * 0.75, this.get("splatImg"))
 			splattedTomatoes.push(this);
 		}
 	}
@@ -518,7 +531,7 @@ class Tomato extends GameObject{
 	splat() {
 		//findAudio("splat").play();
 		playSound("splat");
-		new Splat(this.x, this.y, this.width * 1.5, this.height * 1.5, TOMATOES[this.type].splatImg)
+		new Splat(this.x, this.y, this.width * 1.5, this.height * 1.5, this.get("splatImg"))
 		splattedTomatoes.push(this);
 	}
 }

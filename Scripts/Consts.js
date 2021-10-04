@@ -41,21 +41,23 @@ const DECEL = 0.01;
 
 const TOMATOES = {
     "tomato": {
-        "prob": 60,
         "bounce_pts": 1,
     },
     "orange": {
-        "prob": 25,
         "hp": 5,
         "bounce_pts": 2,
     },
     "egg": {
-        "prob": 15,
         "hp": 5,
         "pinata_pts": 15,
     },
+    "banana": {
+        "spin": 0.01,
+        "bounce_pts": 2,
+    },
 };
 const TOMATO_TYPES = Object.keys(TOMATOES);
+const MAX_SPEED = 5;
 
 // Power-ups
 
