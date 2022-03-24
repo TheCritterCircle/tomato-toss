@@ -158,7 +158,6 @@ class Player extends GameObject{
 
 	drawEffects(toDraw) {
 		toDraw.forEach(e => {
-			console.log(e);
 			this.effectIcon.img = POWERUP_IMGS[POWERUP_TYPES.indexOf(e)];
 			if (effects[e] < 0 || effects[e] > 1 || effects[e] % 0.2 < 0.1) {
 				this.effectIcon.draw();
@@ -361,6 +360,10 @@ class Tomato extends GameObject{
 
 			if (this.animTimer > BLINK_DUR * NUM_BLINKS)
 				this.isSpawning = false;
+				this.velX = Math.random() * 2;
+				if(this.x < canvas.width / 2){
+					this.velX *= 1;
+				}
 		} else {
 			this.visible = true;
 
@@ -394,8 +397,6 @@ class Tomato extends GameObject{
 			this.velX *= 0.99 ** (1 / timeScale * timeSpeed);				
 
 			this.collision();
-
-			console.log("velX", this.velX, "velY", this.velY, "x", this.x, "y", this.y);
 		}
 
 		if (this.timeLeft >= 0) {

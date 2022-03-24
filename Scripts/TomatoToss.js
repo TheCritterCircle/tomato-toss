@@ -7,6 +7,7 @@ let timeScale = 1;
 let score = 0;
 let combo = 0;
 let xp = 0;
+let noDropBonus = true;
 
 let xpBar = 0;
 let comboBar = 0;
@@ -116,6 +117,7 @@ function getTargetXP() {
 function initGame() {
 	changeRuleset(LEVELS[0]);
 	score = 0, xp = 0, level = 1, combo = 0;
+	noDropBonus = true;
 
 	background.img = BACKGROUND_IMG;
 	player = new Player(canvas.width/2, canvas.height - 4, 120, 200);
@@ -141,9 +143,13 @@ function initGame() {
 	changeState(new PlayState());
 }
 
-function addPoints(points, x, y) {
+function addPoints(points, x, y, _text) {
 	score += points;
-	let text = points >= 0 ? "+" + points : points;
+	let text = ""
+	if(_text == null){
+		text = points >= 0 ? "+" + points : points;
+	}
+	else{text = _text;}
 	let color = points > 0 ? "#0080f0" : points < 0 ? "#800000" : "#808080";
 	objects.push(new GhostText(x, y, text, color));
 }
@@ -207,6 +213,8 @@ function incCombo(points) {
 	xp ++;
 	if(xp >= getTargetXP()) {
 		xp = 0;
+		if(noDropBonus){addPoints(level * 10,player.x,player.y-player.height,"NO DROP BONUS")}
+		noDropBonus = true;
 		level++;
 		if (level <= LEVELS.length) changeRuleset(LEVELS[level-1]);
 		for (let i = 0; i < tomatoes.length; i++) {
@@ -221,6 +229,7 @@ function incCombo(points) {
 }
 
 function breakCombo() {
+	noDropBonus = false;
 	combo = 0;
 }
 
@@ -316,13 +325,18 @@ function activateSpikes() {
 }
 
 function addItem() {
-	let type = chooseRandom(currentRuleset.item_probs);
-	if (type === "tomato")
+	if(tomatoes.length > 1){
+		let type = chooseRandom(currentRuleset.item_probs);
+		if (type === "tomato")
+			addTomato();
+		if (type === "powerup")
+			addPowerup();
+		if (type === "fork")
+			addFork();
+	}
+	else{
 		addTomato();
-	if (type === "powerup")
-		addPowerup();
-	if (type === "fork")
-		addFork();
+	}
 }
 
 function deleteTomato(tomato) {
