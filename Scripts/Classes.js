@@ -361,8 +361,8 @@ class Tomato extends GameObject{
 			if (this.animTimer > BLINK_DUR * NUM_BLINKS)
 				this.isSpawning = false;
 				this.velX = Math.random() * 2;
-				if(this.x < canvas.width / 2){
-					this.velX *= 1;
+				if(this.x > canvas.width / 2){
+					this.velX *= -1;
 				}
 		} else {
 			this.visible = true;
