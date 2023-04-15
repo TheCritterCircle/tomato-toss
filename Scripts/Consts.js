@@ -161,6 +161,8 @@ const NEXT_BTN = findImage("Menu/next");
 const PREV_BTN = findImage("Menu/prev");
 const HELP_BTN = findImage("Menu/help");
 
+const PROGRESS_BAR = findImage("progressbar");
+
 // Help
 
 const HELP_PAGES = []

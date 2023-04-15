@@ -176,8 +176,10 @@ function drawUI() {
 	ctx.fillText(scoreText, 10, 60);
 	ctx.font = "10px Arial";
 
+	//XP Bar (Red)
 	ctx.beginPath();
-	ctx.rect(20 + textW, 5, canvas.width - textW - 85, 25);
+	//ctx.rect(20 + textW, 5, canvas.width - textW - 85, 25);
+	ctx.rect(20 + textW, 10, 570, 15);
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fill();
 	ctx.closePath();
@@ -186,9 +188,12 @@ function drawUI() {
 	ctx.fillStyle = "#FF0000";
 	ctx.fill();
 	ctx.closePath();
+	ctx.drawImage(PROGRESS_BAR, 20 + textW, 5, 575, 25);
 
+	//Combo Bar (Green)
 	ctx.beginPath();
-	ctx.rect(20 + textW, 35, canvas.width - textW - 85, 25);
+	//ctx.rect(20 + textW, 35, canvas.width - textW - 85, 25);
+	ctx.rect(20 + textW, 40, 570, 15);
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fill();
 	ctx.closePath();
@@ -197,6 +202,7 @@ function drawUI() {
 	ctx.fillStyle = "#009900";
 	ctx.fill();
 	ctx.closePath();
+	ctx.drawImage(PROGRESS_BAR, 20 + textW, 35, 575, 25);
 }
 
 function showHelp() {
