@@ -184,7 +184,8 @@ function drawUI() {
 	ctx.fill();
 	ctx.closePath();
 	ctx.beginPath();
-	ctx.rect(25 + textW, 10, (canvas.width - textW - 95) * xpBar, 15);
+	//ctx.rect(25 + textW, 10, (canvas.width - textW - 95) * xpBar, 15);
+	ctx.rect(25 + textW, 10, xpBar * 575, 15);
 	ctx.fillStyle = "#FF0000";
 	ctx.fill();
 	ctx.closePath();
@@ -198,7 +199,8 @@ function drawUI() {
 	ctx.fill();
 	ctx.closePath();
 	ctx.beginPath();
-	ctx.rect(25 + textW, 40, (canvas.width - textW - 95) * comboBar, 15);
+	//ctx.rect(25 + textW, 40, (canvas.width - textW - 95) * comboBar, 15);
+	ctx.rect(25 + textW, 40, comboBar * 575, 15);
 	ctx.fillStyle = "#009900";
 	ctx.fill();
 	ctx.closePath();
