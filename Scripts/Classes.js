@@ -583,7 +583,7 @@ class PowerUp extends GameObject {
 		if (this.isTouching(player.plate)) {
 			switch (this.type) {
 				case "coin":
-					addPoints(COIN_POINTS, this.x, this.y, "#FFD700")
+					addPoints(COIN_POINTS, this.x, this.y, "+"+COIN_POINTS, "#FFD700");
 					break;
 
 				default:
