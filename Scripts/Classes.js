@@ -382,20 +382,16 @@ class Tomato extends GameObject{
 			this.hitHeight = this.height;
 
 			if (this.type == "banana") {
-				let speed = Math.sqrt(this.velX**2 + this.velY**2);
-				let dir;
-				dir = Math.atan2(this.velY, this.velX);
-				dir += this.get("spin") * this.velAng / speed / timeScale * timeSpeed;
-				this.velX = speed * Math.cos(dir);
-				this.velY = speed * Math.sin(dir);
+				let newVel = rotVector(this.velX, this.velY, this.get("spin") * this.velAng / timeScale * timeSpeed);
+				this.velX, this.velY = newVel.x, newVel.y;
 			}
-
+			
 			this.velAng *= 0.99 ** (1 / timeScale * timeSpeed);
 			this.velX *= 0.99 ** (1 / timeScale * timeSpeed);				
 
 			this.collision();
 
-			console.log("velX", this.velX, "velY", this.velY, "x", this.x, "y", this.y);
+			//console.log("velX", this.velX, "velY", this.velY, "x", this.x, "y", this.y);
 		}
 
 		if (this.timeLeft >= 0) {
@@ -564,7 +560,7 @@ class PowerUp extends GameObject {
 			this.visible = true;
 			this.animate();
 
-			this.y += POWERUP_SPEED / timeScale;
+			this.y += POWERUP_FALL_SPEED / timeScale;
 			this.hitY = this.y + this.offsetY;
 			this.collision();
 		}
@@ -573,7 +569,7 @@ class PowerUp extends GameObject {
 	}
 	
 	animate() {
-		let sine = Math.sin(this.animTimer * SPIN_ANIM_SPEED);
+		let sine = Math.sin(this.animTimer * POWERUP_SPIN_SPEED);
 
 		this.width = this.baseW * Math.abs(sine);
 		this.flipped = sine < 0;
@@ -585,6 +581,10 @@ class PowerUp extends GameObject {
 		//Player
 		if (this.isTouching(player.plate)) {
 			switch (this.type) {
+				case "coin":
+					addPoints(COIN_POINTS, this.x, this.y, "#FFD700")
+					break;
+
 				default:
 					let quality = POWERUPS[this.type].quality;
 					let color = quality > 0 ? "#0080f0" : quality < 0 ? "#800000" : "#808080";

@@ -26,6 +26,16 @@ const INPUT_DOWN = ["KeyS", "ArrowDown", "ShiftLeft"];
 const INPUT_PAUSE = ["KeyP"];
 */
 
+// Player
+
+const WALK_SPEED = 6;
+const SLIDE_SPEED = 12;
+const SLIDE_DURATION = 250;
+const PLAYER_SIZE = 0.9;
+
+const WALK_ANIM_SPEED = 1 / 200;
+const WALK_ANIM_SCALE = 0.03;
+const MAX_GHOSTS = 3;
 
 // Tomato
 
@@ -35,10 +45,6 @@ const MIN_BOUNCE = -4.5;
 const MAX_BOUNCE = -5;
 // How much a tomato's trajectory is influenced by how it hits the player.
 const CONTROL = 0.05;
-const DECEL = 0.01;
-
-// Duration of each blink and total number of blinks when a tomato spawns.
-
 const TOMATOES = {
     "tomato": {
         "bounce_pts": 1,
@@ -57,10 +63,11 @@ const TOMATOES = {
     },
 };
 const TOMATO_TYPES = Object.keys(TOMATOES);
-const MAX_SPEED = 5;
 
 // Power-ups
 
+const POWERUP_FALL_SPEED = 2.5;
+const POWERUP_SPIN_SPEED = 16.2;
 const POWERUPS = {
     "speed_up": {
         "name": "Speed Up",
@@ -74,6 +81,10 @@ const POWERUPS = {
         "name": "Slow Time",
         "quality": 1,
     },
+    "coin": {
+        "name": "Coin",
+        "quality": 1,
+    },
     "mirror": {
         "name": "Mirrored",
         "quality": -1,
@@ -84,34 +95,24 @@ const POWERUPS = {
     },
 }
 const POWERUP_TYPES = Object.keys(POWERUPS);
-
-// Player
-
-const WALK_SPEED = 6;
-const SLIDE_SPEED = 12;
-const SLIDE_DURATION = 250;
-const PLAYER_SIZE = 0.9;
-
-const WALK_ANIM_SPEED = 1 / 200;
-const WALK_ANIM_SCALE = 0.03;
-const MAX_GHOSTS = 3;
-
+const MAGNET_STR = 0.007;
+// Points obtained upon collecting a coin.
+const COIN_POINTS = 10
 
 // Items
 
 // Combo needed to spawn a new tomato and initial y value.
 const NEW_ITEM_Y = 100;
+// Duration of each blink and total number of blinks when an item spawns.
 const BLINK_DUR = 0.8; // Heh, blink ;)
 const NUM_BLINKS = 3;
-
-const POWERUP_SPEED = 2.5;
-const FORK_SPEED = 5;
-const SPIN_ANIM_SPEED = 16.2;
 const ITEM_TYPES = ["tomato", "powerup", "fork"];
+
+// Hazards
+
+const HAZARD_TYPES = ["fork", "spikes"];
 const FORK_TYPES = ["middle", "right", "left"];
-
-const MAGNET_STR = 0.007;
-
+const FORK_SPEED = 5;
 const FORK_DIRS = {
     "middle": Math.PI/2,
     "left": Math.PI*2/3,
@@ -119,6 +120,7 @@ const FORK_DIRS = {
 }
 
 // Images
+
 let file = "";
 
 let date = new Date();

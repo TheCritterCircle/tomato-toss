@@ -21,9 +21,10 @@ let effects = {};
 
 let tomatoes = [];
 let splattedTomatoes = [];
+let tomatoCooldown = 0;
 
 let timeMultiplier = 1;
-let forkCooldown = 0;
+let hazardCooldown = 0;
 
 let spikesRight = false;
 let spikesLeft = false;
@@ -126,6 +127,7 @@ function initGame() {
 
 	tomatoes = [];
 	splattedTomatoes = [];
+	tomatoCooldown = currentRuleset.tomato_cooldown;
 	hazardCooldown = currentRuleset.hazard_cooldown;
 
 	spikesRight = false;
@@ -141,10 +143,11 @@ function initGame() {
 	changeState(new PlayState());
 }
 
-function addPoints(points, x, y) {
+function addPoints(points, x, y, color="auto") {
 	score += points;
 	let text = points >= 0 ? "+" + points : points;
-	let color = points > 0 ? "#0080f0" : points < 0 ? "#800000" : "#808080";
+	if (color == "auto")
+		color = points > 0 ? "#0080f0" : points < 0 ? "#800000" : "#808080";
 	objects.push(new GhostText(x, y, text, color));
 }
 
@@ -155,7 +158,7 @@ function drawUI() {
 	let textW = Math.max(ctx.measureText(scoreText).width, ctx.measureText(levelText).width);
 	
 	let xpBarTarget = xp / getTargetXP();
-	let comboBarTarget = combo / currentRuleset.new_item_combo;
+	let comboBarTarget = combo / currentRuleset.powerup_combo;
 	xpBar += (xpBarTarget - xpBar) * 0.5;
 	comboBar += (comboBarTarget - comboBar) * 0.5;
 
@@ -198,10 +201,10 @@ function showHelp() {
 }
 
 function incCombo(points) {
-	combo += points / tomatoes.length;
-	if (combo >= currentRuleset.new_item_combo) {
+	combo += points;
+	if (combo >= currentRuleset.powerup_combo) {
 		combo = 0;
-		addItem();
+		addPowerup();
 	}
 
 	xp ++;
@@ -272,7 +275,11 @@ function addTomato(type, x = 50 + (canvas.width - 100) * Math.random(), y = NEW_
 
 function addPowerup(type, x = 70 + (canvas.width - 140) * Math.random(), y = NEW_ITEM_Y) {
 	if (!type) type = chooseRandom(currentRuleset.powerup_probs);
-	let isMystery = Math.random()*100 < currentRuleset.mystery_prob;
+
+	let isMystery = false
+	if (type != "coin")
+		isMystery = Math.random()*100 < currentRuleset.mystery_prob;
+	
 	let powerup = new PowerUp(x, y, 70, 70, type, isMystery);
 	objects.push(powerup);
 }

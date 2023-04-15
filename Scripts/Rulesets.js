@@ -1,7 +1,9 @@
 const DEFAULT_RULESET = {
     first_tomato: "tomato",
-    new_item_combo: 3,
-    item_probs: {
+    tomato_cooldown: 10,
+    powerup_combo: 10,
+    new_item_combo: 3, // unused
+    item_probs: { // unused
         tomato: 50,
         powerup: 50,
     },
@@ -39,11 +41,13 @@ const MIRROR_RULESET = {
     powerup_probs: {
         speed_up: 20,
         magnet: 20,
-        slow_time: 20,
+        slow_time: 15,
         mirror: 40,
+        coin: 5,
     },
 };
 
+/*
 const BANANA_RULESET = {
     tomato_probs: {
         tomato: 60,
@@ -57,13 +61,15 @@ const BANANA_RULESET = {
         mirror: 40,
     },
 };
+*/
 
 const SPIKES_RULESET = {
     powerup_probs: {
-        speed_up: 30,
-        magnet: 30,
+        speed_up: 25,
+        magnet: 20,
         slow_time: 20,
         mirror: 20,
+        coin: 15,
     },
     hazard_cooldown: 10,
     hazard_probs: {
@@ -86,9 +92,8 @@ const IMPOSSIBLE_RULESET = {
 const LEVELS = [
     START_RULESET,
     START_RULESET,
-    START_RULESET,
+    DEFAULT_RULESET,
     MIRROR_RULESET,
     MIRROR_RULESET,
-    //BANANA_RULESET,
     SPIKES_RULESET,
 ]

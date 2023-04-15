@@ -185,3 +185,10 @@ function chooseRandom(probs) {
 	}
 	return item;
 }
+
+function rotVector(x, y, ang) {
+	return {
+		x: x * Math.cos(ang) - y * Math.sin(ang),
+		y: x * Math.sin(ang) + y * Math.cos(ang)
+	}
+}

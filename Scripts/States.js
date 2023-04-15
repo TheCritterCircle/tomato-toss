@@ -41,6 +41,12 @@ class PlayState extends State {
         splattedTomatoes = [];
         cleanUp();
 
+        if (tomatoCooldown < 0) {
+            addTomato();
+            tomatoCooldown += currentRuleset.tomato_cooldown;
+        }
+        tomatoCooldown -= delta * timeSpeed;
+
         if (hazardCooldown < 0) {
             addHazard();
             hazardCooldown += currentRuleset.hazard_cooldown;
