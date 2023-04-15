@@ -500,8 +500,9 @@ class Tomato extends GameObject{
 				} 
 			}
 
-			this.velY = MIN_BOUNCE + Math.random() * (MAX_BOUNCE - MIN_BOUNCE);
 			this.velX += CONTROL * (this.x - (player.plate.hitX + player.plate.hitWidth / 2));
+			//Gets lowest (lower means higher) number between max bounce or based on velX.
+			this.velY = Math.max(MIN_BOUNCE - Math.abs(1/this.velX), MAX_BOUNCE)
 			this.velAng -= 2 * player.velX - this.velX;
 
 			addPoints(this.get("bounce_pts") || 0, this.x, this.y);

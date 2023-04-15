@@ -41,7 +41,7 @@ const MAX_GHOSTS = 3;
 
 const GRAVITY = 0.06;
 // Min and max values for the boost that a tomato gets when bounced.
-const MIN_BOUNCE = -4.5; 
+const MIN_BOUNCE = -3.5; 
 const MAX_BOUNCE = -5;
 // How much a tomato's trajectory is influenced by how it hits the player.
 const CONTROL = 0.05;
