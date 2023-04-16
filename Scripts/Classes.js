@@ -54,12 +54,6 @@ class Plate extends GameObject{
 		this.hitX = x - this.hitWidth/2;
 		this.hitY = y + 12;
 	}
-
-	drawHitbox() {
-		ctx.beginPath();
-		ctx.rect(this.hitX, this.hitY, this.hitWidth, this.hitHeight);
-		ctx.stroke();
-	}
 }
 
 class Player extends GameObject{
@@ -164,12 +158,6 @@ class Player extends GameObject{
 			}
 			this.effectIcon.x += 60;
 		})
-	}
-
-	drawHitbox() {
-		ctx.beginPath();
-		ctx.rect(this.hitX, this.hitY, this.hitWidth, this.hitHeight);
-		ctx.stroke();
 	}
 
 	updateHitbox(x, y) {
@@ -373,26 +361,26 @@ class Tomato extends GameObject{
 			} else {
 				this.velY += GRAVITY / timeScale * timeSpeed;
 				if (effects.magnet) this.beAtracted();
-			}
 			
-			this.x += this.velX / timeScale * timeSpeed;
-			this.y += this.velY / timeScale * timeSpeed;
-			this.angle += this.velAng / timeScale * timeSpeed;
-
-			this.hitX = this.x + this.offsetX;
-			this.hitY = this.y + this.offsetY;
-			this.hitWidth = this.width;
-			this.hitHeight = this.height;
-
-			if (this.type == "banana") {
-				let newVel = rotVector(this.velX, this.velY, this.get("spin") * this.velAng / timeScale * timeSpeed);
-				this.velX, this.velY = newVel.x, newVel.y;
+				this.x += this.velX / timeScale * timeSpeed;
+				this.y += this.velY / timeScale * timeSpeed;
+				this.angle += this.velAng / timeScale * timeSpeed;
+	
+				this.hitX = this.x + this.offsetX;
+				this.hitY = this.y + this.offsetY;
+				this.hitWidth = this.width;
+				this.hitHeight = this.height;
+	
+				if (this.type == "banana") {
+					let newVel = rotVector(this.velX, this.velY, this.get("spin") * this.velAng / timeScale * timeSpeed);
+					this.velX, this.velY = newVel.x, newVel.y;
+				}
+				
+				this.velAng *= 0.99 ** (1 / timeScale * timeSpeed);
+				this.velX *= 0.99 ** (1 / timeScale * timeSpeed);				
+	
+				this.collision();
 			}
-			
-			this.velAng *= 0.99 ** (1 / timeScale * timeSpeed);
-			this.velX *= 0.99 ** (1 / timeScale * timeSpeed);				
-
-			this.collision();
 		}
 
 		if (this.timeLeft >= 0) {
@@ -570,6 +558,10 @@ class PowerUp extends GameObject {
 		this.animTimer += delta;
 	}
 	
+	get(property) {
+		return POWERUPS[this.type][property];
+	}
+	
 	animate() {
 		let sine = Math.sin(this.animTimer * POWERUP_SPIN_SPEED);
 
@@ -588,9 +580,9 @@ class PowerUp extends GameObject {
 					break;
 
 				default:
-					let quality = POWERUPS[this.type].quality;
+					let quality = this.get("quality");
 					let color = quality > 0 ? "#0080f0" : quality < 0 ? "#800000" : "#808080";
-					let text = POWERUPS[this.type].name + "!";
+					let text = this.get("name") + "!";
 					objects.push(new GhostText(this.x, this.y, text, color));
 					effects[this.type] = 7;
 					break;
@@ -670,12 +662,7 @@ class Fork extends GameObject{
 	collision() {
 		//Tomatoes
 		for (let t of tomatoes)
-			if (!t.isSpawning
-			&& t.fork == null
-			&& this.hitX <= t.hitX + t.hitWidth
-			&& this.hitY <= t.hitY + t.hitHeight
-			&& this.hitX + this.hitWidth >= t.hitX
-			&& this.hitY + this.hitHeight >= t.hitY) {
+			if (!t.isSpawning && t.fork == null && this.isTouching(t)) {
 				t.stickTo(this);
 				this.tomatoes.push(t);
 			}
@@ -696,12 +683,6 @@ class Fork extends GameObject{
 			this.animTimer = 0;
 			this.tomatoes.forEach(t => {t.detach()})
 		}
-	}
-
-	drawHitbox() {
-		ctx.beginPath();
-		ctx.rect(this.hitX, this.hitY, this.hitWidth, this.hitHeight);
-		ctx.stroke();
 	}
 }
 

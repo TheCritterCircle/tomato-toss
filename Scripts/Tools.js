@@ -70,6 +70,12 @@ class GameObject {
 		ctx.restore();
 	}
 
+	drawHitbox() {
+		ctx.beginPath();
+		ctx.rect(this.hitX, this.hitY, this.hitWidth, this.hitHeight);
+		ctx.stroke();
+	}
+
 	isTouching(other) {
 		return this.hitX < other.hitX + other.hitWidth
 		&& this.hitY < other.hitY + other.hitHeight
