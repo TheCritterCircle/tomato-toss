@@ -154,6 +154,31 @@ function addPoints(points, x, y, text=null, color=null) {
 	objects.push(new GhostText(x, y, text, color));
 }
 
+function drawProgressBar(x, y, length, ratio, color) {
+	if (length < 20) {
+		length = 20;
+		console.log("Progress bar length must be 20 or higher")
+	}
+
+	ctx.beginPath();
+	//ctx.rect(20 + textW, 5, canvas.width - textW - 85, 25);
+	ctx.rect(x+5, y+5, length-10, 15);
+	ctx.fillStyle = "#FFFFFF";
+	ctx.fill();
+	ctx.closePath();
+
+	ctx.beginPath();
+	//ctx.rect(25 + textW, 10, (canvas.width - textW - 95) * xpBar, 15);
+	ctx.rect(x+5, y+5, ratio * (length-10), 15);
+	ctx.fillStyle = color;
+	ctx.fill();
+	ctx.closePath();
+
+	ctx.drawImage(PROGRESS_BAR, 0, 0, 10, 25, x, y, 10, 25);
+	ctx.drawImage(PROGRESS_BAR, 10, 0, 555, 25, x+10, y, length-20, 25);
+	ctx.drawImage(PROGRESS_BAR, 565, 0, 10, 25, x+length-10, y, 10, 25);
+}
+
 function drawUI() {
 	ctx.font = "30px Arial";
 	let levelText = "Level: " + level;
@@ -177,34 +202,9 @@ function drawUI() {
 	ctx.font = "10px Arial";
 
 	//XP Bar (Red)
-	ctx.beginPath();
-	//ctx.rect(20 + textW, 5, canvas.width - textW - 85, 25);
-	ctx.rect(20 + textW, 10, 570, 15);
-	ctx.fillStyle = "#FFFFFF";
-	ctx.fill();
-	ctx.closePath();
-	ctx.beginPath();
-	//ctx.rect(25 + textW, 10, (canvas.width - textW - 95) * xpBar, 15);
-	ctx.rect(25 + textW, 10, xpBar * 575, 15);
-	ctx.fillStyle = "#FF0000";
-	ctx.fill();
-	ctx.closePath();
-	ctx.drawImage(PROGRESS_BAR, 20 + textW, 5, 575, 25);
-
+	drawProgressBar(20 + textW, 5, canvas.width - textW - 85, xpBar, "#FF0000")
 	//Combo Bar (Green)
-	ctx.beginPath();
-	//ctx.rect(20 + textW, 35, canvas.width - textW - 85, 25);
-	ctx.rect(20 + textW, 40, 570, 15);
-	ctx.fillStyle = "#FFFFFF";
-	ctx.fill();
-	ctx.closePath();
-	ctx.beginPath();
-	//ctx.rect(25 + textW, 40, (canvas.width - textW - 95) * comboBar, 15);
-	ctx.rect(25 + textW, 40, comboBar * 575, 15);
-	ctx.fillStyle = "#009900";
-	ctx.fill();
-	ctx.closePath();
-	ctx.drawImage(PROGRESS_BAR, 20 + textW, 35, 575, 25);
+	drawProgressBar(20 + textW, 35, canvas.width - textW - 85, comboBar, "#009900")
 }
 
 function showHelp() {

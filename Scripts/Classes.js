@@ -144,13 +144,12 @@ class Player extends GameObject{
 		this.spdGhosts.forEach(o => {o.draw()});
 		super.draw();
 		this.plate.draw();
-
-		this.effectIcon.x = this.plate.x - 30 * (Object.keys(effects).length - 1);
-		this.effectIcon.y = this.plate.y - 40;
 		this.drawEffects(Object.keys(effects));
 	}
 
 	drawEffects(toDraw) {
+		this.effectIcon.x = this.plate.x - 30 * (Object.keys(effects).length - 1);
+		this.effectIcon.y = this.plate.y - 40;
 		toDraw.forEach(e => {
 			this.effectIcon.img = POWERUP_IMGS[POWERUP_TYPES.indexOf(e)];
 			if (effects[e] < 0 || effects[e] > 1 || effects[e] % 0.2 < 0.1) {
