@@ -62,6 +62,8 @@ class PlayState extends State {
             player.endSlide();
             changeState(new GameoverState());
         }    
+
+        boss.main()
     }
 
     draw() {
@@ -71,6 +73,11 @@ class PlayState extends State {
     
         drawUI();
         this.buttons.forEach(btn => {btn.draw()});
+
+        this.drawMore()
+    }
+    drawMore(){
+
     }
 
     mouseDown(e) {
@@ -155,6 +162,16 @@ class PlayState extends State {
 
     handlePause(pause = true) {
         if (pause) changeState(new PauseState(this));
+    }
+}
+
+class BossState extends PlayState{
+    constructor(){
+        super()
+    }
+
+    drawMore(){
+        boss.draw()
     }
 }
 

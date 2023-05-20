@@ -49,6 +49,8 @@ let lastSlideTime;
 let lastCalledTime;
 let delta;
 
+let boss = new Boss()
+
 function getFPS() {
 	if (lastCalledTime) {
 		delta = (Date.now() - lastCalledTime)/1000;
@@ -233,6 +235,12 @@ function incCombo(points) {
 		objects.push(new BigText("LEVEL " + level));
 		addTomato(currentRuleset.first_tomato);
 		hazardCooldown += BLINK_DUR * NUM_BLINKS;
+		if(level == BOSS_LEVEL){
+			changeState(new BossState())
+		}
+		else if(level == BOSS_LEVEL + 1){
+			changeState(new PlayState())
+		}
 	}
 }
 

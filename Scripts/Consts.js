@@ -119,6 +119,8 @@ const FORK_DIRS = {
     "right": Math.PI/3,
 }
 
+const BOSS_LEVEL = 15
+
 // Images
 
 let file = "";
@@ -146,6 +148,9 @@ const FORK_IMG = findImage("fork");
 
 const SPIKE_IMG = findImage("spikes");
 const WARNING = findImage("warning");
+
+const BOSS_FACE = findImage("bossface")
+const BOSS_FACE_HURT = findImage("bossface_hurt")
 
 const BACKGROUND_IMG = findSpecialImage(file, "background");
 const GAMEOVER_IMG = findImage("gameover");

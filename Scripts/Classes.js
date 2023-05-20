@@ -813,3 +813,48 @@ class Spikes extends GameObject{
 		}
 	}
 }
+
+class Boss{
+	constructor(){
+		this.face = new GameObject(0,0,200,200,BOSS_FACE);
+
+		this.speed = 10;
+
+		this.isInvincible = false
+		this.invincibilityTimer = 0
+	}
+
+	draw(){
+		this.face.draw()
+	}
+
+	main(){
+		// Bounce off Sides of the Screen
+		this.face.x += this.speed * timeScale
+		if(this.face.x > canvas.width - this.face.width || this.face.x < 0){
+			this.speed *= -1
+			this.face.x += this.speed * timeScale
+		}
+
+		if(this.isInvincible){
+			this.invincibilityTimer -= timeScale
+			if(this.invincibilityTimer <= 0){
+				this.face.img = BOSS_FACE
+				this.isInvincible = false
+			}
+		}
+		else{
+			// Collision With Tomatoes
+			for (let t of tomatoes){
+				if(!t.isSpawning){
+					// isTouching() does, in fact, not work for this and I don't know what hitX is
+					if(t.x < this.face.x + this.face.width && t.x > this.face.x && t.y < t.y + t.height){
+						this.isInvincible = true
+						this.face.img = BOSS_FACE_HURT
+						this.invincibilityTimer = 100
+					}
+				}
+			}
+		}
+	}
+}
