@@ -6,10 +6,14 @@ function changeState(newState) {
 
 function setMusic(name = "") {
     if (music && !muted) {
-        let src = "Sounds/" + name + ".wav"
-        if (!music.src.endsWith(src)) {
-            music.src = src;
-            music.play();
+        let audioElement = document.getElementById("Audio_" + name)
+        if(audioElement){
+            audioElement.play()
+        }
+        else{
+            audioElement = document.getElementById("Audio_TomatoToss")
+            audioElement.pause()
+            audioElement.currentTime = 0
         }
     } 
     /*

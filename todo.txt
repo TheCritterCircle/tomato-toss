@@ -1,0 +1,3 @@
+Finish Boss
+DONE : Make sounds not load themselves each time they are used
+Better font?

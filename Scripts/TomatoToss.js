@@ -274,18 +274,14 @@ function cleanUp() {
 	toDelete = [];}
 
 function playSound(name) {
-	if (!sounds.length > 0) return;
-
-	let i;
-	for (i = 0; i < sounds.length; i++)
-		if (sounds[i].ended) break;
-	if (i >= sounds.length) i = 0;
-	let s = sounds[i];
-
-	s.src = "Sounds/" + name + ".wav";
-	s.play();
-	sounds.splice(i, 1);
-	sounds.push(s);
+	let audioElement = document.getElementById("Audio_" + name);
+	if(audioElement){
+		if(audioElement.currentTime > 0){
+			audioElement.pause()
+			audioElement.currentTime = 0;
+		}
+		audioElement.play();
+	}
 }
 
 function addTomato(type, x = 50 + (canvas.width - 100) * Math.random(), y = NEW_ITEM_Y) {
